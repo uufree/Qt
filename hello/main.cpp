@@ -1,11 +1,15 @@
-#include "hellodialog.h"
-#include <QApplication>
+#include<QCoreApplication>
+#include"newspaper.h"
+#include"reader.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    HelloDialog w;
-    w.show();
+    QCoreApplication app(argc,argv);
+    Newspaper newspaper("Newspaper A");
+    Reader reader;
+    QObject::connect(&newspaper,&Newspaper::newsPaper,&reader,&Reader::receiveNewspaper);
 
-    return a.exec();
+    newspaper.send();
+
+    return app.exec();
 }
