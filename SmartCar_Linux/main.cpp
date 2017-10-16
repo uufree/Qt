@@ -8,6 +8,7 @@
 #include<QDataStream>
 #include<QByteArray>
 #include<iostream>
+#include<string>
 
 int main(int argc, char *argv[])
 {
@@ -17,7 +18,10 @@ int main(int argc, char *argv[])
     QDataStream out(clientSocket);
     out.setVersion(QDataStream::Qt_5_7);
 
+    qDebug() << "client will send message~" << endl;
     out << "hello,world!";
+    qDebug() << "client is already send message!" << endl;
 
+    a.exit();
     return a.exec();
 }

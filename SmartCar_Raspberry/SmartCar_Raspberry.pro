@@ -12,6 +12,10 @@ TARGET = SmartCar_Raspberry
 TEMPLATE = app
 
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    clientsocket.cpp \
+    tcpserver.cpp
 
-HEADERS  +=
+HEADERS  += \
+    clientsocket.h \
+    tcpserver.h
