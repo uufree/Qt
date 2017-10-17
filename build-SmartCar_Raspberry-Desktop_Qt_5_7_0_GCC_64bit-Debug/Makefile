@@ -49,13 +49,9 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../SmartCar_Raspberry/main.cpp \
-		../SmartCar_Raspberry/clientsocket.cpp \
-		../SmartCar_Raspberry/tcpserver.cpp moc_clientsocket.cpp \
-		moc_tcpserver.cpp
+		../SmartCar_Raspberry/tcpserver.cpp moc_tcpserver.cpp
 OBJECTS       = main.o \
-		clientsocket.o \
 		tcpserver.o \
-		moc_clientsocket.o \
 		moc_tcpserver.o
 DIST          = ../../Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Qt5.7.0/5.7/gcc_64/mkspecs/common/unix.conf \
@@ -206,9 +202,7 @@ DIST          = ../../Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Qt5.7.0/5.7/gcc_64/mkspecs/features/exceptions.prf \
 		../../Qt5.7.0/5.7/gcc_64/mkspecs/features/yacc.prf \
 		../../Qt5.7.0/5.7/gcc_64/mkspecs/features/lex.prf \
-		../SmartCar_Raspberry/SmartCar_Raspberry.pro ../SmartCar_Raspberry/clientsocket.h \
-		../SmartCar_Raspberry/tcpserver.h ../SmartCar_Raspberry/main.cpp \
-		../SmartCar_Raspberry/clientsocket.cpp \
+		../SmartCar_Raspberry/SmartCar_Raspberry.pro ../SmartCar_Raspberry/tcpserver.h ../SmartCar_Raspberry/main.cpp \
 		../SmartCar_Raspberry/tcpserver.cpp
 QMAKE_TARGET  = SmartCar_Raspberry
 DESTDIR       = 
@@ -544,8 +538,8 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../SmartCar_Raspberry/clientsocket.h ../SmartCar_Raspberry/tcpserver.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../SmartCar_Raspberry/main.cpp ../SmartCar_Raspberry/clientsocket.cpp ../SmartCar_Raspberry/tcpserver.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../SmartCar_Raspberry/tcpserver.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../SmartCar_Raspberry/main.cpp ../SmartCar_Raspberry/tcpserver.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -571,77 +565,9 @@ benchmark: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_clientsocket.cpp moc_tcpserver.cpp
+compiler_moc_header_make_all: moc_tcpserver.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_clientsocket.cpp moc_tcpserver.cpp
-moc_clientsocket.cpp: ../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/QTcpSocket \
-		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/qtcpsocket.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/qabstractsocket.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qiodevice.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qglobal.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qconfig.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qfeatures.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsystemdetection.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qprocessordetection.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcompilerdetection.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qtypeinfo.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qtypetraits.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qisenum.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsysinfo.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qlogging.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qflags.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qbasicatomic.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic_bootstrap.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qgenericatomic.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic_cxx11.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic_msvc.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qglobalstatic.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmutex.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qnumeric.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qversiontagging.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobject.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobjectdefs.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qnamespace.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobjectdefs_impl.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstring.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qchar.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qbytearray.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qrefcount.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qarraydata.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstringbuilder.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qlist.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qalgorithms.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qiterator.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qhashfunctions.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qpair.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qbytearraylist.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstringlist.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qregexp.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstringmatcher.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcoreevent.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qscopedpointer.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmetatype.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qvarlengtharray.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcontainerfwd.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobject_impl.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qdebug.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qhash.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmap.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qtextstream.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qlocale.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qvariant.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qshareddata.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qvector.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qpoint.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qset.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcontiguouscache.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsharedpointer.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsharedpointer_impl.h \
-		../SmartCar_Raspberry/clientsocket.h \
-		../../Qt5.7.0/5.7/gcc_64/bin/moc
-	/home/uuchen/Qt5.7.0/5.7/gcc_64/bin/moc $(DEFINES) -I/home/uuchen/Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++ -I/home/uuchen/Qt/SmartCar_Raspberry -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtWidgets -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtGui -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtNetwork -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../SmartCar_Raspberry/clientsocket.h -o moc_clientsocket.cpp
-
+	-$(DEL_FILE) moc_tcpserver.cpp
 moc_tcpserver.cpp: ../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/QTcpServer \
 		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/qtcpserver.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobject.h \
@@ -707,7 +633,9 @@ moc_tcpserver.cpp: ../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/QTcpServer \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsharedpointer.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsharedpointer_impl.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/qhostaddress.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QList \
+		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/QTcpSocket \
+		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/qtcpsocket.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QString \
 		../SmartCar_Raspberry/tcpserver.h \
 		../../Qt5.7.0/5.7/gcc_64/bin/moc
 	/home/uuchen/Qt5.7.0/5.7/gcc_64/bin/moc $(DEFINES) -I/home/uuchen/Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++ -I/home/uuchen/Qt/SmartCar_Raspberry -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtWidgets -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtGui -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtNetwork -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../SmartCar_Raspberry/tcpserver.h -o moc_tcpserver.cpp
@@ -835,79 +763,8 @@ main.o: ../SmartCar_Raspberry/main.cpp ../../Qt5.7.0/5.7/gcc_64/include/QtWidget
 		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/qabstractsocket.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/qhostaddress.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/QTcpSocket \
-		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/qtcpsocket.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QDataStream \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QList
+		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/qtcpsocket.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../SmartCar_Raspberry/main.cpp
-
-clientsocket.o: ../SmartCar_Raspberry/clientsocket.cpp ../SmartCar_Raspberry/clientsocket.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/QTcpSocket \
-		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/qtcpsocket.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/qabstractsocket.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qiodevice.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qglobal.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qconfig.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qfeatures.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsystemdetection.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qprocessordetection.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcompilerdetection.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qtypeinfo.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qtypetraits.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qisenum.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsysinfo.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qlogging.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qflags.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qbasicatomic.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic_bootstrap.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qgenericatomic.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic_cxx11.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qatomic_msvc.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qglobalstatic.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmutex.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qnumeric.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qversiontagging.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobject.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobjectdefs.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qnamespace.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobjectdefs_impl.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstring.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qchar.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qbytearray.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qrefcount.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qarraydata.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstringbuilder.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qlist.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qalgorithms.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qiterator.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qhashfunctions.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qpair.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qbytearraylist.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstringlist.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qregexp.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qstringmatcher.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcoreevent.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qscopedpointer.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmetatype.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qvarlengtharray.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcontainerfwd.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qobject_impl.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qdebug.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qhash.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmap.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qtextstream.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qlocale.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qvariant.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qshareddata.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qvector.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qpoint.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qset.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcontiguouscache.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsharedpointer.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsharedpointer_impl.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QDataStream \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qdatastream.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o clientsocket.o ../SmartCar_Raspberry/clientsocket.cpp
 
 tcpserver.o: ../SmartCar_Raspberry/tcpserver.cpp ../SmartCar_Raspberry/tcpserver.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/QTcpServer \
@@ -975,11 +832,10 @@ tcpserver.o: ../SmartCar_Raspberry/tcpserver.cpp ../SmartCar_Raspberry/tcpserver
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsharedpointer.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qsharedpointer_impl.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/qhostaddress.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QList
+		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/QTcpSocket \
+		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/qtcpsocket.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QString
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o tcpserver.o ../SmartCar_Raspberry/tcpserver.cpp
-
-moc_clientsocket.o: moc_clientsocket.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_clientsocket.o moc_clientsocket.cpp
 
 moc_tcpserver.o: moc_tcpserver.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_tcpserver.o moc_tcpserver.cpp

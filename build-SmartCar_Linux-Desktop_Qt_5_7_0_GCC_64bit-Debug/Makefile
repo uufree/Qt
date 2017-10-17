@@ -15,7 +15,7 @@ CXX           = g++
 DEFINES       = -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++11 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../SmartCar_Linux -I. -I../../Qt5.7.0/5.7/gcc_64/include -I../../Qt5.7.0/5.7/gcc_64/include/QtWidgets -I../../Qt5.7.0/5.7/gcc_64/include/QtGui -I../../Qt5.7.0/5.7/gcc_64/include/QtNetwork -I../../Qt5.7.0/5.7/gcc_64/include/QtCore -I. -I../../Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../SmartCar_Linux -I. -I../../Qt5.7.0/5.7/gcc_64/include -I../../Qt5.7.0/5.7/gcc_64/include/QtWidgets -I../../Qt5.7.0/5.7/gcc_64/include/QtGui -I../../Qt5.7.0/5.7/gcc_64/include/QtNetwork -I../../Qt5.7.0/5.7/gcc_64/include/QtCore -I. -I. -I../../Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/uuchen/Qt5.7.0/5.7/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -184,6 +184,7 @@ DIST          = ../../Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Qt5.7.0/5.7/gcc_64/mkspecs/features/qt_config.prf \
 		../../Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_post.prf \
+		../SmartCar_Linux/.qmake.stash \
 		../../Qt5.7.0/5.7/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../Qt5.7.0/5.7/gcc_64/mkspecs/features/default_pre.prf \
 		../../Qt5.7.0/5.7/gcc_64/mkspecs/features/resolve_config.prf \
@@ -211,7 +212,7 @@ TARGET        = SmartCar_Linux
 first: all
 ####### Build rules
 
-$(TARGET):  $(OBJECTS)  
+$(TARGET): ui_form.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../SmartCar_Linux/SmartCar_Linux.pro ../../Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++/qmake.conf ../../Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_pre.prf \
@@ -345,6 +346,7 @@ Makefile: ../SmartCar_Linux/SmartCar_Linux.pro ../../Qt5.7.0/5.7/gcc_64/mkspecs/
 		../../Qt5.7.0/5.7/gcc_64/mkspecs/features/qt_config.prf \
 		../../Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../Qt5.7.0/5.7/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../Qt5.7.0/5.7/gcc_64/mkspecs/features/default_pre.prf \
 		../../Qt5.7.0/5.7/gcc_64/mkspecs/features/resolve_config.prf \
@@ -499,6 +501,7 @@ Makefile: ../SmartCar_Linux/SmartCar_Linux.pro ../../Qt5.7.0/5.7/gcc_64/mkspecs/
 ../../Qt5.7.0/5.7/gcc_64/mkspecs/features/qt_config.prf:
 ../../Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++/qmake.conf:
 ../../Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../Qt5.7.0/5.7/gcc_64/mkspecs/features/exclusive_builds.prf:
 ../../Qt5.7.0/5.7/gcc_64/mkspecs/features/default_pre.prf:
 ../../Qt5.7.0/5.7/gcc_64/mkspecs/features/resolve_config.prf:
@@ -537,6 +540,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../SmartCar_Linux/mainwindow.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../SmartCar_Linux/main.cpp ../SmartCar_Linux/mainwindow.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../SmartCar_Linux/form.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -671,15 +675,20 @@ moc_mainwindow.cpp: ../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QMainWindow \
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all:
+compiler_uic_make_all: ui_form.h
 compiler_uic_clean:
+	-$(DEL_FILE) ui_form.h
+ui_form.h: ../SmartCar_Linux/form.ui \
+		../../Qt5.7.0/5.7/gcc_64/bin/uic
+	/home/uuchen/Qt5.7.0/5.7/gcc_64/bin/uic ../SmartCar_Linux/form.ui -o ui_form.h
+
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
 compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_header_clean 
+compiler_clean: compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
 
@@ -797,7 +806,11 @@ main.o: ../SmartCar_Linux/main.cpp ../SmartCar_Linux/mainwindow.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qthread.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/QTcpSocket \
 		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/qtcpsocket.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/qabstractsocket.h
+		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/QHostAddress \
+		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/qhostaddress.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QDataStream \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QByteArray
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../SmartCar_Linux/main.cpp
 
 mainwindow.o: ../SmartCar_Linux/mainwindow.cpp ../SmartCar_Linux/mainwindow.h \

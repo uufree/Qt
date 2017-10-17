@@ -14,12 +14,14 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
     QTcpSocket* clientSocket = new QTcpSocket;
-    clientSocket->connectToHost(QHostAddress("192.168.1.105"),6666);
-    QDataStream out(clientSocket);
-    out.setVersion(QDataStream::Qt_5_7);
+    clientSocket->connectToHost(QHostAddress("127.0.0.1"),6666);
+//    QDataStream out(clientSocket);
+//    out.setVersion(QDataStream::Qt_5_7);
 
     qDebug() << "client will send message~" << endl;
-    out << "hello,world!";
+    clientSocket->write("hello,Qt!");
+    clientSocket->write("hello,Qt!");
+    clientSocket->write("hello,Qt!");
     qDebug() << "client is already send message!" << endl;
 
     a.exit();

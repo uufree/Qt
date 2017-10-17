@@ -2,20 +2,24 @@
 #define TCPSERVER_H
 
 #include<QTcpServer>
-#include<QList>
+#include<QTcpSocket>
+#include<QString>
 
-class  ClientSocket;
-class TcpServer : public QTcpServer
+class TcpServer : public QObject
 {
     Q_OBJECT
 public:
-    TcpServer(QObject* parent = 0);
+    TcpServer();
+    ~TcpServer();
 
+    int listen();
+
+private slots:
+    void handleNewConnection();
+    void readInSocket();
 private:
-    void handleNewTcpConnection();
-private:
-    QList<ClientSocket*> clientList;
+    QTcpServer* server;
+    QTcpSocket* client;
 };
-
 
 #endif // TCPSERVER_H

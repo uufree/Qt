@@ -1,12 +1,36 @@
 #include "tcpserver.h"
 
-TcpServer::TcpServer(QObject* parent) :
-    QTcpServer(parent)
+TcpServer::TcpServer() :
+    server(new QTcpServer)
 {
-    connect(this,SIGNAL(newConnection),this,SLOT(handleNewTcpConnection));
+    connect(server,SIGNAL(newConnection()),this,SLOT(handleNewConnection()));
 }
 
-void TcpServer::handleNewTcpConnection()
+int TcpServer::listen()
 {
-    qDebug() << "a new connection is come in!" << endl;
+    if(!server->listen(QHostAddress::Any,6666))
+    {
+        qDebug() << "Failed to bind the port!" << endl;
+        return -1;
+    }
+    return 0;
+}
+
+
+TcpServer::~TcpServer()
+{
+    if(client)
+        delete client;
+}
+
+void TcpServer::handleNewConnection()
+{
+    client = server->nextPendingConnection();
+    connect(client,SIGNAL(readyRead()),this,SLOT(readInSocket()));
+}
+
+void TcpServer::readInSocket()
+{
+    QString str = client->readAll();
+    qDebug() << str << endl;
 }

@@ -13,9 +13,7 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    clientsocket.cpp \
     tcpserver.cpp
 
 HEADERS  += \
-    clientsocket.h \
     tcpserver.h
