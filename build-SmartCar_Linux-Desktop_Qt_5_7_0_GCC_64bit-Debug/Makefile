@@ -15,7 +15,7 @@ CXX           = g++
 DEFINES       = -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++11 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../SmartCar_Linux -I. -I../../Qt5.7.0/5.7/gcc_64/include -I../../Qt5.7.0/5.7/gcc_64/include/QtWidgets -I../../Qt5.7.0/5.7/gcc_64/include/QtGui -I../../Qt5.7.0/5.7/gcc_64/include/QtNetwork -I../../Qt5.7.0/5.7/gcc_64/include/QtCore -I. -I. -I../../Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../SmartCar_Linux -I. -I../SmartCar_Linux -I../../Qt5.7.0/5.7/gcc_64/include -I../../Qt5.7.0/5.7/gcc_64/include/QtWidgets -I../../Qt5.7.0/5.7/gcc_64/include/QtGui -I../../Qt5.7.0/5.7/gcc_64/include/QtNetwork -I../../Qt5.7.0/5.7/gcc_64/include/QtCore -I. -I. -I../../Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/uuchen/Qt5.7.0/5.7/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -212,7 +212,7 @@ TARGET        = SmartCar_Linux
 first: all
 ####### Build rules
 
-$(TARGET): ui_form.h $(OBJECTS)  
+$(TARGET): ui_login.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../SmartCar_Linux/SmartCar_Linux.pro ../../Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++/qmake.conf ../../Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_pre.prf \
@@ -540,7 +540,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../SmartCar_Linux/mainwindow.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../SmartCar_Linux/main.cpp ../SmartCar_Linux/mainwindow.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../SmartCar_Linux/form.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../SmartCar_Linux/login.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -671,16 +671,16 @@ moc_mainwindow.cpp: ../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QMainWindow \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qicon.h \
 		../SmartCar_Linux/mainwindow.h \
 		../../Qt5.7.0/5.7/gcc_64/bin/moc
-	/home/uuchen/Qt5.7.0/5.7/gcc_64/bin/moc $(DEFINES) -I/home/uuchen/Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++ -I/home/uuchen/Qt/SmartCar_Linux -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtWidgets -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtGui -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtNetwork -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../SmartCar_Linux/mainwindow.h -o moc_mainwindow.cpp
+	/home/uuchen/Qt5.7.0/5.7/gcc_64/bin/moc $(DEFINES) -I/home/uuchen/Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++ -I/home/uuchen/Qt/SmartCar_Linux -I/home/uuchen/Qt/SmartCar_Linux -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtWidgets -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtGui -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtNetwork -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../SmartCar_Linux/mainwindow.h -o moc_mainwindow.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_form.h
+compiler_uic_make_all: ui_login.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_form.h
-ui_form.h: ../SmartCar_Linux/form.ui \
+	-$(DEL_FILE) ui_login.h
+ui_login.h: ../SmartCar_Linux/login.ui \
 		../../Qt5.7.0/5.7/gcc_64/bin/uic
-	/home/uuchen/Qt5.7.0/5.7/gcc_64/bin/uic ../SmartCar_Linux/form.ui -o ui_form.h
+	/home/uuchen/Qt5.7.0/5.7/gcc_64/bin/uic ../SmartCar_Linux/login.ui -o ui_login.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -809,8 +809,50 @@ main.o: ../SmartCar_Linux/main.cpp ../SmartCar_Linux/mainwindow.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/qabstractsocket.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/QHostAddress \
 		../../Qt5.7.0/5.7/gcc_64/include/QtNetwork/qhostaddress.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QDataStream \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QByteArray
+		ui_login.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QVariant \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QAction \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qaction.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qactiongroup.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QButtonGroup \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qbuttongroup.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QDialog \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qdialog.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QHBoxLayout \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qboxlayout.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qlayout.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qlayoutitem.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qgridlayout.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QHeaderView \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qheaderview.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractitemview.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qframe.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qabstractitemmodel.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qitemselectionmodel.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qstyleoption.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractspinbox.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qvalidator.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qregularexpression.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qslider.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractslider.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qstyle.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qtabbar.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qrubberband.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QLabel \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qlabel.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QLineEdit \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qlineedit.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qtextcursor.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qtextformat.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qpen.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qtextoption.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QPushButton \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qpushbutton.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qabstractbutton.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QVBoxLayout \
+		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../SmartCar_Linux/main.cpp
 
 mainwindow.o: ../SmartCar_Linux/mainwindow.cpp ../SmartCar_Linux/mainwindow.h \
