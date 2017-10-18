@@ -12,10 +12,10 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_QML_DEBUG -DQT_MULTIMEDIAWIDGETS_LIB -DQT_MULTIMEDIA_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
+DEFINES       = -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++11 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../Camera -I. -I../../Qt5.7.0/5.7/gcc_64/include -I../../Qt5.7.0/5.7/gcc_64/include/QtMultimediaWidgets -I../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia -I../../Qt5.7.0/5.7/gcc_64/include/QtWidgets -I../../Qt5.7.0/5.7/gcc_64/include/QtGui -I../../Qt5.7.0/5.7/gcc_64/include/QtNetwork -I../../Qt5.7.0/5.7/gcc_64/include/QtCore -I. -I. -I../../Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../Camera -I. -isystem /usr/local/include -isystem /usr/local/include/opencv -isystem /usr/local/include/opencv2 -I../../Qt5.7.0/5.7/gcc_64/include -I../../Qt5.7.0/5.7/gcc_64/include/QtWidgets -I../../Qt5.7.0/5.7/gcc_64/include/QtGui -I../../Qt5.7.0/5.7/gcc_64/include/QtCore -I. -I. -I../../Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/uuchen/Qt5.7.0/5.7/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -35,8 +35,8 @@ COMPRESS      = gzip -9f
 DISTNAME      = Camera1.0.0
 DISTDIR = /home/uuchen/Qt/build-Camera-Desktop_Qt_5_7_0_GCC_64bit-Debug/.tmp/Camera1.0.0
 LINK          = g++
-LFLAGS        = -Wl,-rpath,/home/uuchen/Qt5.7.0/5.7/gcc_64/lib -Wl,-rpath-link,/home/uuchen/Qt5.7.0/5.7/gcc_64/lib
-LIBS          = $(SUBLIBS) -L/home/uuchen/Qt5.7.0/5.7/gcc_64/lib -lQt5MultimediaWidgets -L/usr/lib64 -lQt5Multimedia -lQt5Widgets -lQt5Gui -lQt5Network -lQt5Core -lGL -lpthread 
+LFLAGS        = -Wl,-rpath,/home/uuchen/Qt5.7.0/5.7/gcc_64/lib
+LIBS          = $(SUBLIBS) /usr/local/lib/libopencv_highgui.so /usr/local/lib/libopencv_core.so /usr/local/lib/libopencv_imgproc.so -L/home/uuchen/Qt5.7.0/5.7/gcc_64/lib -lQt5Widgets -L/usr/lib64 -lQt5Gui -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -363,11 +363,8 @@ Makefile: ../Camera/Camera.pro ../../Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++/qmake.
 		../../Qt5.7.0/5.7/gcc_64/mkspecs/features/yacc.prf \
 		../../Qt5.7.0/5.7/gcc_64/mkspecs/features/lex.prf \
 		../Camera/Camera.pro \
-		../../Qt5.7.0/5.7/gcc_64/lib/libQt5MultimediaWidgets.prl \
-		../../Qt5.7.0/5.7/gcc_64/lib/libQt5Multimedia.prl \
 		../../Qt5.7.0/5.7/gcc_64/lib/libQt5Widgets.prl \
 		../../Qt5.7.0/5.7/gcc_64/lib/libQt5Gui.prl \
-		../../Qt5.7.0/5.7/gcc_64/lib/libQt5Network.prl \
 		../../Qt5.7.0/5.7/gcc_64/lib/libQt5Core.prl
 	$(QMAKE) -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug -o Makefile ../Camera/Camera.pro
 ../../Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_pre.prf:
@@ -519,11 +516,8 @@ Makefile: ../Camera/Camera.pro ../../Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++/qmake.
 ../../Qt5.7.0/5.7/gcc_64/mkspecs/features/yacc.prf:
 ../../Qt5.7.0/5.7/gcc_64/mkspecs/features/lex.prf:
 ../Camera/Camera.pro:
-../../Qt5.7.0/5.7/gcc_64/lib/libQt5MultimediaWidgets.prl:
-../../Qt5.7.0/5.7/gcc_64/lib/libQt5Multimedia.prl:
 ../../Qt5.7.0/5.7/gcc_64/lib/libQt5Widgets.prl:
 ../../Qt5.7.0/5.7/gcc_64/lib/libQt5Gui.prl:
-../../Qt5.7.0/5.7/gcc_64/lib/libQt5Network.prl:
 ../../Qt5.7.0/5.7/gcc_64/lib/libQt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug -o Makefile ../Camera/Camera.pro
@@ -670,37 +664,17 @@ moc_mainwindow.cpp: ../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QMainWindow \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qtouchdevice.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qtabwidget.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qicon.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/QCamera \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qcamera.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qmediacontrol.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qtmultimediadefs.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qmediaobject.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qmultimedia.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qmediaservice.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qcameraexposure.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qmediaenumdebug.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmetaobject.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qcamerafocus.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qcameraimageprocessing.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qcameraviewfindersettings.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qvideoframe.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qabstractvideobuffer.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimediaWidgets/QCameraViewfinder \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimediaWidgets/qcameraviewfinder.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimediaWidgets/qvideowidget.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimediaWidgets/qtmultimediawidgetdefs.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qmediabindableinterface.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/QCameraImageCapture \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qcameraimagecapture.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qmediaencodersettings.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QFileDialog \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qfiledialog.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qdir.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qfileinfo.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qdialog.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QTimer \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qtimer.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qbasictimer.h \
 		../Camera/mainwindow.h \
 		../../Qt5.7.0/5.7/gcc_64/bin/moc
-	/home/uuchen/Qt5.7.0/5.7/gcc_64/bin/moc $(DEFINES) -I/home/uuchen/Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++ -I/home/uuchen/Qt/Camera -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtMultimediaWidgets -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtMultimedia -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtWidgets -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtGui -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtNetwork -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Camera/mainwindow.h -o moc_mainwindow.cpp
+	/home/uuchen/Qt5.7.0/5.7/gcc_64/bin/moc $(DEFINES) -I/home/uuchen/Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++ -I/home/uuchen/Qt/Camera -I/usr/local/include -I/usr/local/include/opencv -I/usr/local/include/opencv2 -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtWidgets -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtGui -I/home/uuchen/Qt5.7.0/5.7/gcc_64/include/QtCore -I. -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../Camera/mainwindow.h -o moc_mainwindow.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -822,34 +796,14 @@ main.o: ../Camera/main.cpp ../Camera/mainwindow.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qtouchdevice.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qtabwidget.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qicon.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/QCamera \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qcamera.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qmediacontrol.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qtmultimediadefs.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qmediaobject.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qmultimedia.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qmediaservice.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qcameraexposure.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qmediaenumdebug.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmetaobject.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qcamerafocus.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qcameraimageprocessing.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qcameraviewfindersettings.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qvideoframe.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qabstractvideobuffer.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimediaWidgets/QCameraViewfinder \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimediaWidgets/qcameraviewfinder.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimediaWidgets/qvideowidget.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimediaWidgets/qtmultimediawidgetdefs.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qmediabindableinterface.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/QCameraImageCapture \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qcameraimagecapture.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qmediaencodersettings.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QFileDialog \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qfiledialog.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qdir.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qfileinfo.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qdialog.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QTimer \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qtimer.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qbasictimer.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QApplication \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qapplication.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qcoreapplication.h \
@@ -960,35 +914,16 @@ mainwindow.o: ../Camera/mainwindow.cpp ../Camera/mainwindow.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qtouchdevice.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qtabwidget.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtGui/qicon.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/QCamera \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qcamera.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qmediacontrol.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qtmultimediadefs.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qmediaobject.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qmultimedia.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qmediaservice.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qcameraexposure.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qmediaenumdebug.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qmetaobject.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qcamerafocus.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qcameraimageprocessing.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qcameraviewfindersettings.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qvideoframe.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qabstractvideobuffer.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimediaWidgets/QCameraViewfinder \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimediaWidgets/qcameraviewfinder.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimediaWidgets/qvideowidget.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimediaWidgets/qtmultimediawidgetdefs.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qmediabindableinterface.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/QCameraImageCapture \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qcameraimagecapture.h \
-		../../Qt5.7.0/5.7/gcc_64/include/QtMultimedia/qmediaencodersettings.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QFileDialog \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qfiledialog.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qdir.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qfileinfo.h \
 		../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/qdialog.h \
-		ui_mainwindow.h
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QTimer \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qtimer.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/qbasictimer.h \
+		ui_mainwindow.h \
+		../../Qt5.7.0/5.7/gcc_64/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../Camera/mainwindow.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 

@@ -13,7 +13,6 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
@@ -27,8 +26,7 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralWidget;
-    QWidget *horizontalLayoutWidget;
-    QHBoxLayout *ImageView;
+    QLabel *ImageViewer;
     QWidget *widget;
     QVBoxLayout *verticalLayout;
     QLabel *ImageCapture;
@@ -43,14 +41,9 @@ public:
         MainWindow->resize(803, 487);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        horizontalLayoutWidget = new QWidget(centralWidget);
-        horizontalLayoutWidget->setObjectName(QStringLiteral("horizontalLayoutWidget"));
-        horizontalLayoutWidget->setGeometry(QRect(30, 20, 471, 441));
-        ImageView = new QHBoxLayout(horizontalLayoutWidget);
-        ImageView->setSpacing(6);
-        ImageView->setContentsMargins(11, 11, 11, 11);
-        ImageView->setObjectName(QStringLiteral("ImageView"));
-        ImageView->setContentsMargins(0, 0, 0, 0);
+        ImageViewer = new QLabel(centralWidget);
+        ImageViewer->setObjectName(QStringLiteral("ImageViewer"));
+        ImageViewer->setGeometry(QRect(20, 20, 481, 441));
         widget = new QWidget(centralWidget);
         widget->setObjectName(QStringLiteral("widget"));
         widget->setGeometry(QRect(510, 20, 269, 441));
@@ -97,6 +90,7 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
+        ImageViewer->setText(QString());
         ImageCapture->setText(QApplication::translate("MainWindow", "no image to display...", 0));
         captureButton->setText(QApplication::translate("MainWindow", "Capture", 0));
         saveButton->setText(QApplication::translate("MainWindow", "Save", 0));

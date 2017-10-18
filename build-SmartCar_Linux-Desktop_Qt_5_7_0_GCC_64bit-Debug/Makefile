@@ -212,7 +212,7 @@ TARGET        = SmartCar_Linux
 first: all
 ####### Build rules
 
-$(TARGET): ui_login.h $(OBJECTS)  
+$(TARGET): ui_login.h ui_mainwindow.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../SmartCar_Linux/SmartCar_Linux.pro ../../Qt5.7.0/5.7/gcc_64/mkspecs/linux-g++/qmake.conf ../../Qt5.7.0/5.7/gcc_64/mkspecs/features/spec_pre.prf \
@@ -540,7 +540,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../SmartCar_Linux/mainwindow.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../SmartCar_Linux/main.cpp ../SmartCar_Linux/mainwindow.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../SmartCar_Linux/login.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../SmartCar_Linux/login.ui ../SmartCar_Linux/mainwindow.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -675,12 +675,16 @@ moc_mainwindow.cpp: ../../Qt5.7.0/5.7/gcc_64/include/QtWidgets/QMainWindow \
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_login.h
+compiler_uic_make_all: ui_login.h ui_mainwindow.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_login.h
+	-$(DEL_FILE) ui_login.h ui_mainwindow.h
 ui_login.h: ../SmartCar_Linux/login.ui \
 		../../Qt5.7.0/5.7/gcc_64/bin/uic
 	/home/uuchen/Qt5.7.0/5.7/gcc_64/bin/uic ../SmartCar_Linux/login.ui -o ui_login.h
+
+ui_mainwindow.h: ../SmartCar_Linux/mainwindow.ui \
+		../../Qt5.7.0/5.7/gcc_64/bin/uic
+	/home/uuchen/Qt5.7.0/5.7/gcc_64/bin/uic ../SmartCar_Linux/mainwindow.ui -o ui_mainwindow.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:

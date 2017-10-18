@@ -1,26 +1,25 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include<QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    cap = cv::VideoCapture(0);
+    if(!cap.isOpened())
+    {
+        qDebug() << "摄像头没有打开!" << endl;
+    }
+    timer = new QTimer(this);
 
-    camera = new QCamera(this);
-    viewfinder = new QCameraViewfinder(this);
-    imageCapture = new QCameraImageCapture(camera);
-
-    ui->ImageView->addWidget(viewfinder);
-    ui->ImageCapture->setScaledContents(true);
-
-    connect(imageCapture,SIGNAL(imageCaptured(int,QImage)),this,SLOT(displayImage(int,QImage)));
+    connect(timer,SIGNAL(timeout()),this,SLOT(handleCameraData()));
     connect(ui->captureButton,SIGNAL(clicked()),this,SLOT(captureImage()));
     connect(ui->saveButton,SIGNAL(clicked()),this,SLOT(saveImage()));
-    connect(ui->quitButton,SIGNAL(clicked()),this,SLOT(quit()));
+    connect(ui->quitButton,SIGNAL(clicked()),this,SLOT(handleQuit()));
 
-    camera->setViewfinder(viewfinder);
-    camera->start();
+    timer->start(30);
 }
 
 MainWindow::~MainWindow()
@@ -30,11 +29,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::captureImage()
 {
-    imageCapture->capture();
-}
-
-void MainWindow::displayImage(int,QImage image)
-{
+    cv::Mat img;
+    cap >> img;
+    QImage image = matToQImage(img);
     ui->ImageCapture->setPixmap(QPixmap::fromImage(image));
 }
 
@@ -51,3 +48,48 @@ void MainWindow::saveImage()
     if(pixMap)
         pixMap->save(imageName);
 }
+
+void MainWindow::handleCameraData()
+{
+    cv::Mat img;
+    cap >> img;
+    QImage image = matToQImage(img);
+    ui->ImageViewer->setPixmap(QPixmap::fromImage(image));
+}
+
+void MainWindow::handleQuit()
+{
+    timer->stop();
+    QMainWindow::close();
+}
+
+QImage MainWindow::matToQImage(cv::Mat& cvImg)
+{
+    QImage qImg;
+
+    if(cvImg.channels()==3)                             //3 channels color image
+    {
+        cv::cvtColor(cvImg,cvImg,CV_BGR2RGB);
+        qImg =QImage((const unsigned char*)(cvImg.data),
+                    cvImg.cols, cvImg.rows,
+                    cvImg.cols*cvImg.channels(),
+                    QImage::Format_RGB888);
+    }
+    else if(cvImg.channels()==1)                    //grayscale image
+    {
+        qImg =QImage((const unsigned char*)(cvImg.data),
+                    cvImg.cols,cvImg.rows,
+                    cvImg.cols*cvImg.channels(),
+                    QImage::Format_Indexed8);
+    }
+    else
+    {
+        qImg =QImage((const unsigned char*)(cvImg.data),
+                    cvImg.cols,cvImg.rows,
+                    cvImg.cols*cvImg.channels(),
+                    QImage::Format_RGB888);
+    }
+
+    return qImg;
+}
+

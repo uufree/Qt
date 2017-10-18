@@ -2,10 +2,11 @@
 #define MAINWINDOW_H
 
 #include<QMainWindow>
-#include<QCamera>
-#include<QCameraViewfinder>
-#include<QCameraImageCapture>
 #include<QFileDialog>
+#include<QTimer>
+#include<opencv2/highgui/highgui.hpp>
+#include<opencv2/imgproc/imgproc.hpp>
+#include<opencv2/core/core.hpp>
 
 namespace Ui {
 class MainWindow;
@@ -20,14 +21,16 @@ public:
     ~MainWindow();
 private slots:
     void captureImage();
-    void displayImage(int,QImage);
     void saveImage();
+    void handleCameraData();
+    void handleQuit();
+private:
+    QImage matToQImage(cv::Mat& cvImg);
 
 private:
     Ui::MainWindow *ui;
-    QCamera* camera;
-    QCameraViewfinder* viewfinder;
-    QCameraImageCapture* imageCapture;
+    cv::VideoCapture cap;
+    QTimer* timer;
 };
 
 #endif // MAINWINDOW_H
