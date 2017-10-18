@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include<QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -67,7 +66,7 @@ QImage MainWindow::matToQImage(cv::Mat& cvImg)
 {
     QImage qImg;
 
-    if(cvImg.channels()==3)                             //3 channels color image
+    if(cvImg.channels()==3)
     {
         cv::cvtColor(cvImg,cvImg,CV_BGR2RGB);
         qImg =QImage((const unsigned char*)(cvImg.data),
@@ -75,7 +74,7 @@ QImage MainWindow::matToQImage(cv::Mat& cvImg)
                     cvImg.cols*cvImg.channels(),
                     QImage::Format_RGB888);
     }
-    else if(cvImg.channels()==1)                    //grayscale image
+    else if(cvImg.channels()==1)
     {
         qImg =QImage((const unsigned char*)(cvImg.data),
                     cvImg.cols,cvImg.rows,
