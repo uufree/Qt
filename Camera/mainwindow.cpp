@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     cap = cv::VideoCapture(0);
     if(!cap.isOpened())
     {
-        qDebug() << "摄像头没有打开!" << endl;
+        qDebug() << "camera is error!" << endl;
     }
     timer = new QTimer(this);
 
