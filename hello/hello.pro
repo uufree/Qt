@@ -15,6 +15,5 @@ TEMPLATE = app
 SOURCES += main.cpp
 
 HEADERS  += \
-    newspaper.h \
-    reader.h
+    newspaper.h
 

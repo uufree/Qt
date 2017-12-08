@@ -1,28 +1,48 @@
 #ifndef NEWSPAPER_H
 #define NEWSPAPER_H
 
-#include<QObject>
 
-class Newspaper : public QObject
+#include<QPushButton>
+#include<QMainWindow>
+#include<QTimer>
+
+class Button : public QMainWindow
 {
     Q_OBJECT
-
 public:
-    Newspaper(const QString& str) : name(str)
-    {}
-
-    void send()
+    Button() : button(new QPushButton("Quit")),timer(new QTimer(this)),number(1)
     {
-        emit newsPaper(name);
+        QObject::connect(timer,SIGNAL(timeout()),this,SLOT(changeButton()));
     }
 
-signals:
-    void newsPaper(const QString& str);
+    Button(const Button&) = delete;
+    Button& operator=(const Button&) = delete;
+
+    void display()
+    {
+        timer->start(3000);
+        button->show();
+    }
+
+public slots:
+    void changeButton()
+    {
+        if(number == 1)
+        {
+            button->setText("dog");
+            number = 0;
+        }
+        else
+        {
+            button->setText("pig");
+            number = 1;
+        }
+    }
 
 private:
-    QString name;
-
+    QPushButton* button;
+    QTimer* timer;
+    int number;
 };
-
 
 #endif // NEWSPAPER_H
