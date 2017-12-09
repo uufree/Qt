@@ -1,12 +1,15 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include<QMainWindow>
 #include<QtSerialPort/QSerialPort>
 #include<QtSerialPort/QSerialPortInfo>
 #include<QTimer>
 #include<QVector>
 #include<QString>
+#include<QMap>
+
+#include"global.h"
 
 namespace Ui {
 class MainWindow;
@@ -21,16 +24,30 @@ public:
     ~MainWindow();
 
 public slots:
+    void startClicked();
+    void clearClicked();
+    void exportDataClicked();
+    void cupButtonClicked();
+    void handleTimeout();
 
 private:
     void initSerialPort();
-    void signalsAndSlots();
+    void initSignalsAndSlots();
+    void clearCurrentMessage();
+    void clearLineChart();
+    void clearAll();
+    void start();
+    void stop();
+    void setDefaultSetting();
 
 private:
     Ui::MainWindow *ui;
-    static const int maxSerial = 32;
-    QVector<QString> serialNameList;
-    QVector<QSerialPort*> aliveSerialPortList;
+    static const int maxSerialPort = 32;
+    static const int defaultSerialPort = 9;
+
+    SettingData data;
+    QMap<QString,QSerialPort*> aliveSerialPortMap;
+    QSerialPort* currentSerialPort;
     QTimer* timer;
 };
 

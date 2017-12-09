@@ -1,12 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include<QByteArray>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    foreach(const QSerialPortInfo& info,QSerial::availablePorts())
+    foreach(const QSerialPortInfo& info,QSerialPortInfo::availablePorts())
     {
         QSerialPort serial;
         serial.setPort(info);
@@ -47,9 +48,30 @@ void MainWindow::openButtonCliked()
         serialPort->setBaudRate(QSerialPort::Baud9600);//波特率
         serialPort->setDataBits(QSerialPort::Data8);//数据位
         serialPort->setStopBits(QSerialPort::OneStop);//停止位
-        serialPort->set
+        serialPort->setFlowControl(QSerialPort::NoFlowControl);
+        ui->openButton->setText(tr("关闭串口"));
+        ui->sendButton->setEnabled(true);
+        QObject::connect(serialPort,SIGNAL(readyRead()),this,SLOT(readData()));
+    }
+    else
+    {
+        serialPort->clear();
+        serialPort->close();
+        serialPort->deleteLater();
+        ui->openButton->setText(tr("打开串口"));
+        ui->sendButton->setEnabled(false);
     }
 }
 
 void MainWindow::readData()
-{}
+{
+    QByteArray buf = serialPort->readAll();
+    if(buf.count() > 0)
+    {
+        QString str = ui->recvEdit->toPlainText();
+        str += tr(buf);
+        ui->recvEdit->clear();
+        ui->recvEdit->append(str);
+    }
+    buf.clear();
+}

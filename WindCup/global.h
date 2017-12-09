@@ -5,12 +5,12 @@
 
 struct SettingData
 {
+    QString portName;
     QString baud;
-    QString data;
-    QString check;
-    QString stop;
+    QString pollTime;
+    QString cupSpeed;
     QString testArea;
-    QString testCups;
+    QString cupCount;
 };
 
 #endif // GLOBAL_H

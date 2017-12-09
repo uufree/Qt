@@ -13,15 +13,9 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    settingdialog.cpp \
-    onecupsettingdialog.cpp
+        mainwindow.cpp
 
 HEADERS  += mainwindow.h \
-    global.h \
-    settingdialog.h \
-    onecupsettingdialog.h
+    global.h
 
-FORMS    += mainwindow.ui \
-    settingdialog.ui \
-    onecupsettingdialog.ui
+FORMS    += mainwindow.ui
