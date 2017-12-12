@@ -12,10 +12,9 @@ TARGET = actionTest
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp
+SOURCES += main.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += \
+    test.h
 
-RESOURCES += \
-    res.qrc
+RESOURCES +=
