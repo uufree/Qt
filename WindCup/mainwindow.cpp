@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
         ++ch;
     }
     serialPortList = {"com1","com2","com3","com4","com5","com6","com7","com8","com9","com10","com11","com12","com13","com14","com15"};
-
+    cupNameList = {"表1：","表2：","表3：","表4：","表5：","表6：","表7：","表8：","表9：","表10：","表11：","表12：","表13：","表14：","表15：","表16：","表17：","表18：","表19：","表20：","表21：","表22：","表23：","表24：","表25：","表26：","表27：","表28：","表29：","表30：","表31：","表32："};
     initAll();
 }
 
@@ -392,7 +392,6 @@ void MainWindow::initCurrentDisplayArea()
 //初始化折线图信息
 void MainWindow::initLineChart()
 {
-
 }
 
 void MainWindow::initSpeed()
@@ -491,7 +490,7 @@ void MainWindow::clearLineChart()
 void MainWindow::clearSpeed()
 {
     for(int i=0;i<currentCups;++i)
-        cupList[i]->setText(cupList[i]->objectName());
+        cupList[i]->setText(cupNameList[i]);
 }
 
 void MainWindow::clearAll()

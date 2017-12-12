@@ -11,6 +11,8 @@
 #include<QPushButton>
 #include<QByteArray>
 #include<QTime>
+#include<QDebug>
+#include<QEvent>
 
 #include"global.h"
 
@@ -32,7 +34,6 @@ public slots:
     void exportDataClicked();//no
     void handleTimeout();//ok
     void updateTime();//ok
-
 
     void cupButtonClicked0();
     void cupButtonClicked1();
@@ -67,6 +68,17 @@ public slots:
     void cupButtonClicked30();
     void cupButtonClicked31();
 
+protected:
+    void changeEvent(QEvent* event)
+    {
+        if(event->type() != QEvent::WindowStateChange)
+            return;
+        if(this->windowState() == Qt::WindowMaximized)
+            //窗口最大化，处理折线图
+        else
+            //窗口最小化，处理折线图
+    }
+
 private:
 //初始化信息与清理信息
     void initSettingArea();//ok
@@ -99,6 +111,7 @@ private:
     QVector<QPushButton*> cupList;
     QVector<char> addrList;//在
     QVector<QString> serialPortList;
+    QVector<QString> cupNameList;
 
     double currentSpeed[32];
     double currentVolume[32];
