@@ -9,3 +9,8 @@ MainWindow::~MainWindow()
 {
 
 }
+
+void MainWindow::paintEvent(QPaintEvent* event)
+{
+    QPainter painter(ui->)
+}

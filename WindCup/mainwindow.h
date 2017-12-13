@@ -13,6 +13,9 @@
 #include<QTime>
 #include<QDebug>
 #include<QEvent>
+#include<QPainter>
+#include<QColor>
+#include<QPaintEvent>
 
 #include"global.h"
 
@@ -73,11 +76,13 @@ protected:
     {
         if(event->type() != QEvent::WindowStateChange)
             return;
-        if(this->windowState() == Qt::WindowMaximized)
+ //       if(this->windowState() == Qt::WindowMaximized)
             //窗口最大化，处理折线图
-        else
+//        else
             //窗口最小化，处理折线图
     }
+
+    void paintEvent(QPaintEvent* event);
 
 private:
 //初始化信息与清理信息
@@ -96,11 +101,18 @@ private:
     void collectSettingMessage();//ok
     void start();//ok
 
+//绘制折现图的函数
+    void paintSmallSystem();
+    void paintBigSystem();
+    void paintSmallLineChart();
+    void paintBigLineChart();
+
 private:
     Ui::MainWindow *ui;
     static const int maxCups = 32;
     static const int defaultCups = 9;
     int currentCups;
+    uint32_t seconds;
 
     SettingData settingData;
     QSerialPort* currentSerialPort;
@@ -112,6 +124,10 @@ private:
     QVector<char> addrList;//在
     QVector<QString> serialPortList;
     QVector<QString> cupNameList;
+
+//坐标系的三点图
+    QPoint smallPoint1,smallPoint2,smallPoint3;
+    QPoint bigPoint1,bigPoint2,bigPoint3;
 
     double currentSpeed[32];
     double currentVolume[32];

@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     currentCups(9),
+    seconds(0),
     currentSerialPort(new QSerialPort),
     serialTimer(new QTimer),
     timeTimer(new QTimer),
@@ -24,8 +25,17 @@ MainWindow::MainWindow(QWidget *parent) :
         addrList.append(ch);
         ++ch;
     }
-    serialPortList = {"com1","com2","com3","com4","com5","com6","com7","com8","com9","com10","com11","com12","com13","com14","com15"};
+    serialPortList = {"/dev/ttyACM0","com2","com3","com4","com5","com6","com7","com8","com9","com10","com11","com12","com13","com14","com15"};
     cupNameList = {"表1：","表2：","表3：","表4：","表5：","表6：","表7：","表8：","表9：","表10：","表11：","表12：","表13：","表14：","表15：","表16：","表17：","表18：","表19：","表20：","表21：","表22：","表23：","表24：","表25：","表26：","表27：","表28：","表29：","表30：","表31：","表32："};
+
+    for(int i=0;i<32;i++)
+    {
+        currentSpeed[i] = 0;
+        currentVolume[i] = 0;
+        currentSpeed[i] = 0;
+        currentVolume[i] = 0;
+    }
+
     initAll();
 }
 
@@ -43,14 +53,15 @@ void MainWindow::startClicked()
         start();//根据设置区的信息建立串口，启动定时器
         ui->startBtton->setText(tr("停止"));
         ui->flushButton->setEnabled(false);
-        ui->saveDataButton->setEnabled(false);
+
+        ui->saveDataButton->setText(tr("保存数据"));
     }
     else
     {
         serialTimer->stop();
         ui->startBtton->setText(tr("开始"));
         ui->flushButton->setEnabled(true);
-        ui->saveDataButton->setEnabled(true);
+        ui->saveDataButton->setText(tr("历史数据"));
     }
 }
 
@@ -61,18 +72,34 @@ void MainWindow::flushClicked()
 
 void MainWindow::exportDataClicked()//保存数据信息
 {
-
+//    if(ui->saveDataButton->text() == tr())
 }
 
 void MainWindow::handleTimeout()
 {
-    QByteArray byte8;
+//    QByteArray byte8;
     for(int i=0;i<currentCups;i++)
     {
-        currentSerialPort->write(&addrList[i],1);
-        byte8 = currentSerialPort->readAll();
-        //这块没有计算，只显示
-        cupList[i]->setText(QString::number(byte8.toInt(),16).toUpper());
+//        char ch = addrList[i];
+//        currentSerialPort->write(&ch,1);
+//        qDebug() << "write: " << (uint8_t)ch;
+//        byte8 = currentSerialPort->readAll();
+//        qDebug() << "read: " << byte8.data();
+//        qDebug() << "read: " << *((uint8_t*)byte8.data());
+
+        //版本2
+        char ch = addrList[i];
+        currentSerialPort->write(&ch,1);
+        qDebug() << "write: " << (uint8_t)ch;
+        char in;
+        currentSerialPort->read(&in,1);
+        qDebug() << "read: " << (uint8_t)ch;
+
+        //简略的计算
+        currentSpeed[i] = (uint8_t)addrList[i] * settingData.cupSpeed.toInt();
+        currentVolume[i] = currentSpeed[i] * settingData.testArea.toInt();
+        averageSpeed[i] = (averageSpeed[i] + currentSpeed[i]) / 2;
+        averageVolume[i] = (averageVolume[i] + currentVolume[i]) / 2;
     }
 }
 
@@ -80,11 +107,38 @@ void MainWindow::updateTime()
 {
     dateTimeStr = dateTime->currentTime().toString();
     ui->currentTime->setText(dateTimeStr);
+
+    //记录当前运行的总时间
+    ++seconds;
+
+    if(ui->startBtton->text() == tr("停止"))
+    {
+        QString str;
+        //更新cups speed
+        for(int i=0;i<currentCups;i++)
+        {
+            str = cupNameList[i] + QString::number(currentSpeed[i]);
+            cupList[i]->setText(str);
+        }
+
+        //更新currrent cup数据
+        if(ui->currentCup->text() != "")
+        {
+            int index = ui->currentCup->text().toInt() - 1;
+            ui->currentSpeed->setText(QString::number(currentSpeed[index]));
+            ui->currentVolume->setText(QString::number(currentVolume[index]));
+            ui->currentAverageSpeed->setText(QString::number(averageSpeed[index]));
+            ui->currentAverageVolume->setText(QString::number(averageVolume[index]));
+        }
+        //更新折线图
+        update();
+    }
+
 }
 
 void MainWindow::cupButtonClicked0()
 {
-    ui->currentCup->setText(QString::number(0));
+    ui->currentCup->setText(QString::number(0+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[0]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[0]));
     ui->currentSpeed->setText(QString::number(currentSpeed[0]));
@@ -92,7 +146,7 @@ void MainWindow::cupButtonClicked0()
 }
 void MainWindow::cupButtonClicked1()
 {
-    ui->currentCup->setText(QString::number(1));
+    ui->currentCup->setText(QString::number(1+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[1]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[1]));
     ui->currentSpeed->setText(QString::number(currentSpeed[1]));
@@ -100,7 +154,7 @@ void MainWindow::cupButtonClicked1()
 }
 void MainWindow::cupButtonClicked2()
 {
-    ui->currentCup->setText(QString::number(2));
+    ui->currentCup->setText(QString::number(2+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[2]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[2]));
     ui->currentSpeed->setText(QString::number(currentSpeed[2]));
@@ -108,7 +162,7 @@ void MainWindow::cupButtonClicked2()
 }
 void MainWindow::cupButtonClicked3()
 {
-    ui->currentCup->setText(QString::number(3));
+    ui->currentCup->setText(QString::number(3+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[3]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[3]));
     ui->currentSpeed->setText(QString::number(currentSpeed[3]));
@@ -116,7 +170,7 @@ void MainWindow::cupButtonClicked3()
 }
 void MainWindow::cupButtonClicked4()
 {
-    ui->currentCup->setText(QString::number(4));
+    ui->currentCup->setText(QString::number(4+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[4]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[4]));
     ui->currentSpeed->setText(QString::number(currentSpeed[4]));
@@ -124,7 +178,7 @@ void MainWindow::cupButtonClicked4()
 }
 void MainWindow::cupButtonClicked5()
 {
-    ui->currentCup->setText(QString::number(5));
+    ui->currentCup->setText(QString::number(5+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[5]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[5]));
     ui->currentSpeed->setText(QString::number(currentSpeed[5]));
@@ -132,7 +186,7 @@ void MainWindow::cupButtonClicked5()
 }
 void MainWindow::cupButtonClicked6()
 {
-    ui->currentCup->setText(QString::number(6));
+    ui->currentCup->setText(QString::number(6+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[6]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[6]));
     ui->currentSpeed->setText(QString::number(currentSpeed[6]));
@@ -140,7 +194,7 @@ void MainWindow::cupButtonClicked6()
 }
 void MainWindow::cupButtonClicked7()
 {
-    ui->currentCup->setText(QString::number(7));
+    ui->currentCup->setText(QString::number(7+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[7]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[7]));
     ui->currentSpeed->setText(QString::number(currentSpeed[7]));
@@ -149,7 +203,7 @@ void MainWindow::cupButtonClicked7()
 
 void MainWindow::cupButtonClicked8()
 {
-    ui->currentCup->setText(QString::number(8));
+    ui->currentCup->setText(QString::number(8+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[8]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[8]));
     ui->currentSpeed->setText(QString::number(currentSpeed[8]));
@@ -157,7 +211,7 @@ void MainWindow::cupButtonClicked8()
 }
 void MainWindow::cupButtonClicked9()
 {
-    ui->currentCup->setText(QString::number(9));
+    ui->currentCup->setText(QString::number(9+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[9]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[9]));
     ui->currentSpeed->setText(QString::number(currentSpeed[9]));
@@ -165,7 +219,7 @@ void MainWindow::cupButtonClicked9()
 }
 void MainWindow::cupButtonClicked10()
 {
-    ui->currentCup->setText(QString::number(10));
+    ui->currentCup->setText(QString::number(10+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[10]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[10]));
     ui->currentSpeed->setText(QString::number(currentSpeed[10]));
@@ -173,7 +227,7 @@ void MainWindow::cupButtonClicked10()
 }
 void MainWindow::cupButtonClicked11()
 {
-    ui->currentCup->setText(QString::number(11));
+    ui->currentCup->setText(QString::number(11+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[11]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[11]));
     ui->currentSpeed->setText(QString::number(currentSpeed[11]));
@@ -182,7 +236,7 @@ void MainWindow::cupButtonClicked11()
 
 void MainWindow::cupButtonClicked12()
 {
-    ui->currentCup->setText(QString::number(12));
+    ui->currentCup->setText(QString::number(12+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[12]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[12]));
     ui->currentSpeed->setText(QString::number(currentSpeed[12]));
@@ -190,7 +244,7 @@ void MainWindow::cupButtonClicked12()
 }
 void MainWindow::cupButtonClicked13()
 {
-    ui->currentCup->setText(QString::number(13));
+    ui->currentCup->setText(QString::number(13+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[13]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[13]));
     ui->currentSpeed->setText(QString::number(currentSpeed[13]));
@@ -198,7 +252,7 @@ void MainWindow::cupButtonClicked13()
 }
 void MainWindow::cupButtonClicked14()
 {
-    ui->currentCup->setText(QString::number(14));
+    ui->currentCup->setText(QString::number(14+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[14]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[14]));
     ui->currentSpeed->setText(QString::number(currentSpeed[14]));
@@ -206,7 +260,7 @@ void MainWindow::cupButtonClicked14()
 }
 void MainWindow::cupButtonClicked15()
 {
-    ui->currentCup->setText(QString::number(15));
+    ui->currentCup->setText(QString::number(15+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[15]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[15]));
     ui->currentSpeed->setText(QString::number(currentSpeed[15]));
@@ -215,7 +269,7 @@ void MainWindow::cupButtonClicked15()
 
 void MainWindow::cupButtonClicked16()
 {
-    ui->currentCup->setText(QString::number(16));
+    ui->currentCup->setText(QString::number(16+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[16]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[16]));
     ui->currentSpeed->setText(QString::number(currentSpeed[16]));
@@ -223,7 +277,7 @@ void MainWindow::cupButtonClicked16()
 }
 void MainWindow::cupButtonClicked17()
 {
-    ui->currentCup->setText(QString::number(17));
+    ui->currentCup->setText(QString::number(17+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[17]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[17]));
     ui->currentSpeed->setText(QString::number(currentSpeed[17]));
@@ -231,7 +285,7 @@ void MainWindow::cupButtonClicked17()
 }
 void MainWindow::cupButtonClicked18()
 {
-    ui->currentCup->setText(QString::number(18));
+    ui->currentCup->setText(QString::number(18+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[18]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[18]));
     ui->currentSpeed->setText(QString::number(currentSpeed[18]));
@@ -239,7 +293,7 @@ void MainWindow::cupButtonClicked18()
 }
 void MainWindow::cupButtonClicked19()
 {
-    ui->currentCup->setText(QString::number(19));
+    ui->currentCup->setText(QString::number(19+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[19]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[19]));
     ui->currentSpeed->setText(QString::number(currentSpeed[19]));
@@ -248,7 +302,7 @@ void MainWindow::cupButtonClicked19()
 
 void MainWindow::cupButtonClicked20()
 {
-    ui->currentCup->setText(QString::number(20));
+    ui->currentCup->setText(QString::number(20+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[20]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[20]));
     ui->currentSpeed->setText(QString::number(currentSpeed[20]));
@@ -256,7 +310,7 @@ void MainWindow::cupButtonClicked20()
 }
 void MainWindow::cupButtonClicked21()
 {
-    ui->currentCup->setText(QString::number(21));
+    ui->currentCup->setText(QString::number(21+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[21]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[21]));
     ui->currentSpeed->setText(QString::number(currentSpeed[21]));
@@ -264,7 +318,7 @@ void MainWindow::cupButtonClicked21()
 }
 void MainWindow::cupButtonClicked22()
 {
-    ui->currentCup->setText(QString::number(22));
+    ui->currentCup->setText(QString::number(22+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[22]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[22]));
     ui->currentSpeed->setText(QString::number(currentSpeed[22]));
@@ -272,7 +326,7 @@ void MainWindow::cupButtonClicked22()
 }
 void MainWindow::cupButtonClicked23()
 {
-    ui->currentCup->setText(QString::number(23));
+    ui->currentCup->setText(QString::number(23+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[23]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[23]));
     ui->currentSpeed->setText(QString::number(currentSpeed[23]));
@@ -281,7 +335,7 @@ void MainWindow::cupButtonClicked23()
 
 void MainWindow::cupButtonClicked24()
 {
-    ui->currentCup->setText(QString::number(24));
+    ui->currentCup->setText(QString::number(24+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[24]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[24]));
     ui->currentSpeed->setText(QString::number(currentSpeed[24]));
@@ -289,7 +343,7 @@ void MainWindow::cupButtonClicked24()
 }
 void MainWindow::cupButtonClicked25()
 {
-    ui->currentCup->setText(QString::number(25));
+    ui->currentCup->setText(QString::number(25+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[25]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[25]));
     ui->currentSpeed->setText(QString::number(currentSpeed[25]));
@@ -297,7 +351,7 @@ void MainWindow::cupButtonClicked25()
 }
 void MainWindow::cupButtonClicked26()
 {
-    ui->currentCup->setText(QString::number(26));
+    ui->currentCup->setText(QString::number(26+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[26]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[26]));
     ui->currentSpeed->setText(QString::number(currentSpeed[26]));
@@ -305,7 +359,7 @@ void MainWindow::cupButtonClicked26()
 }
 void MainWindow::cupButtonClicked27()
 {
-    ui->currentCup->setText(QString::number(27));
+    ui->currentCup->setText(QString::number(27+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[27]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[27]));
     ui->currentSpeed->setText(QString::number(currentSpeed[27]));
@@ -314,7 +368,7 @@ void MainWindow::cupButtonClicked27()
 
 void MainWindow::cupButtonClicked28()
 {
-    ui->currentCup->setText(QString::number(28));
+    ui->currentCup->setText(QString::number(28+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[28]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[28]));
     ui->currentSpeed->setText(QString::number(currentSpeed[28]));
@@ -322,7 +376,7 @@ void MainWindow::cupButtonClicked28()
 }
 void MainWindow::cupButtonClicked29()
 {
-    ui->currentCup->setText(QString::number(29));
+    ui->currentCup->setText(QString::number(29+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[29]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[29]));
     ui->currentSpeed->setText(QString::number(currentSpeed[29]));
@@ -330,7 +384,7 @@ void MainWindow::cupButtonClicked29()
 }
 void MainWindow::cupButtonClicked30()
 {
-    ui->currentCup->setText(QString::number(30));
+    ui->currentCup->setText(QString::number(30+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[30]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[30]));
     ui->currentSpeed->setText(QString::number(currentSpeed[30]));
@@ -338,7 +392,7 @@ void MainWindow::cupButtonClicked30()
 }
 void MainWindow::cupButtonClicked31()
 {
-    ui->currentCup->setText(QString::number(31));
+    ui->currentCup->setText(QString::number(31+1));
     ui->currentAverageSpeed->setText(QString::number(averageSpeed[31]));
     ui->currentAverageVolume->setText(QString::number(averageVolume[31]));
     ui->currentSpeed->setText(QString::number(currentSpeed[31]));
@@ -392,6 +446,13 @@ void MainWindow::initCurrentDisplayArea()
 //初始化折线图信息
 void MainWindow::initLineChart()
 {
+    smallPoint1 = QPoint(400,30);
+    smallPoint2 = QPoint(400,360);
+    smallPoint3 = QPoint(800,360);
+
+    bigPoint1 = QPoint(600,30);
+    bigPoint2 = QPoint(600,550);
+    bigPoint3 = QPoint(1250,550);
 }
 
 void MainWindow::initSpeed()
@@ -484,13 +545,15 @@ void MainWindow::clearCurrentMessage()
 //清理折线图信息
 void MainWindow::clearLineChart()
 {
-
 }
 
 void MainWindow::clearSpeed()
 {
     for(int i=0;i<currentCups;++i)
+    {
+        qDebug() << cupNameList[i];
         cupList[i]->setText(cupNameList[i]);
+    }
 }
 
 void MainWindow::clearAll()
@@ -535,4 +598,56 @@ void MainWindow::start()
     currentSerialPort->setFlowControl(QSerialPort::NoFlowControl);
 
     serialTimer->start(settingData.pollTime.toInt());
+}
+
+void MainWindow::paintEvent(QPaintEvent *event)
+{
+    paintSmallSystem();
+//    paintBigSystem();
+}
+
+void MainWindow::paintSmallSystem()
+{
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing,true);
+    painter.drawLine(smallPoint1,smallPoint2);
+    painter.drawLine(smallPoint2,smallPoint3);
+
+    int sizeY = (smallPoint2.ry() - smallPoint1.ry()) / 10;
+    int sizeX = (smallPoint3.rx() - smallPoint2.rx()) / 10;
+    for(int i=1;i<=10;++i)//y刻度线
+    {
+        painter.drawLine(smallPoint2.rx(),smallPoint2.ry() - sizeY * i,smallPoint2.rx() - 5,smallPoint2.ry() - sizeY * i);
+        painter.drawText(smallPoint2.rx() - 20,smallPoint2.ry() - sizeY * i + 5,QString::number((i)));
+    }
+
+    for(int i=1;i<=10;++i)//x刻度线
+    {
+        painter.drawLine(smallPoint2.rx() + sizeX * i,smallPoint2.ry(),smallPoint2.rx() + sizeX * i,smallPoint2.ry() + 5);
+        painter.drawText(smallPoint2.rx() + sizeX * i - 5 ,smallPoint2.ry() + 20,QString::number((i)));
+    }
+    painter.drawText(smallPoint2.rx() - 15,smallPoint2.ry() + 15,QString::number(0));
+}
+
+void MainWindow::paintBigSystem()
+{
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing,true);
+    painter.drawLine(bigPoint1,bigPoint2);
+    painter.drawLine(bigPoint2,bigPoint3);
+
+    int sizeY = (bigPoint2.ry() - bigPoint1.ry()) / 10;
+    int sizeX = (bigPoint3.rx() - bigPoint2.rx()) / 10;
+    for(int i=1;i<=10;++i)//y刻度线
+    {
+        painter.drawLine(bigPoint2.rx(),bigPoint2.ry() - sizeY * i,bigPoint2.rx() - 5,bigPoint2.ry() - sizeY * i);
+        painter.drawText(bigPoint2.rx() - 20,bigPoint2.ry() - sizeY * i + 5,QString::number((i)));
+    }
+
+    for(int i=1;i<=10;++i)//x刻度线
+    {
+        painter.drawLine(bigPoint2.rx() + sizeX * i,bigPoint2.ry(),bigPoint2.rx() + sizeX * i,bigPoint2.ry() + 5);
+        painter.drawText(bigPoint2.rx() + sizeX * i - 5 ,bigPoint2.ry() + 20,QString::number((i)));
+    }
+    painter.drawText(bigPoint2.rx() - 15,bigPoint2.ry() + 15,QString::number(0));
 }

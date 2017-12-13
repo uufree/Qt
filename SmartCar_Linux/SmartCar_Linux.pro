@@ -9,6 +9,6 @@ QT += widgets core network
 
 # Input
 HEADERS += mainwindow.h
-FORMS += login.ui \
+FORMS += \
     mainwindow.ui
 SOURCES += main.cpp mainwindow.cpp
