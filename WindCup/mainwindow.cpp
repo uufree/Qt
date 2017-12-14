@@ -6,6 +6,8 @@
 #include<QTableWidget>
 #include<QComboBox>
 #include<QDebug>
+#include<QFile>
+#include<QDataStream>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -15,9 +17,17 @@ MainWindow::MainWindow(QWidget *parent) :
     currentSerialPort(new QSerialPort),
     serialTimer(new QTimer),
     timeTimer(new QTimer),
-    dateTime(new QTime)
+    dateTime(new QTime),
+    widget(new QTableWidget)
 {
     ui->setupUi(this);
+
+    QFile qss(":/qss/uuchen.qss");
+    if(!qss.open(QIODevice::ReadOnly))
+        qDebug() << "qss: open file error!";
+    QTextStream in(&qss);
+    QString styleSheet = in.readAll();
+    this->setStyleSheet(styleSheet);
 
     char ch = 0x31;
     for(int i=0;i<32;i++)
@@ -26,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
         ++ch;
     }
     cupNameList = {"表1：","表2：","表3：","表4：","表5：","表6：","表7：","表8：","表9：","表10：","表11：","表12：","表13：","表14：","表15：","表16：","表17：","表18：","表19：","表20：","表21：","表22：","表23：","表24：","表25：","表26：","表27：","表28：","表29：","表30：","表31：","表32："};
+    tableGroupList = {"第一组：","第二组：","第三组：","第四组：","第五组：","第六组：","第七组：","第八组：","第九组：","第十组：","第十一组：","第十二组：","第十三组：","第十四组：","第十五组：","第十六组：","第十七组：","第十八组：","第十九组：","第二十组：","第二十一组：","第二十二组：","第二十三组：","第二十四组：","第二十五组：","第二十六组：","第二十七组：","第二十八组：","第二十九组：","第三十组：","第三十一组：","第三十二组："};
 
     for(int i=0;i<32;i++)
     {
@@ -38,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //new position ways
 
     initAll();
+    widget->resize(1,1);
 }
 
 MainWindow::~MainWindow()
@@ -49,18 +61,19 @@ void MainWindow::startClicked()
 {
     if(ui->startBtton->text() == tr("开始"))
     {
+        exportDataList.clear();
         clearAll();//清理掉已有的信息
         collectSettingMessage();//收集设置区的信息
         start();//根据设置区的信息建立串口，启动定时器
         ui->startBtton->setText(tr("停止"));
         ui->flushButton->setEnabled(false);
-
         ui->saveDataButton->setText(tr("保存数据"));
     }
     else
     {
         serialTimer->stop();
-        writeDataInFile();
+        if(!exportDataList.empty())
+            writeDataInFile();
         ui->startBtton->setText(tr("开始"));
         ui->flushButton->setEnabled(true);
         ui->saveDataButton->setText(tr("历史数据"));
@@ -82,34 +95,112 @@ void MainWindow::exportDataClicked()//保存数据信息
         for(int i=0;i<currentCups;i++)
         {
             exportDataList.push_back(currentSpeed[i]);
-            exportDataList.push_back(currentVolume[i]);
             exportDataList.push_back(averageSpeed[i]);
+            exportDataList.push_back(currentVolume[i]);
             exportDataList.push_back(averageVolume[i]);
         }
     }
     else
-    {
-        //从文件中读取数据并展示
+    {//读取数据，并且显示数据
+        //读取数据
+        readDataInFile();
+        //显示数据
+            //表格初始化过程
+        int rowCount = (exportDataList.size() / 4 / currentCups) * (currentCups + 1);
+        int countInGroup = currentCups + 1;
+        widget->setColumnCount(4);
+        widget->setRowCount(rowCount);
+        QTableWidgetItem* item1 = new QTableWidgetItem;
+        item1->setText("当前风速");
+        widget->setHorizontalHeaderItem(0,item1);
+        QTableWidgetItem* item2 = new QTableWidgetItem;
+        item2->setText("平均风速");
+        widget->setHorizontalHeaderItem(1,item2);
+        QTableWidgetItem* item3 = new QTableWidgetItem;
+        item3->setText("当前风量");
+        widget->setHorizontalHeaderItem(2,item3);
+        QTableWidgetItem* item4 = new QTableWidgetItem;
+        item4->setText("平均风量");
+        widget->setHorizontalHeaderItem(3,item4);
+
+        for(int i=0;i<rowCount/countInGroup;i++)
+        {
+            QTableWidgetItem* item = new QTableWidgetItem;
+            item->setText(tableGroupList[i]);
+            widget->setVerticalHeaderItem(i * countInGroup,item);
+
+            for(int j = 1;j < countInGroup;j++)
+            {
+                QTableWidgetItem* item = new QTableWidgetItem;
+                if(j < countInGroup)
+                    item->setText(cupNameList[j-1]);
+                else
+                    item->setText("");
+                widget->setVerticalHeaderItem(i * countInGroup + j,item);
+            }
+        }
+
+            //填充表格
+        for(int i=0;i<rowCount/countInGroup;i++)
+        {
+            for(int j = 1;j < countInGroup;j++)
+            {
+                for(int k = 0;k < 4;k++)
+                {
+                    widget->setItem(i * countInGroup + j,k,new QTableWidgetItem(QString::number(exportDataList.front())));
+                    exportDataList.pop_front();
+                }
+            }
+        }
+
+        widget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        widget->resize(480,500);
+        widget->setWindowTitle(currentFile);
+        widget->setWindowModality(Qt::ApplicationModal);
+        widget->show();
     }
 }
 
 void MainWindow::writeDataInFile()
-{}
+{
+    currentFile.clear();
+    currentFile = dateTimeStr + ".dat";
+    currentFile = "/home/uuchen/" + currentFile;
+    QFile current(currentFile);
+    if(current.exists())
+        current.remove();
+    if(!current.open(QIODevice::ReadWrite))
+        qDebug() << "writeDataInFile: open file error!";
+    QDataStream out(&current);
+    out << exportDataList;
+    exportDataList.clear();
+    current.close();
+}
 
 void MainWindow::readDataInFile()
-{}
+{
+    exportDataList.clear();
+    QFile current(currentFile);
+    if(!current.open(QIODevice::ReadWrite))
+        qDebug() << "readDataInFile: open file error!";
+    QDataStream in(&current);
+    in >> exportDataList;
+    current.close();
+}
 
 void MainWindow::handleTimeout()
 {
-
+    //串口数据写发送的时候会默认加上\r\n
     for(int i=0;i<currentCups;i++)
     {
         char ch = addrList[i];
-        currentSerialPort->write(&ch,1);
-//        qDebug() << "write: " << ch;
-        char in;
-        currentSerialPort->read(&in,1);
-//        qDebug() << "read: " << in;
+        currentSerialPort->write(&ch);
+        qDebug() << "write: " << (uint8_t)ch;
+        char in = '1';
+//        currentSerialPort->read(&in,1);
+//        qDebug() << "read: " << (uint8_t)in;
+        QByteArray buf = currentSerialPort->readAll();
+        qDebug() << buf.data();
 
         currentSpeed[i] = (uint8_t)in * settingData.cupSpeed.toInt();
         currentVolume[i] = currentSpeed[i] * settingData.testArea.toInt();
@@ -612,13 +703,27 @@ void MainWindow::start()
     }
 
     if(currentSerialPort != NULL)
+    {
+        currentSerialPort->close();
         delete currentSerialPort;
+    }
 
     //这块没有按照设置的方式来设置端口信息
     currentSerialPort = new QSerialPort;
     currentSerialPort->setPortName(ui->settingPort->currentText());
     currentSerialPort->open(QIODevice::ReadWrite);
-    currentSerialPort->setBaudRate(QSerialPort::Baud9600);
+    //设置波特率
+    if(settingData.baud == "9600")
+        currentSerialPort->setBaudRate(QSerialPort::Baud9600);
+    else if(settingData.baud == "2400")
+        currentSerialPort->setBaudRate(QSerialPort::Baud2400);
+    else if(settingData.baud == "4800")
+        currentSerialPort->setBaudRate(QSerialPort::Baud4800);
+    else if(settingData.baud == "19200")
+        currentSerialPort->setBaudRate(QSerialPort::Baud19200);
+    else
+        currentSerialPort->setBaudRate(QSerialPort::Baud9600);
+
     currentSerialPort->setDataBits(QSerialPort::Data8);
     currentSerialPort->setParity(QSerialPort::NoParity);
     currentSerialPort->setStopBits(QSerialPort::OneStop);
@@ -696,7 +801,7 @@ void MainWindow::paintLineChart()
         font.setPixelSize(20);
         painter.setFont(font);
         painter.setPen(penText);
-        painter.drawText(pointList[i].rx(),pointList[i].ry() + 10,QString::number(lineChartMessage[i]));
+        painter.drawText(pointList[i].rx() - 10,pointList[i].ry() + 20,QString::number(lineChartMessage[i]));
     }
 
     if(lineChartMessage.size() > 0)
@@ -704,6 +809,6 @@ void MainWindow::paintLineChart()
         painter.setPen(penPoint);
         painter.drawPoint(pointList[pointList.size()- 1]);
         painter.setPen(penText);
-        painter.drawText(pointList[pointList.size() - 1].rx(),pointList[pointList.size() - 1].ry() + 10,QString::number(lineChartMessage[lineChartMessage.size()-1]));
+        painter.drawText(pointList[pointList.size() - 1].rx() - 10,pointList[pointList.size() - 1].ry() + 20,QString::number(lineChartMessage[lineChartMessage.size()-1]));
     }
 }

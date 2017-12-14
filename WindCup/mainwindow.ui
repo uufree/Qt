@@ -560,11 +560,6 @@
                   </item>
                   <item>
                    <property name="text">
-                    <string>14400</string>
-                   </property>
-                  </item>
-                  <item>
-                   <property name="text">
                     <string>19200</string>
                    </property>
                   </item>

@@ -17,6 +17,7 @@
 #include<QColor>
 #include<QPaintEvent>
 #include<QFile>
+#include<QTableWidget>
 
 #include"global.h"
 
@@ -104,6 +105,7 @@ private:
     static const int systemSize = 10;
     int currentCups;
     uint32_t seconds;
+    QString currentFile;
 
     SettingData settingData;
     QSerialPort* currentSerialPort;
@@ -114,6 +116,7 @@ private:
     QVector<QPushButton*> cupList;
     QVector<char> addrList;//在
     QVector<QString> cupNameList;
+    QVector<QString> tableGroupList;
 
 //坐标系的三点图
     QPoint Point1,Point2,Point3;
@@ -126,6 +129,7 @@ private:
 
     QVector<double> lineChartMessage;
     QVector<double> exportDataList;
+    QTableWidget* widget;
 };
 
 #endif // MAINWINDOW_H

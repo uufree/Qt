@@ -139,6 +139,9 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(MainWindow->sizePolicy().hasHeightForWidth());
         MainWindow->setSizePolicy(sizePolicy);
+        QIcon icon;
+        icon.addFile(QString::fromUtf8("../../\346\241\214\351\235\242/WineCup.png"), QSize(), QIcon::Normal, QIcon::Off);
+        MainWindow->setWindowIcon(icon);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -702,7 +705,7 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", Q_NULLPTR));
+        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "\346\231\272\350\203\275\351\243\216\351\200\237\351\207\207\351\233\206\347\263\273\347\273\237", Q_NULLPTR));
         E0->setText(QApplication::translate("MainWindow", "\350\241\2501\357\274\232", Q_NULLPTR));
         E1->setText(QApplication::translate("MainWindow", "\350\241\2502\357\274\232", Q_NULLPTR));
         E2->setText(QApplication::translate("MainWindow", "\350\241\2503\357\274\232", Q_NULLPTR));
@@ -749,7 +752,6 @@ public:
          << QApplication::translate("MainWindow", "9600", Q_NULLPTR)
          << QApplication::translate("MainWindow", "2400", Q_NULLPTR)
          << QApplication::translate("MainWindow", "4800", Q_NULLPTR)
-         << QApplication::translate("MainWindow", "14400", Q_NULLPTR)
          << QApplication::translate("MainWindow", "19200", Q_NULLPTR)
         );
         label_4->setText(QApplication::translate("MainWindow", "\346\265\213\346\226\255\351\235\242\351\235\242\347\247\257:", Q_NULLPTR));
