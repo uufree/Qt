@@ -20,3 +20,6 @@ HEADERS  += mainwindow.h \
     global.h
 
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    img.qrc

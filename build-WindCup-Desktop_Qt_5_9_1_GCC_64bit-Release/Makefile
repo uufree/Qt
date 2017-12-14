@@ -51,9 +51,11 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../WindCup/main.cpp \
-		../WindCup/mainwindow.cpp moc_mainwindow.cpp
+		../WindCup/mainwindow.cpp qrc_img.cpp \
+		moc_mainwindow.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
+		qrc_img.o \
 		moc_mainwindow.o
 DIST          = ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/common/unix.conf \
@@ -214,6 +216,7 @@ DIST          = ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/qt_config.prf \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/spec_post.prf \
+		../WindCup/.qmake.stash \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/toolchain.prf \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/default_pre.prf \
@@ -405,6 +408,7 @@ Makefile: ../WindCup/WindCup.pro ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/linux-g++/qm
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/qt_config.prf \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/toolchain.prf \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/default_pre.prf \
@@ -424,6 +428,7 @@ Makefile: ../WindCup/WindCup.pro ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/linux-g++/qm
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/yacc.prf \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/lex.prf \
 		../WindCup/WindCup.pro \
+		../WindCup/img.qrc \
 		../../Qt5.9.1/5.9.1/gcc_64/lib/libQt5Widgets.prl \
 		../../Qt5.9.1/5.9.1/gcc_64/lib/libQt5Gui.prl \
 		../../Qt5.9.1/5.9.1/gcc_64/lib/libQt5SerialPort.prl \
@@ -588,6 +593,7 @@ Makefile: ../WindCup/WindCup.pro ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/linux-g++/qm
 ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/qt_config.prf:
 ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/linux-g++/qmake.conf:
 ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/exclusive_builds.prf:
 ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/toolchain.prf:
 ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/default_pre.prf:
@@ -607,6 +613,7 @@ Makefile: ../WindCup/WindCup.pro ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/linux-g++/qm
 ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/yacc.prf:
 ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/lex.prf:
 ../WindCup/WindCup.pro:
+../WindCup/img.qrc:
 ../../Qt5.9.1/5.9.1/gcc_64/lib/libQt5Widgets.prl:
 ../../Qt5.9.1/5.9.1/gcc_64/lib/libQt5Gui.prl:
 ../../Qt5.9.1/5.9.1/gcc_64/lib/libQt5SerialPort.prl:
@@ -625,6 +632,7 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
+	$(COPY_FILE) --parents ../WindCup/img.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../WindCup/mainwindow.h ../WindCup/global.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../WindCup/main.cpp ../WindCup/mainwindow.cpp $(DISTDIR)/
@@ -652,8 +660,14 @@ check: first
 
 benchmark: first
 
-compiler_rcc_make_all:
+compiler_rcc_make_all: qrc_img.cpp
 compiler_rcc_clean:
+	-$(DEL_FILE) qrc_img.cpp
+qrc_img.cpp: ../WindCup/img.qrc \
+		../../Qt5.9.1/5.9.1/gcc_64/bin/rcc \
+		../WindCup/WindCup.png
+	/home/uuchen/Qt5.9.1/5.9.1/gcc_64/bin/rcc -name img ../WindCup/img.qrc -o qrc_img.cpp
+
 compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) moc_predefs.h
@@ -812,7 +826,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
 
@@ -1086,18 +1100,21 @@ mainwindow.o: ../WindCup/mainwindow.cpp ../WindCup/mainwindow.h \
 		../../Qt5.9.1/5.9.1/gcc_64/include/QtGui/QPaintEvent \
 		../WindCup/global.h \
 		ui_mainwindow.h \
-		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/QLineEdit \
-		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qlineedit.h \
-		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qframe.h \
-		../../Qt5.9.1/5.9.1/gcc_64/include/QtGui/qtextcursor.h \
-		../../Qt5.9.1/5.9.1/gcc_64/include/QtGui/qtextformat.h \
-		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/QTableWidget \
-		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qtablewidget.h \
-		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qtableview.h \
-		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qabstractitemview.h \
-		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qabstractscrollarea.h \
-		../../Qt5.9.1/5.9.1/gcc_64/include/QtCore/qabstractitemmodel.h \
-		../../Qt5.9.1/5.9.1/gcc_64/include/QtCore/qitemselectionmodel.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtCore/QVariant \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/QAction \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qaction.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qactiongroup.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/QApplication \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qapplication.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtCore/qcoreapplication.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtCore/qeventloop.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qdesktopwidget.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtGui/qguiapplication.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtGui/qinputmethod.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/QButtonGroup \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qbuttongroup.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/QComboBox \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qcombobox.h \
 		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qabstractitemdelegate.h \
 		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qstyleoption.h \
 		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qabstractspinbox.h \
@@ -1108,9 +1125,35 @@ mainwindow.o: ../WindCup/mainwindow.cpp ../WindCup/mainwindow.h \
 		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qstyle.h \
 		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qtabbar.h \
 		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qrubberband.h \
-		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/QComboBox \
-		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qcombobox.h
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qframe.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtCore/qabstractitemmodel.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/QGridLayout \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qgridlayout.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qlayout.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qlayoutitem.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qboxlayout.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/QHBoxLayout \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/QHeaderView \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qheaderview.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qabstractitemview.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qabstractscrollarea.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtCore/qitemselectionmodel.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/QLabel \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qlabel.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/QLineEdit \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qlineedit.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtGui/qtextcursor.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtGui/qtextformat.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/QSpacerItem \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/QVBoxLayout \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/QWidget \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/QTableWidget \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qtablewidget.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/qtableview.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../WindCup/mainwindow.cpp
+
+qrc_img.o: qrc_img.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_img.o qrc_img.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp

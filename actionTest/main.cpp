@@ -9,9 +9,7 @@ int main(int argc, char *argv[])
 
     foreach(const QSerialPortInfo& info,QSerialPortInfo::availablePorts())
     {
-//        qDebug() << "q";
-//        QSerialPort port(info);
-//        qDebug() << port.portName();
+        qDebug() << info.portName();
     }
 
     return a.exec();

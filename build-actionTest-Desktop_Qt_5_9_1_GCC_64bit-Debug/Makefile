@@ -12,10 +12,10 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+DEFINES       = -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_SERIALPORT_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++11 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../actionTest -I. -I../../Qt5.9.1/5.9.1/gcc_64/include -I../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets -I../../Qt5.9.1/5.9.1/gcc_64/include/QtGui -I../../Qt5.9.1/5.9.1/gcc_64/include/QtCore -I. -isystem /usr/include/libdrm -I../../Qt5.9.1/5.9.1/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../actionTest -I. -I../../Qt5.9.1/5.9.1/gcc_64/include -I../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets -I../../Qt5.9.1/5.9.1/gcc_64/include/QtGui -I../../Qt5.9.1/5.9.1/gcc_64/include/QtSerialPort -I../../Qt5.9.1/5.9.1/gcc_64/include/QtCore -I. -isystem /usr/include/libdrm -I../../Qt5.9.1/5.9.1/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/uuchen/Qt5.9.1/5.9.1/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -38,7 +38,7 @@ DISTNAME      = actionTest1.0.0
 DISTDIR = /home/uuchen/Qt/build-actionTest-Desktop_Qt_5_9_1_GCC_64bit-Debug/.tmp/actionTest1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-rpath,/home/uuchen/Qt5.9.1/5.9.1/gcc_64/lib
-LIBS          = $(SUBLIBS) -L/home/uuchen/Qt5.9.1/5.9.1/gcc_64/lib -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -L/home/uuchen/Qt5.9.1/5.9.1/gcc_64/lib -lQt5Widgets -lQt5Gui -lQt5SerialPort -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -211,6 +211,7 @@ DIST          = ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/qt_config.prf \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/spec_post.prf \
+		../actionTest/.qmake.stash \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/toolchain.prf \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/default_pre.prf \
@@ -401,6 +402,7 @@ Makefile: ../actionTest/actionTest.pro ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/linux-
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/qt_config.prf \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/toolchain.prf \
 		../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/default_pre.prf \
@@ -423,6 +425,7 @@ Makefile: ../actionTest/actionTest.pro ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/linux-
 		../actionTest/actionTest.pro \
 		../../Qt5.9.1/5.9.1/gcc_64/lib/libQt5Widgets.prl \
 		../../Qt5.9.1/5.9.1/gcc_64/lib/libQt5Gui.prl \
+		../../Qt5.9.1/5.9.1/gcc_64/lib/libQt5SerialPort.prl \
 		../../Qt5.9.1/5.9.1/gcc_64/lib/libQt5Core.prl
 	$(QMAKE) -o Makefile ../actionTest/actionTest.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
 ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/spec_pre.prf:
@@ -584,6 +587,7 @@ Makefile: ../actionTest/actionTest.pro ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/linux-
 ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/qt_config.prf:
 ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/linux-g++/qmake.conf:
 ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/exclusive_builds.prf:
 ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/toolchain.prf:
 ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/features/default_pre.prf:
@@ -606,6 +610,7 @@ Makefile: ../actionTest/actionTest.pro ../../Qt5.9.1/5.9.1/gcc_64/mkspecs/linux-
 ../actionTest/actionTest.pro:
 ../../Qt5.9.1/5.9.1/gcc_64/lib/libQt5Widgets.prl:
 ../../Qt5.9.1/5.9.1/gcc_64/lib/libQt5Gui.prl:
+../../Qt5.9.1/5.9.1/gcc_64/lib/libQt5SerialPort.prl:
 ../../Qt5.9.1/5.9.1/gcc_64/lib/libQt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ../actionTest/actionTest.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
@@ -776,7 +781,13 @@ main.o: ../actionTest/main.cpp ../../Qt5.9.1/5.9.1/gcc_64/include/QtWidgets/QApp
 		../../Qt5.9.1/5.9.1/gcc_64/include/QtGui/qvector2d.h \
 		../../Qt5.9.1/5.9.1/gcc_64/include/QtGui/qtouchdevice.h \
 		../../Qt5.9.1/5.9.1/gcc_64/include/QtGui/qguiapplication.h \
-		../../Qt5.9.1/5.9.1/gcc_64/include/QtGui/qinputmethod.h
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtGui/qinputmethod.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtCore/QDebug \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtSerialPort/QSerialPort \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtSerialPort/qserialport.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtSerialPort/qserialportglobal.h \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtSerialPort/QSerialPortInfo \
+		../../Qt5.9.1/5.9.1/gcc_64/include/QtSerialPort/qserialportinfo.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../actionTest/main.cpp
 
 ####### Install

@@ -19,13 +19,12 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    char ch = 0xe0;
-    for(int i=0;i<32;++i)
+    char ch = 0x31;
+    for(int i=0;i<32;i++)
     {
         addrList.append(ch);
         ++ch;
     }
-    serialPortList = {"/dev/ttyACM0","com2","com3","com4","com5","com6","com7","com8","com9","com10","com11","com12","com13","com14","com15"};
     cupNameList = {"表1：","表2：","表3：","表4：","表5：","表6：","表7：","表8：","表9：","表10：","表11：","表12：","表13：","表14：","表15：","表16：","表17：","表18：","表19：","表20：","表21：","表22：","表23：","表24：","表25：","表26：","表27：","表28：","表29：","表30：","表31：","表32："};
 
     for(int i=0;i<32;i++)
@@ -35,6 +34,8 @@ MainWindow::MainWindow(QWidget *parent) :
         currentSpeed[i] = 0;
         currentVolume[i] = 0;
     }
+
+    //new position ways
 
     initAll();
 }
@@ -59,6 +60,7 @@ void MainWindow::startClicked()
     else
     {
         serialTimer->stop();
+        writeDataInFile();
         ui->startBtton->setText(tr("开始"));
         ui->flushButton->setEnabled(true);
         ui->saveDataButton->setText(tr("历史数据"));
@@ -68,39 +70,53 @@ void MainWindow::startClicked()
 void MainWindow::flushClicked()
 {
     clearAll();//清理数据区的所有信息
+    ui->settingPort->clear();
+    foreach(const QSerialPortInfo& info,QSerialPortInfo::availablePorts())
+        ui->settingPort->addItem(info.portName());
 }
 
 void MainWindow::exportDataClicked()//保存数据信息
 {
-//    if(ui->saveDataButton->text() == tr())
+    if(ui->saveDataButton->text() == tr("保存数据"))
+    {
+        for(int i=0;i<currentCups;i++)
+        {
+            exportDataList.push_back(currentSpeed[i]);
+            exportDataList.push_back(currentVolume[i]);
+            exportDataList.push_back(averageSpeed[i]);
+            exportDataList.push_back(averageVolume[i]);
+        }
+    }
+    else
+    {
+        //从文件中读取数据并展示
+    }
 }
+
+void MainWindow::writeDataInFile()
+{}
+
+void MainWindow::readDataInFile()
+{}
 
 void MainWindow::handleTimeout()
 {
-//    QByteArray byte8;
+
     for(int i=0;i<currentCups;i++)
     {
-//        char ch = addrList[i];
-//        currentSerialPort->write(&ch,1);
-//        qDebug() << "write: " << (uint8_t)ch;
-//        byte8 = currentSerialPort->readAll();
-//        qDebug() << "read: " << byte8.data();
-//        qDebug() << "read: " << *((uint8_t*)byte8.data());
-
-        //版本2
         char ch = addrList[i];
         currentSerialPort->write(&ch,1);
-        qDebug() << "write: " << (uint8_t)ch;
+//        qDebug() << "write: " << ch;
         char in;
         currentSerialPort->read(&in,1);
-        qDebug() << "read: " << (uint8_t)ch;
+//        qDebug() << "read: " << in;
 
-        //简略的计算
-        currentSpeed[i] = (uint8_t)addrList[i] * settingData.cupSpeed.toInt();
+        currentSpeed[i] = (uint8_t)in * settingData.cupSpeed.toInt();
         currentVolume[i] = currentSpeed[i] * settingData.testArea.toInt();
         averageSpeed[i] = (averageSpeed[i] + currentSpeed[i]) / 2;
         averageVolume[i] = (averageVolume[i] + currentVolume[i]) / 2;
     }
+
 }
 
 void MainWindow::updateTime()
@@ -111,6 +127,7 @@ void MainWindow::updateTime()
     //记录当前运行的总时间
     ++seconds;
 
+    int average = 0;
     if(ui->startBtton->text() == tr("停止"))
     {
         QString str;
@@ -119,6 +136,7 @@ void MainWindow::updateTime()
         {
             str = cupNameList[i] + QString::number(currentSpeed[i]);
             cupList[i]->setText(str);
+            average += currentSpeed[i];
         }
 
         //更新currrent cup数据
@@ -130,6 +148,19 @@ void MainWindow::updateTime()
             ui->currentAverageSpeed->setText(QString::number(averageSpeed[index]));
             ui->currentAverageVolume->setText(QString::number(averageVolume[index]));
         }
+
+        //更新画折线图需要的数据
+        average = average / currentCups;
+        lineChartMessage.push_front(average);
+        if(lineChartMessage.size() > 10)
+            lineChartMessage.pop_back();
+
+        Point2 = QPoint(0.47 * this->width(),0.65 * this->height());
+        Point1 = QPoint(0.47 * this->width(),30);
+        Point3 = QPoint(this->width()-30,0.65 * this->height());
+
+        SizeX = (Point3.rx() - Point2.rx()) / 10;
+        SizeY = (Point2.ry() - Point1.ry()) / 10;
         //更新折线图
         update();
     }
@@ -402,8 +433,8 @@ void MainWindow::cupButtonClicked31()
 void MainWindow::initSettingArea()
 {
 //init settingSerialPortBox
-    for(int i=0;i<serialPortList.size();i++)
-        ui->settingPort->addItem(serialPortList[i]);
+    foreach(const QSerialPortInfo& info,QSerialPortInfo::availablePorts())
+        ui->settingPort->addItem(info.portName());
 
     ui->settingPort->setCurrentIndex(0);
     settingData.portName = ui->settingPort->currentText();
@@ -446,13 +477,12 @@ void MainWindow::initCurrentDisplayArea()
 //初始化折线图信息
 void MainWindow::initLineChart()
 {
-    smallPoint1 = QPoint(400,30);
-    smallPoint2 = QPoint(400,360);
-    smallPoint3 = QPoint(800,360);
+    Point2 = QPoint(0.47 * this->width(),0.65 * this->height());
+    Point1 = QPoint(0.47 * this->width(),30);
+    Point3 = QPoint(this->width()-30,0.65 * this->height());
 
-    bigPoint1 = QPoint(600,30);
-    bigPoint2 = QPoint(600,550);
-    bigPoint3 = QPoint(1250,550);
+    SizeX = (Point3.rx() - Point2.rx()) / 10;
+    SizeY = (Point2.ry() - Point1.ry()) / 10;
 }
 
 void MainWindow::initSpeed()
@@ -542,18 +572,15 @@ void MainWindow::clearCurrentMessage()
     ui->currentVolume->clear();
 }
 
-//清理折线图信息
 void MainWindow::clearLineChart()
 {
+    //清理折线图信息
 }
 
 void MainWindow::clearSpeed()
 {
     for(int i=0;i<currentCups;++i)
-    {
-        qDebug() << cupNameList[i];
         cupList[i]->setText(cupNameList[i]);
-    }
 }
 
 void MainWindow::clearAll()
@@ -602,52 +629,81 @@ void MainWindow::start()
 
 void MainWindow::paintEvent(QPaintEvent *event)
 {
-    paintSmallSystem();
-//    paintBigSystem();
+    paintSystem();
+    paintLineChart();
 }
 
-void MainWindow::paintSmallSystem()
+void MainWindow::paintSystem()
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing,true);
-    painter.drawLine(smallPoint1,smallPoint2);
-    painter.drawLine(smallPoint2,smallPoint3);
+    painter.drawLine(Point1,Point2);
+    painter.drawLine(Point2,Point3);
 
-    int sizeY = (smallPoint2.ry() - smallPoint1.ry()) / 10;
-    int sizeX = (smallPoint3.rx() - smallPoint2.rx()) / 10;
+    int sizeY = (Point2.ry() - Point1.ry()) / 10;
+    int sizeX = (Point3.rx() - Point2.rx()) / 10;
     for(int i=1;i<=10;++i)//y刻度线
     {
-        painter.drawLine(smallPoint2.rx(),smallPoint2.ry() - sizeY * i,smallPoint2.rx() - 5,smallPoint2.ry() - sizeY * i);
-        painter.drawText(smallPoint2.rx() - 20,smallPoint2.ry() - sizeY * i + 5,QString::number((i)));
+        painter.drawLine(Point2.rx(),Point2.ry() - sizeY * i,Point2.rx() - 5,Point2.ry() - sizeY * i);
+        painter.drawText(Point2.rx() - 35,Point2.ry() - sizeY * i + 5,QString::number((i * systemSize)));
     }
 
     for(int i=1;i<=10;++i)//x刻度线
     {
-        painter.drawLine(smallPoint2.rx() + sizeX * i,smallPoint2.ry(),smallPoint2.rx() + sizeX * i,smallPoint2.ry() + 5);
-        painter.drawText(smallPoint2.rx() + sizeX * i - 5 ,smallPoint2.ry() + 20,QString::number((i)));
+        painter.drawLine(Point2.rx() + sizeX * i,Point2.ry(),Point2.rx() + sizeX * i,Point2.ry() + 5);
+        painter.drawText(Point2.rx() + sizeX * i - 5 ,Point2.ry() + 20,QString::number((i)));
     }
-    painter.drawText(smallPoint2.rx() - 15,smallPoint2.ry() + 15,QString::number(0));
+    painter.drawText(Point2.rx() - 15,Point2.ry() + 15,QString::number(0));
+
+    painter.drawText(Point2.rx() + 10 * SizeX + 10,Point2.ry() + 10,"秒");
+    painter.drawText(Point2.rx() - 20,Point2.ry() - 10 * SizeY - 10,"风量");;
+
+    QFont font;
+    QPen pen;
+    pen.setColor(Qt::gray);
+    font.setPixelSize(20);
+    painter.setFont(font);
+    painter.setPen(pen);
+    painter.drawText(Point2.rx() + 3.5 * SizeX,Point2.ry() - 9.5 * SizeY,"时间-风量变化图");
 }
 
-void MainWindow::paintBigSystem()
+void MainWindow::paintLineChart()
 {
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing,true);
-    painter.drawLine(bigPoint1,bigPoint2);
-    painter.drawLine(bigPoint2,bigPoint3);
+    QPen penLine,penPoint,penText;
+    penLine.setColor(Qt::black);
+    penLine.setWidth(2);
+    penPoint.setColor(Qt::blue);
+    penPoint.setWidth(5);
+    penText.setColor(Qt::red);
+    penText.setWidth(2);
 
-    int sizeY = (bigPoint2.ry() - bigPoint1.ry()) / 10;
-    int sizeX = (bigPoint3.rx() - bigPoint2.rx()) / 10;
-    for(int i=1;i<=10;++i)//y刻度线
+    QVector<QPoint> pointList;//获得10个坐标，在图中依次连起来
+    for(int i=0;i<lineChartMessage.size();i++)
     {
-        painter.drawLine(bigPoint2.rx(),bigPoint2.ry() - sizeY * i,bigPoint2.rx() - 5,bigPoint2.ry() - sizeY * i);
-        painter.drawText(bigPoint2.rx() - 20,bigPoint2.ry() - sizeY * i + 5,QString::number((i)));
+        pointList.append(QPoint(Point2.rx() + (i+1) * SizeX,Point2.ry() - lineChartMessage[i] / systemSize * SizeY));
+    }
+    pointList.reserve(pointList.size());
+
+    for(int i=0;i<lineChartMessage.size()-1;i++)
+    {
+        painter.setPen(penLine);
+        painter.drawLine(pointList[i],pointList[i+1]);
+        painter.setPen(penPoint);
+        painter.drawPoint(pointList[i]);
+        QFont font;
+        font.setPixelSize(20);
+        painter.setFont(font);
+        painter.setPen(penText);
+        painter.drawText(pointList[i].rx(),pointList[i].ry() + 10,QString::number(lineChartMessage[i]));
     }
 
-    for(int i=1;i<=10;++i)//x刻度线
+    if(lineChartMessage.size() > 0)
     {
-        painter.drawLine(bigPoint2.rx() + sizeX * i,bigPoint2.ry(),bigPoint2.rx() + sizeX * i,bigPoint2.ry() + 5);
-        painter.drawText(bigPoint2.rx() + sizeX * i - 5 ,bigPoint2.ry() + 20,QString::number((i)));
+        painter.setPen(penPoint);
+        painter.drawPoint(pointList[pointList.size()- 1]);
+        painter.setPen(penText);
+        painter.drawText(pointList[pointList.size() - 1].rx(),pointList[pointList.size() - 1].ry() + 10,QString::number(lineChartMessage[lineChartMessage.size()-1]));
     }
-    painter.drawText(bigPoint2.rx() - 15,bigPoint2.ry() + 15,QString::number(0));
 }

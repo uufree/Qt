@@ -20,7 +20,11 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>智能风速采集系统</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../../桌面/WineCup.png</normaloff>../../桌面/WineCup.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">

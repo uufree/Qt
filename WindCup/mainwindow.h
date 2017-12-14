@@ -16,6 +16,7 @@
 #include<QPainter>
 #include<QColor>
 #include<QPaintEvent>
+#include<QFile>
 
 #include"global.h"
 
@@ -72,16 +73,6 @@ public slots:
     void cupButtonClicked31();
 
 protected:
-    void changeEvent(QEvent* event)
-    {
-        if(event->type() != QEvent::WindowStateChange)
-            return;
- //       if(this->windowState() == Qt::WindowMaximized)
-            //窗口最大化，处理折线图
-//        else
-            //窗口最小化，处理折线图
-    }
-
     void paintEvent(QPaintEvent* event);
 
 private:
@@ -100,17 +91,17 @@ private:
 //作为公有槽的内部函数使用
     void collectSettingMessage();//ok
     void start();//ok
-
+    void writeDataInFile();//将exportDataList中的数据写入文件中
+    void readDataInFile();//从文件中读取数据
 //绘制折现图的函数
-    void paintSmallSystem();
-    void paintBigSystem();
-    void paintSmallLineChart();
-    void paintBigLineChart();
+    void paintSystem();
+    void paintLineChart();
 
 private:
     Ui::MainWindow *ui;
     static const int maxCups = 32;
     static const int defaultCups = 9;
+    static const int systemSize = 10;
     int currentCups;
     uint32_t seconds;
 
@@ -122,17 +113,19 @@ private:
     QString dateTimeStr;
     QVector<QPushButton*> cupList;
     QVector<char> addrList;//在
-    QVector<QString> serialPortList;
     QVector<QString> cupNameList;
 
 //坐标系的三点图
-    QPoint smallPoint1,smallPoint2,smallPoint3;
-    QPoint bigPoint1,bigPoint2,bigPoint3;
+    QPoint Point1,Point2,Point3;
+    int SizeX,SizeY;
 
     double currentSpeed[32];
     double currentVolume[32];
     double averageSpeed[32];
     double averageVolume[32];
+
+    QVector<double> lineChartMessage;
+    QVector<double> exportDataList;
 };
 
 #endif // MAINWINDOW_H
