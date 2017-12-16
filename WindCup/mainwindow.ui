@@ -20,7 +20,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>智能风速采集系统</string>
+   <string>智能风速测量系统</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -380,22 +380,22 @@
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_29" stretch="10,1,10">
+       <layout class="QHBoxLayout" name="horizontalLayout_14" stretch="10,1,10">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_23">
+           <layout class="QHBoxLayout" name="horizontalLayout_23" stretch="5,4">
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_21" stretch="0,0">
+             <layout class="QHBoxLayout" name="horizontalLayout_21" stretch="0,1">
               <item>
                <widget class="QLabel" name="label_18">
                 <property name="text">
-                 <string> 风杯编号:</string>
+                 <string> 当前日期:</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="currentCup"/>
+               <widget class="QLineEdit" name="currentDate"/>
               </item>
              </layout>
             </item>
@@ -417,20 +417,6 @@
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_24">
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_14">
-              <item>
-               <widget class="QLabel" name="label_14">
-                <property name="text">
-                 <string>当前风速:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="currentSpeed"/>
-              </item>
-             </layout>
-            </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_18">
               <item>
@@ -454,26 +440,12 @@
               <item>
                <widget class="QLabel" name="label_15">
                 <property name="text">
-                 <string>平均风速:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="currentAverageSpeed"/>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_20">
-              <item>
-               <widget class="QLabel" name="label_12">
-                <property name="text">
                  <string>平均风量:</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLineEdit" name="currentAverageVolume"/>
+               <widget class="QLineEdit" name="currentAverageSpeed"/>
               </item>
              </layout>
             </item>

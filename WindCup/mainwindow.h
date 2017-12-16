@@ -2,22 +2,27 @@
 #define MAINWINDOW_H
 
 #include<QMainWindow>
-#include<QDateTime>
+#include<QPushButton>
+#include<QTableWidget>
+#include<QLineEdit>
+#include<QTableWidget>
+#include<QComboBox>
+
+#include<QDate>
+#include<QTime>
+#include<QTimer>
 #include<QtSerialPort/QSerialPort>
 #include<QtSerialPort/QSerialPortInfo>
-#include<QTimer>
 #include<QVector>
 #include<QString>
-#include<QPushButton>
-#include<QByteArray>
-#include<QTime>
 #include<QDebug>
 #include<QEvent>
 #include<QPainter>
 #include<QColor>
 #include<QPaintEvent>
 #include<QFile>
-#include<QTableWidget>
+#include<QFile>
+#include<QDataStream>
 
 #include"global.h"
 
@@ -39,39 +44,6 @@ public slots:
     void exportDataClicked();//no
     void handleTimeout();//ok
     void updateTime();//ok
-
-    void cupButtonClicked0();
-    void cupButtonClicked1();
-    void cupButtonClicked2();
-    void cupButtonClicked3();
-    void cupButtonClicked4();
-    void cupButtonClicked5();
-    void cupButtonClicked6();
-    void cupButtonClicked7();
-    void cupButtonClicked8();
-    void cupButtonClicked9();
-    void cupButtonClicked10();
-    void cupButtonClicked11();
-    void cupButtonClicked12();
-    void cupButtonClicked13();
-    void cupButtonClicked14();
-    void cupButtonClicked15();
-    void cupButtonClicked16();
-    void cupButtonClicked17();
-    void cupButtonClicked18();
-    void cupButtonClicked19();
-    void cupButtonClicked20();
-    void cupButtonClicked21();
-    void cupButtonClicked22();
-    void cupButtonClicked23();
-    void cupButtonClicked24();
-    void cupButtonClicked25();
-    void cupButtonClicked26();
-    void cupButtonClicked27();
-    void cupButtonClicked28();
-    void cupButtonClicked29();
-    void cupButtonClicked30();
-    void cupButtonClicked31();
 
 protected:
     void paintEvent(QPaintEvent* event);
@@ -102,34 +74,33 @@ private:
     Ui::MainWindow *ui;
     static const int maxCups = 32;
     static const int defaultCups = 9;
-    static const int systemSize = 10;
+    static const int systemSize = 5;//Y方向的单位长度
     int currentCups;
-    uint32_t seconds;
     QString currentFile;
 
-    SettingData settingData;
-    QSerialPort* currentSerialPort;
-    QTimer* serialTimer;
-    QTimer* timeTimer;
-    QTime* dateTime;
-    QString dateTimeStr;
-    QVector<QPushButton*> cupList;
-    QVector<char> addrList;//在
-    QVector<QString> cupNameList;
-    QVector<QString> tableGroupList;
+    SettingData settingData;//设置区信息
+    QSerialPort* currentSerialPort;//当前的串口
+    QTimer* serialTimer;//串口时间定时器
+    QTimer* timeTimer;//1s响应一次
+    QDate* date;//日期
+    QTime* time;//时间
+    int year,mouth,day;
+    QString dateStr,timeStr;//日期与实践
+    QVector<QPushButton*> cupList;//
+    QVector<char> addrList;//每个风杯的地址
+    QVector<QString> cupNameList;//每个风杯的名字，例：‘表1:’
+    QVector<QString> tableGroupList;//数据列表显示时需要的信息,‘第一组：’
 
 //坐标系的三点图
     QPoint Point1,Point2,Point3;
     int SizeX,SizeY;
+    QVector<double> lineChartMessage;//画折线图需要的信息，像队列一样使用
 
-    double currentSpeed[32];
-    double currentVolume[32];
-    double averageSpeed[32];
-    double averageVolume[32];
+    double currentSpeedList[32];
+    double averageSpeed,currentVolume;
 
-    QVector<double> lineChartMessage;
-    QVector<double> exportDataList;
-    QTableWidget* widget;
+    QVector<double> exportDataList;//每一次加载/展示的数据
+    QTableWidget* widget;//展示数据信息需要的表格
 };
 
 #endif // MAINWINDOW_H
