@@ -13,4 +13,11 @@ struct SettingData
     QString cupCount;
 };
 
+enum CUP_STATE
+{
+    RUNING,
+    STOP,
+    ERROR
+};
+
 #endif // GLOBAL_H

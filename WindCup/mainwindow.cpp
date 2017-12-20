@@ -4,7 +4,8 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    currentCups(9),
+    currentCups(11),
+    currentCupIndex(0),
     currentSerialPort(new QSerialPort),
     serialTimer(new QTimer),
     timeTimer(new QTimer),
@@ -22,14 +23,21 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setStyleSheet(styleSheet);
 
 //初始化地址信息以及其他必要的信息
-    char ch = 0xe0;
+    uint8_t ch = 0xe0;
+    QVector<QString> cupNameList = {"表1：","表2：","表3：","表4：","表5：","表6：","表7：","表8：","表9：","表10：","表11：","表12：","表13：","表14：","表15：","表16：","表17：","表18：","表19：","表20：","表21：","表22：","表23：","表24：","表25：","表26：","表27：","表28：","表29：","表30：","表31：","表32："};
+    nameList.insert(0xde,"负压：");
+    nameList.insert(0xdf,"大气压：");
+    speedList.insert(0xde,0);
+    speedList.insert(0xdf,0);
+    addrList.insert(0xde,RUNING);
+    addrList.insert(0xdf,RUNING);
     for(int i=0;i<32;i++)
     {
-        addrList.append(ch);
+        nameList.insert(ch,cupNameList[i]);
+        speedList.insert(ch,0);
+        addrList.insert(ch,RUNING);
         ++ch;
-        currentSpeedList[i] = 0;
     }
-    cupNameList = {"表1：","表2：","表3：","表4：","表5：","表6：","表7：","表8：","表9：","表10：","表11：","表12：","表13：","表14：","表15：","表16：","表17：","表18：","表19：","表20：","表21：","表22：","表23：","表24：","表25：","表26：","表27：","表28：","表29：","表30：","表31：","表32："};
     tableGroupList = {"第一组：","第二组：","第三组：","第四组：","第五组：","第六组：","第七组：","第八组：","第九组：","第十组：","第十一组：","第十二组：","第十三组：","第十四组：","第十五组：","第十六组：","第十七组：","第十八组：","第十九组：","第二十组：","第二十一组：","第二十二组：","第二十三组：","第二十四组：","第二十五组：","第二十六组：","第二十七组：","第二十八组：","第二十九组：","第三十组：","第三十一组：","第三十二组："};
 
 //分四个区域分别初始化
@@ -77,10 +85,14 @@ void MainWindow::exportDataClicked()//保存数据信息
 {
     if(ui->saveDataButton->text() == tr("保存数据"))
     {
-        for(int i=0;i<currentCups;i++)
-            exportDataList.append(currentSpeedList[i]);
+        char index = 0xe0;
+        for(int i=0;i<currentCups;i++,index++)
+            exportDataList.append(speedList[index]);
+
         exportDataList.append(averageSpeed);
         exportDataList.append(currentVolume);
+        exportDataList.append(negPressure);
+        exportDataList.append(atmPressure);
     }
     else
     {//读取数据，并且显示数据
@@ -92,19 +104,26 @@ void MainWindow::exportDataClicked()//保存数据信息
         widget->setRowCount(rowCount);
         widget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 //初始化X轴
-        for(int i=0;i<columnCount-2;i++)
+        char index = 0xe0;
+        for(int i=0;i<columnCount-4;i++,index++)
         {
             QTableWidgetItem* item = new QTableWidgetItem;
-            item->setText(cupNameList[i]);
+            item->setText(nameList[index]);
             widget->setHorizontalHeaderItem(i,item);
         }
 
         QTableWidgetItem* item1 = new QTableWidgetItem;
         item1->setText("平均风速:");
-        widget->setHorizontalHeaderItem(columnCount-2,item1);
+        widget->setHorizontalHeaderItem(columnCount-4,item1);
         QTableWidgetItem* item2 = new QTableWidgetItem;
         item2->setText("当前风量:");
-        widget->setHorizontalHeaderItem(columnCount-1,item2);
+        widget->setHorizontalHeaderItem(columnCount-3,item2);
+        QTableWidgetItem* item3 = new QTableWidgetItem;
+        item3->setText("负压值:");
+        widget->setHorizontalHeaderItem(columnCount-2,item3);
+        QTableWidgetItem* item4 = new QTableWidgetItem;
+        item4->setText("大气压值:");
+        widget->setHorizontalHeaderItem(columnCount-1,item4);
 //初始化Y轴
         for(int i=0;i<rowCount;i++)
         {
@@ -138,7 +157,7 @@ void MainWindow::writeDataInFile()
     currentFile.clear();
     currentFile = dateStr + timeStr + ".dat";
     currentFile = "/home/uuchen/" + currentFile;
-    QFile current(currentFile);
+    QFile current("D:\\WindCup.dat");
     if(current.exists())
         current.remove();
     if(!current.open(QIODevice::ReadWrite))
@@ -152,7 +171,7 @@ void MainWindow::writeDataInFile()
 void MainWindow::readDataInFile()
 {
     exportDataList.clear();
-    QFile current(currentFile);
+    QFile current("D:\\WindCup.dat");
     if(!current.exists())
         return;
     if(!current.open(QIODevice::ReadWrite))
@@ -165,23 +184,56 @@ void MainWindow::readDataInFile()
 //处理串口定时器到期
 void MainWindow::handleTimeout()
 {
-    //串口数据写发送的时候会默认加上\r\n
-    double speedSum = 0;
-    for(int i=0;i<currentCups;i++)
+    if(currentCupIndex < currentCups)
     {
-
-        char ch = addrList[i];
-        currentSerialPort->write(&ch);
+        char ch = addrList[currentCupIndex];
+        currentSerialPort->write(&ch,1);
         qDebug() << "write: " << (uint8_t)ch;
-        char in;
-        currentSerialPort->read(&in,1);
-        qDebug() << "read: " << (uint8_t)in;
+        char in[3] = {'\0','\0','\0'};
+        int readByte = currentSerialPort->read(in,3);
+        qDebug() << "read: " << in;
+        qDebug() << "readByte: " << readByte;
 
-        currentSpeedList[i] = (uint8_t)in * settingData.cupSpeed.toDouble();
-        speedSum += currentSpeedList[i];
+        if(readByte != 3)
+        {
+            addrList[(uint8_t)in[0]] = ERROR;
+        }
+        else
+        {
+            addrList[(uint8_t)in[0]] = RUNING;
+        }
+
+        if((uint8_t)in[0] < 0xe0)//处理负压与大气压
+        {//无符号整数
+            speedList[(uint8_t)in[0]] = (in[1] << 8) + in[2];
+        }
+        else
+        {//处理风杯
+            speedList[(uint8_t)in[0]] = in[2];
+        }
     }
-    averageSpeed = speedSum / currentCups;
-    currentVolume = averageSpeed * settingData.testArea.toDouble();
+
+    if(++currentCupIndex == currentCups)
+    {//顺便处理电机数据
+        char out[7] = {0x4c,0x57,0x01,0x30,0x01,0x32,0x0d};
+        currentSerialPort->write(out,7);
+        currentCupIndex = 0;
+        char in[25];
+        for(int i=0;i<25;i++)
+            in[i] = '\0';
+        currentSerialPort->read(in,25);
+
+        double result = 0;
+        for(int i=5;i<23;i+=2)
+        {
+            bool isNegative = 0x80 & in[i];
+            result = (in[i] << 7 + in[i+1]) / 10000;
+            isNegative ? result = -result : result = result;
+            electricalData.append(result);
+        }
+
+        currentCupIndex = 0;
+    }
 }
 
 //处理1s定时器到期
@@ -197,31 +249,57 @@ void MainWindow::updateTime()
 //在程序处于数据采集过程中，对信息的更新
     if(ui->startBtton->text() == tr("停止"))
     {
+        //计算平均风速与当前数据
+        double speedSum = 0;
+        uint8_t index = 0xe0;
+        for(int i=0;i<currentCups-2;i++,index++)
+            speedSum += speedList[index];
+        averageSpeed = speedSum / currentCups;
+        currentVolume = averageSpeed * settingData.testArea.toDouble();
+        negPressure = speedList[0xde];
+        atmPressure = speedList[0xdf];
+
         //更新平均风速与当前数据
         ui->currentVolume->setText(QString::number(currentVolume,10,2));
         ui->currentAverageSpeed->setText(QString::number(averageSpeed,10,2));
+        ui->currentNegPressure->setText(QString::number(negPressure,10,2));
+        ui->currentAtmPressure->setText(QString::number(atmPressure,10,2));
 
         //更新每个风杯的实时速度
-        for(int i=0;i<currentCups;i++)
-            cupList[i]->setText(cupNameList[i] + QString::number(currentSpeedList[i],10,2));
+        index = 0xe0;
+        for(int i=0;i<currentCups-2;i++,index++)
+        {
+            if(addrList[index] == RUNING)
+            {
+                cupList[index]->setEnabled(true);
+                cupList[i]->setText(nameList[index] + QString::number(speedList[index],10,2));
+            }
+            else
+            {
+                cupList[index]->setText(nameList[index] + "Error");
+                cupList[index]->setEnabled(false);
+            }
+
+        //更新电参数数据
+        ui->UA->setText(QString::number(electricalData[0],10,2));
+        ui->UB->setText(QString::number(electricalData[1],10,2));
+        ui->UC->setText(QString::number(electricalData[2],10,2));
+        ui->IA->setText(QString::number(electricalData[3],10,2));
+        ui->IB->setText(QString::number(electricalData[4],10,2));
+        ui->IC->setText(QString::number(electricalData[5],10,2));
+        ui->PA->setText(QString::number(electricalData[6],10,2));
+        ui->PB->setText(QString::number(electricalData[7],10,2));
+        ui->PC->setText(QString::number(electricalData[8],10,2));
 
         //更新画折线图需要的风量信息
         lineChartMessage.push_front(currentVolume);
         if(lineChartMessage.size() > 100)
             lineChartMessage.pop_back();
 
-        //每次绘制图形之前都会更新坐标位置信息
-        Point2 = QPoint(0.47 * this->width(),0.65 * this->height());
-        Point1 = QPoint(0.47 * this->width(),30);
-        Point3 = QPoint(this->width()-30,0.65 * this->height());
-
-        SizeX = (Point3.rx() - Point2.rx()) / 10;
-        SizeY = (Point2.ry() - Point1.ry()) / 10;
-
-        //更新折线图
-        update();
     }
 
+    //更新折线图
+    update();
 }
 
 void MainWindow::initSettingArea()
@@ -274,39 +352,38 @@ void MainWindow::initLineChart()
 
 void MainWindow::initSpeed()
 {
-    cupList.append(ui->E0);
-    cupList.append(ui->E1);
-    cupList.append(ui->E2);
-    cupList.append(ui->E3);
-    cupList.append(ui->E4);
-    cupList.append(ui->E5);
-    cupList.append(ui->E6);
-    cupList.append(ui->E7);
-    cupList.append(ui->E8);
-    cupList.append(ui->E9);
-    cupList.append(ui->EA);
-    cupList.append(ui->EB);
-    cupList.append(ui->EC);
-    cupList.append(ui->ED);
-    cupList.append(ui->EE);
-    cupList.append(ui->EF);
-    cupList.append(ui->F0);
-    cupList.append(ui->F1);
-    cupList.append(ui->F2);
-    cupList.append(ui->F3);
-    cupList.append(ui->F4);
-    cupList.append(ui->F5);
-    cupList.append(ui->F6);
-    cupList.append(ui->F7);
-    cupList.append(ui->F8);
-    cupList.append(ui->F9);
-    cupList.append(ui->FA);
-    cupList.append(ui->FB);
-    cupList.append(ui->FC);
-    cupList.append(ui->FD);
-    cupList.append(ui->FE);
-    cupList.append(ui->FF);
-
+    cupList.insert(0xe0,ui->E0);
+    cupList.insert(0xe1,ui->E1);
+    cupList.insert(0xe2,ui->E2);
+    cupList.insert(0xe3,ui->E3);
+    cupList.insert(0xe4,ui->E4);
+    cupList.insert(0xe5,ui->E5);
+    cupList.insert(0xe6,ui->E6);
+    cupList.insert(0xe7,ui->E7);
+    cupList.insert(0xe8,ui->E8);
+    cupList.insert(0xe9,ui->E9);
+    cupList.insert(0xea,ui->EA);
+    cupList.insert(0xeb,ui->EB);
+    cupList.insert(0xec,ui->EC);
+    cupList.insert(0xed,ui->ED);
+    cupList.insert(0xee,ui->EE);
+    cupList.insert(0xef,ui->EF);
+    cupList.append(0xf0,ui->F0);
+    cupList.append(0xf1,ui->F1);
+    cupList.append(0xf2,ui->F2);
+    cupList.append(0xf3,ui->F3);
+    cupList.append(0xf4,ui->F4);
+    cupList.append(0xf5,ui->F5);
+    cupList.append(0xf6,ui->F6);
+    cupList.append(0xf7,ui->F7);
+    cupList.append(0xf8,ui->F8);
+    cupList.append(0xf9,ui->F9);
+    cupList.append(0xfa,ui->FA);
+    cupList.append(0xfb,ui->FB);
+    cupList.append(0xfc,ui->FC);
+    cupList.append(0xfd,ui->FD);
+    cupList.append(0xfe,ui->FE);
+    cupList.append(0xff,ui->FF);
 }
 
 void MainWindow::initAll()
@@ -336,8 +413,8 @@ void MainWindow::clearLineChart()
 
 void MainWindow::clearSpeed()
 {
-    for(int i=0;i<currentCups;++i)
-        cupList[i]->setText(cupNameList[i]);
+    for(int i=0xe0;i<=0xff;i++)
+        cupList[i]->setText(nameList[i]);
 }
 
 void MainWindow::clearAll()
@@ -360,12 +437,13 @@ void MainWindow::collectSettingMessage()
 void MainWindow::start()
 {
     currentCups = settingData.cupCount.toInt();
-    for(int i=0;i<maxCups;++i)
+    char index = 0xe0;
+    for(int i=0;i<maxCups;i++,index++)
     {
-        if(i < currentCups)
-            cupList[i]->setEnabled(true);
+        if(i < currentCups-2)
+            cupList[index]->setEnabled(true);
         else
-            cupList[i]->setEnabled(false);
+            cupList[index]->setEnabled(false);
     }
 
     if(currentSerialPort != NULL)
@@ -381,12 +459,16 @@ void MainWindow::start()
     //设置波特率
     if(settingData.baud == "9600")
         currentSerialPort->setBaudRate(QSerialPort::Baud9600);
+    else if(settingData.baud == "1200")
+        currentSerialPort->setBaudRate(QSerialPort::Baud1200);
     else if(settingData.baud == "2400")
         currentSerialPort->setBaudRate(QSerialPort::Baud2400);
     else if(settingData.baud == "4800")
         currentSerialPort->setBaudRate(QSerialPort::Baud4800);
     else if(settingData.baud == "19200")
         currentSerialPort->setBaudRate(QSerialPort::Baud19200);
+    else if(settingData.baud == "38400")
+        currentSerialPort->setBaudRate(QSerialPort::Baud38400);
     else
         currentSerialPort->setBaudRate(QSerialPort::Baud9600);
 
@@ -400,6 +482,14 @@ void MainWindow::start()
 
 void MainWindow::paintEvent(QPaintEvent *event)
 {
+    //每次绘制图形之前都会更新坐标位置信息
+    Point2 = QPoint(0.55 * this->width(),0.72 * this->height());
+    Point1 = QPoint(0.55 * this->width(),30);
+    Point3 = QPoint(this->width()-30,0.72 * this->height());
+
+    SizeX = (Point3.rx() - Point2.rx()) / 10;
+    SizeY = (Point2.ry() - Point1.ry()) / 10;
+
     paintSystem();
     paintLineChart();
 }

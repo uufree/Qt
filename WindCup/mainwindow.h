@@ -14,6 +14,7 @@
 #include<QtSerialPort/QSerialPort>
 #include<QtSerialPort/QSerialPortInfo>
 #include<QVector>
+#include<QMap>
 #include<QString>
 #include<QDebug>
 #include<QEvent>
@@ -49,7 +50,6 @@ protected:
     void paintEvent(QPaintEvent* event);
 
 private:
-//初始化信息与清理信息
     void initSettingArea();//ok
     void initCurrentDisplayArea();//ok
     void initLineChart();//no
@@ -74,8 +74,9 @@ private:
     Ui::MainWindow *ui;
     static const int maxCups = 32;
     static const int defaultCups = 9;
-    static const int systemSize = 5;//Y方向的单位长度
-    int currentCups;
+    static const int systemSize = 100;//Y方向的单位长度
+    int currentCups;//当前风杯数量
+    int currentCupIndex;
     QString currentFile;
 
     SettingData settingData;//设置区信息
@@ -86,18 +87,19 @@ private:
     QTime* time;//时间
     int year,mouth,day;
     QString dateStr,timeStr;//日期与实践
-    QVector<QPushButton*> cupList;//
-    QVector<char> addrList;//每个风杯的地址
-    QVector<QString> cupNameList;//每个风杯的名字，例：‘表1:’
+    QMap<uint8_t,QPushButton*> cupList;//
+    QMap<uint8_t,CUP_STATE> addrList;//每个风杯的地址
+    QMap<uint8_t,QString> nameList;//使用地址索引大气压与风杯的名称信息，修改后的cupNameList
+    QMap<uint8_t,double> speedList;//使用地址索引大气压与风杯的数据，修改后的currentSpeedList
     QVector<QString> tableGroupList;//数据列表显示时需要的信息,‘第一组：’
+    QVector<double> electricalData;
 
 //坐标系的三点图
     QPoint Point1,Point2,Point3;
     int SizeX,SizeY;
     QVector<double> lineChartMessage;//画折线图需要的信息，像队列一样使用
 
-    double currentSpeedList[32];
-    double averageSpeed,currentVolume;
+    double averageSpeed,currentVolume,negPressure,atmPressure;
 
     QVector<double> exportDataList;//每一次加载/展示的数据
     QTableWidget* widget;//展示数据信息需要的表格
