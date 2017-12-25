@@ -7,6 +7,8 @@
 #include<QLineEdit>
 #include<QTableWidget>
 #include<QComboBox>
+#include<QFileDialog>
+#include<QInputDialog>
 
 #include<QDate>
 #include<QTime>
@@ -24,6 +26,7 @@
 #include<QFile>
 #include<QFile>
 #include<QDataStream>
+#include<QDir>
 
 #include"global.h"
 

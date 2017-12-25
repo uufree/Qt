@@ -46,6 +46,11 @@ MainWindow::MainWindow(QWidget *parent) :
 //分四个区域分别初始化
     initAll();
     widget->resize(1,1);
+
+    /*********在windows运行时需要修改文件路径**********/
+    QDir dir("/home/uuchen/WindCup");
+    if(!dir.exists())
+        dir.mkdir("/home/uuchen/WindCup");
 }
 
 MainWindow::~MainWindow()
@@ -326,6 +331,7 @@ void MainWindow::startClicked()
         ui->startBtton->setText(tr("停止"));
         ui->flushButton->setEnabled(false);
         ui->saveDataButton->setText(tr("保存数据"));
+        currentFile = "uuchen";
         start();//根据设置区的信息建立串口，启动定时器
     }
     else
@@ -379,104 +385,126 @@ void MainWindow::exportDataClicked()//保存数据信息
     }
     else
     {//读取数据，并且显示数据
+        //加载用户文件对话框
+        QFileDialog* dialog = new QFileDialog;
+        dialog->setWindowTitle("历史数据");
+
+        /*******在windows运行时需要修改路径*******/
+        dialog->setDirectory("/home/uuchen/WindCup/");
+        dialog->setWindowModality(Qt::ApplicationModal);
+        dialog->resize(800,500);
+        dialog->setModal(true);
+        if(dialog->exec() == QDialog::Accepted)
+            currentFile = dialog->selectedFiles()[0];
+
         //读取数据
         readDataInFile();
-        int rowCount = (exportDataList.size()) / (currentCups + 4);
-        int columnCount = currentCups + 16;
-        widget->setColumnCount(columnCount);
-        widget->setRowCount(rowCount);
-        widget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-//初始化X轴
-        char index = 0xe0;
-        for(int i=0;i<columnCount-16;i++,index++)
+        if(!exportDataList.empty())
         {
-            QTableWidgetItem* item = new QTableWidgetItem;
-            item->setText(nameList[index]);
-            widget->setHorizontalHeaderItem(i,item);
-        }
-
-        QTableWidgetItem* item1 = new QTableWidgetItem;
-        item1->setText("平均风速:");
-        widget->setHorizontalHeaderItem(columnCount-16,item1);
-        QTableWidgetItem* item2 = new QTableWidgetItem;
-        item2->setText("当前风量:");
-        widget->setHorizontalHeaderItem(columnCount-15,item2);
-        QTableWidgetItem* item3 = new QTableWidgetItem;
-        item3->setText("负压值:");
-        widget->setHorizontalHeaderItem(columnCount-14,item3);
-        QTableWidgetItem* item4 = new QTableWidgetItem;
-        item4->setText("大气压值:");
-        widget->setHorizontalHeaderItem(columnCount-13,item4);
-        QTableWidgetItem* item5 = new QTableWidgetItem;
-        item5->setText("Ua值:");
-        widget->setHorizontalHeaderItem(columnCount-12,item5);
-        QTableWidgetItem* item6 = new QTableWidgetItem;
-        item6->setText("Ia值:");
-        widget->setHorizontalHeaderItem(columnCount-11,item6);
-        QTableWidgetItem* item7 = new QTableWidgetItem;
-        item7->setText("Ub值:");
-        widget->setHorizontalHeaderItem(columnCount-10,item7);
-        QTableWidgetItem* item8 = new QTableWidgetItem;
-        item8->setText("Ib值:");
-        widget->setHorizontalHeaderItem(columnCount-9,item8);
-        QTableWidgetItem* item9 = new QTableWidgetItem;
-        item9->setText("Uc值:");
-        widget->setHorizontalHeaderItem(columnCount-8,item9);
-        QTableWidgetItem* item10 = new QTableWidgetItem;
-        item10->setText("Ic值:");
-        widget->setHorizontalHeaderItem(columnCount-7,item10);
-        QTableWidgetItem* item11 = new QTableWidgetItem;
-        item11->setText("有功功率:");
-        widget->setHorizontalHeaderItem(columnCount-6,item11);
-        QTableWidgetItem* item12 = new QTableWidgetItem;
-        item12->setText("无功功率:");
-        widget->setHorizontalHeaderItem(columnCount-5,item12);
-        QTableWidgetItem* item13 = new QTableWidgetItem;
-        item13->setText("功率因数:");
-        widget->setHorizontalHeaderItem(columnCount-4,item13);
-        QTableWidgetItem* item14 = new QTableWidgetItem;
-        item14->setText("电压变比:");
-        widget->setHorizontalHeaderItem(columnCount-3,item14);
-        QTableWidgetItem* item15 = new QTableWidgetItem;
-        item15->setText("电流变比:");
-        widget->setHorizontalHeaderItem(columnCount-2,item15);
-        QTableWidgetItem* item16 = new QTableWidgetItem;
-        item16->setText("测断面面积:");
-        widget->setHorizontalHeaderItem(columnCount-1,item16);
-//初始化Y轴
-        for(int i=0;i<rowCount;i++)
-        {
-            QTableWidgetItem* item = new QTableWidgetItem;
-            item->setText(tableGroupList[i]);
-            widget->setVerticalHeaderItem(i,item);
-        }
-//填充表格
-        for(int i=0;i < rowCount;i++)
-        {
-            for(int j = 0;j < columnCount;j++)
+            int rowCount = (exportDataList.size()) / (currentCups + 16);
+            int columnCount = currentCups + 16;
+            widget->setColumnCount(columnCount);
+            widget->setRowCount(rowCount);
+            widget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    //初始化X轴
+            char index = 0xe0;
+            for(int i=0;i<columnCount-16;i++,index++)
             {
-                if(!exportDataList.empty())
+                QTableWidgetItem* item = new QTableWidgetItem;
+                item->setText(nameList[index]);
+                widget->setHorizontalHeaderItem(i,item);
+            }
+
+            QTableWidgetItem* item1 = new QTableWidgetItem;
+            item1->setText("平均风速:");
+            widget->setHorizontalHeaderItem(columnCount-16,item1);
+            QTableWidgetItem* item2 = new QTableWidgetItem;
+            item2->setText("当前风量:");
+            widget->setHorizontalHeaderItem(columnCount-15,item2);
+            QTableWidgetItem* item3 = new QTableWidgetItem;
+            item3->setText("负压值:");
+            widget->setHorizontalHeaderItem(columnCount-14,item3);
+            QTableWidgetItem* item4 = new QTableWidgetItem;
+            item4->setText("大气压值:");
+            widget->setHorizontalHeaderItem(columnCount-13,item4);
+            QTableWidgetItem* item5 = new QTableWidgetItem;
+            item5->setText("Ua值:");
+            widget->setHorizontalHeaderItem(columnCount-12,item5);
+            QTableWidgetItem* item6 = new QTableWidgetItem;
+            item6->setText("Ia值:");
+            widget->setHorizontalHeaderItem(columnCount-11,item6);
+            QTableWidgetItem* item7 = new QTableWidgetItem;
+            item7->setText("Ub值:");
+            widget->setHorizontalHeaderItem(columnCount-10,item7);
+            QTableWidgetItem* item8 = new QTableWidgetItem;
+            item8->setText("Ib值:");
+            widget->setHorizontalHeaderItem(columnCount-9,item8);
+            QTableWidgetItem* item9 = new QTableWidgetItem;
+            item9->setText("Uc值:");
+            widget->setHorizontalHeaderItem(columnCount-8,item9);
+            QTableWidgetItem* item10 = new QTableWidgetItem;
+            item10->setText("Ic值:");
+            widget->setHorizontalHeaderItem(columnCount-7,item10);
+            QTableWidgetItem* item11 = new QTableWidgetItem;
+            item11->setText("有功功率:");
+            widget->setHorizontalHeaderItem(columnCount-6,item11);
+            QTableWidgetItem* item12 = new QTableWidgetItem;
+            item12->setText("无功功率:");
+            widget->setHorizontalHeaderItem(columnCount-5,item12);
+            QTableWidgetItem* item13 = new QTableWidgetItem;
+            item13->setText("功率因数:");
+            widget->setHorizontalHeaderItem(columnCount-4,item13);
+            QTableWidgetItem* item14 = new QTableWidgetItem;
+            item14->setText("电压变比:");
+            widget->setHorizontalHeaderItem(columnCount-3,item14);
+            QTableWidgetItem* item15 = new QTableWidgetItem;
+            item15->setText("电流变比:");
+            widget->setHorizontalHeaderItem(columnCount-2,item15);
+            QTableWidgetItem* item16 = new QTableWidgetItem;
+            item16->setText("测断面面积:");
+            widget->setHorizontalHeaderItem(columnCount-1,item16);
+    //初始化Y轴
+            for(int i=0;i<rowCount;i++)
+            {
+                QTableWidgetItem* item = new QTableWidgetItem;
+                item->setText(tableGroupList[i]);
+                widget->setVerticalHeaderItem(i,item);
+            }
+    //填充表格
+            for(int i=0;i < rowCount;i++)
+            {
+                for(int j = 0;j < columnCount;j++)
                 {
-                    widget->setItem(i,j,new QTableWidgetItem(QString::number(exportDataList.front(),10,2)));
-                    exportDataList.pop_front();
+                    if(!exportDataList.empty())
+                    {
+                        widget->setItem(i,j,new QTableWidgetItem(QString::number(exportDataList.front(),10,2)));
+                        exportDataList.pop_front();
+                    }
                 }
             }
-        }
 
-        widget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        widget->resize(800,500);
-        widget->setWindowTitle(currentFile);
-        widget->setWindowModality(Qt::ApplicationModal);
-        widget->show();
+            widget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+            widget->resize(800,500);
+            widget->setWindowTitle(currentFile);
+            widget->setWindowModality(Qt::ApplicationModal);
+            widget->show();
+        }
     }
 }
 
 void MainWindow::writeDataInFile()
 {
-    currentFile.clear();
-    currentFile = dateStr + timeStr + ".dat";
-    currentFile = "/home/uuchen/" + currentFile;
-    QFile current("D:\\WindCup.dat");
+
+    //要求用户输入要保存的文件名称
+    if(currentFile == "uuchen")
+    {
+        QInputDialog* dialog = new QInputDialog(this);
+        currentFile = dialog->getText(this,"WindCup","请输入新建文件名：");
+    /*****在windows运行时需要修改文件路径********/
+        currentFile = "/home/uuchen/WindCup/" + currentFile + ".dat";
+    }
+
+    QFile current(currentFile);
     if(current.exists())
         current.remove();
     if(!current.open(QIODevice::ReadWrite))
@@ -490,7 +518,7 @@ void MainWindow::writeDataInFile()
 void MainWindow::readDataInFile()
 {
     exportDataList.clear();
-    QFile current("D:\\WindCup.dat");
+    QFile current(currentFile);
     if(!current.exists())
         return;
     if(!current.open(QIODevice::ReadWrite))
@@ -553,11 +581,11 @@ void MainWindow::handleTimeout()
     char out[2];
     out[0] = out[1] = ch;
     currentSerialPort->write(out,2);
-    qDebug() << "write: " << (uint8_t)ch;
+//    qDebug() << "write: " << (uint8_t)ch;
     char in[4] = {'\0','\0','\0','\0'};
     int readByte = currentSerialPort->read(in,4);
-    qDebug() << "read: " << (uint8_t)in[0]  << " " << (uint8_t)in[1] << " " << (uint8_t)in[2] << " " << (uint8_t)in[3];
-    qDebug() << "readByte: " << readByte;
+//    qDebug() << "read: " << (uint8_t)in[0]  << " " << (uint8_t)in[1] << " " << (uint8_t)in[2] << " " << (uint8_t)in[3];
+//    qDebug() << "readByte: " << readByte;
 
     if(readByte != 4)
     {
