@@ -4,8 +4,8 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    currentCups(11),
-    currentCupIndex(0),
+    currentCups(9),
+    currentCupIndex(0xde),
     currentSerialPort(new QSerialPort),
     serialTimer(new QTimer),
     timeTimer(new QTimer),
@@ -48,258 +48,6 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
-}
-
-void MainWindow::startClicked()
-{
-    if(ui->startBtton->text() == tr("开始"))
-    {
-        exportDataList.clear();//清理上次剩余的导出的信息
-        clearAll();//清理掉已有的信息
-        collectSettingMessage();//收集设置区的信息
-        ui->startBtton->setText(tr("停止"));
-        ui->flushButton->setEnabled(false);
-        ui->saveDataButton->setText(tr("保存数据"));
-        start();//根据设置区的信息建立串口，启动定时器
-    }
-    else
-    {
-        serialTimer->stop();
-        if(!exportDataList.empty())
-            writeDataInFile();
-        ui->startBtton->setText(tr("开始"));
-        ui->flushButton->setEnabled(true);
-        ui->saveDataButton->setText(tr("历史数据"));
-    }
-}
-
-void MainWindow::flushClicked()
-{
-    clearAll();//清理数据区的所有信息
-    ui->settingPort->clear();
-    foreach(const QSerialPortInfo& info,QSerialPortInfo::availablePorts())
-        ui->settingPort->addItem(info.portName());
-}
-
-void MainWindow::exportDataClicked()//保存数据信息
-{
-    if(ui->saveDataButton->text() == tr("保存数据"))
-    {
-        char index = 0xe0;
-        for(int i=0;i<currentCups;i++,index++)
-            exportDataList.append(speedList[index]);
-
-        exportDataList.append(averageSpeed);
-        exportDataList.append(currentVolume);
-        exportDataList.append(negPressure);
-        exportDataList.append(atmPressure);
-    }
-    else
-    {//读取数据，并且显示数据
-        //读取数据
-        readDataInFile();
-        int rowCount = (exportDataList.size()) / (currentCups + 2);
-        int columnCount = currentCups + 2;
-        widget->setColumnCount(columnCount);
-        widget->setRowCount(rowCount);
-        widget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-//初始化X轴
-        char index = 0xe0;
-        for(int i=0;i<columnCount-4;i++,index++)
-        {
-            QTableWidgetItem* item = new QTableWidgetItem;
-            item->setText(nameList[index]);
-            widget->setHorizontalHeaderItem(i,item);
-        }
-
-        QTableWidgetItem* item1 = new QTableWidgetItem;
-        item1->setText("平均风速:");
-        widget->setHorizontalHeaderItem(columnCount-4,item1);
-        QTableWidgetItem* item2 = new QTableWidgetItem;
-        item2->setText("当前风量:");
-        widget->setHorizontalHeaderItem(columnCount-3,item2);
-        QTableWidgetItem* item3 = new QTableWidgetItem;
-        item3->setText("负压值:");
-        widget->setHorizontalHeaderItem(columnCount-2,item3);
-        QTableWidgetItem* item4 = new QTableWidgetItem;
-        item4->setText("大气压值:");
-        widget->setHorizontalHeaderItem(columnCount-1,item4);
-//初始化Y轴
-        for(int i=0;i<rowCount;i++)
-        {
-            QTableWidgetItem* item = new QTableWidgetItem;
-            item->setText(tableGroupList[i]);
-            widget->setVerticalHeaderItem(i,item);
-        }
-//填充表格
-        for(int i=0;i < rowCount;i++)
-        {
-            for(int j = 0;j < columnCount;j++)
-            {
-                if(!exportDataList.empty())
-                {
-                    widget->setItem(i,j,new QTableWidgetItem(QString::number(exportDataList.front(),10,2)));
-                    exportDataList.pop_front();
-                }
-            }
-        }
-
-        widget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        widget->resize(800,500);
-        widget->setWindowTitle(currentFile);
-        widget->setWindowModality(Qt::ApplicationModal);
-        widget->show();
-    }
-}
-
-void MainWindow::writeDataInFile()
-{
-    currentFile.clear();
-    currentFile = dateStr + timeStr + ".dat";
-    currentFile = "/home/uuchen/" + currentFile;
-    QFile current("D:\\WindCup.dat");
-    if(current.exists())
-        current.remove();
-    if(!current.open(QIODevice::ReadWrite))
-        qDebug() << "writeDataInFile: open file error!";
-    QDataStream out(&current);
-    out << exportDataList;
-    exportDataList.clear();
-    current.close();
-}
-
-void MainWindow::readDataInFile()
-{
-    exportDataList.clear();
-    QFile current("D:\\WindCup.dat");
-    if(!current.exists())
-        return;
-    if(!current.open(QIODevice::ReadWrite))
-        qDebug() << "readDataInFile: open file error!";
-    QDataStream in(&current);
-    in >> exportDataList;
-    current.close();
-}
-
-//处理串口定时器到期
-void MainWindow::handleTimeout()
-{
-    if(currentCupIndex < currentCups)
-    {
-        char ch = addrList[currentCupIndex];
-        currentSerialPort->write(&ch,1);
-        qDebug() << "write: " << (uint8_t)ch;
-        char in[3] = {'\0','\0','\0'};
-        int readByte = currentSerialPort->read(in,3);
-        qDebug() << "read: " << in;
-        qDebug() << "readByte: " << readByte;
-
-        if(readByte != 3)
-        {
-            addrList[(uint8_t)in[0]] = ERROR;
-        }
-        else
-        {
-            addrList[(uint8_t)in[0]] = RUNING;
-        }
-
-        if((uint8_t)in[0] < 0xe0)//处理负压与大气压
-        {//无符号整数
-            speedList[(uint8_t)in[0]] = (in[1] << 8) + in[2];
-        }
-        else
-        {//处理风杯
-            speedList[(uint8_t)in[0]] = in[2];
-        }
-    }
-
-    if(++currentCupIndex == currentCups)
-    {//顺便处理电机数据
-        char out[7] = {0x4c,0x57,0x01,0x30,0x01,0x32,0x0d};
-        currentSerialPort->write(out,7);
-        currentCupIndex = 0;
-        char in[25];
-        for(int i=0;i<25;i++)
-            in[i] = '\0';
-        currentSerialPort->read(in,25);
-
-        double result = 0;
-        for(int i=5;i<23;i+=2)
-        {
-            bool isNegative = 0x80 & in[i];
-            result = (in[i] << 7 + in[i+1]) / 10000;
-            isNegative ? result = -result : result = result;
-            electricalData.append(result);
-        }
-
-        currentCupIndex = 0;
-    }
-}
-
-//处理1s定时器到期
-void MainWindow::updateTime()
-{
-//更新到期的时间与日期
-    timeStr = time->currentTime().toString();
-    ui->currentTime->setText(timeStr);
-    date->currentDate().getDate(&year,&mouth,&day);
-    dateStr = QString::number(year) + "年" + QString::number(mouth) + "月" + QString::number(day) + "日";
-    ui->currentDate->setText(dateStr);
-
-//在程序处于数据采集过程中，对信息的更新
-    if(ui->startBtton->text() == tr("停止"))
-    {
-        //计算平均风速与当前数据
-        double speedSum = 0;
-        uint8_t index = 0xe0;
-        for(int i=0;i<currentCups-2;i++,index++)
-            speedSum += speedList[index];
-        averageSpeed = speedSum / currentCups;
-        currentVolume = averageSpeed * settingData.testArea.toDouble();
-        negPressure = speedList[0xde];
-        atmPressure = speedList[0xdf];
-
-        //更新平均风速与当前数据
-        ui->currentVolume->setText(QString::number(currentVolume,10,2));
-        ui->currentAverageSpeed->setText(QString::number(averageSpeed,10,2));
-        ui->currentNegPressure->setText(QString::number(negPressure,10,2));
-        ui->currentAtmPressure->setText(QString::number(atmPressure,10,2));
-
-        //更新每个风杯的实时速度
-        index = 0xe0;
-        for(int i=0;i<currentCups-2;i++,index++)
-        {
-            if(addrList[index] == RUNING)
-            {
-                cupList[index]->setEnabled(true);
-                cupList[i]->setText(nameList[index] + QString::number(speedList[index],10,2));
-            }
-            else
-            {
-                cupList[index]->setText(nameList[index] + "Error");
-                cupList[index]->setEnabled(false);
-            }
-
-        //更新电参数数据
-        ui->UA->setText(QString::number(electricalData[0],10,2));
-        ui->UB->setText(QString::number(electricalData[1],10,2));
-        ui->UC->setText(QString::number(electricalData[2],10,2));
-        ui->IA->setText(QString::number(electricalData[3],10,2));
-        ui->IB->setText(QString::number(electricalData[4],10,2));
-        ui->IC->setText(QString::number(electricalData[5],10,2));
-        ui->PA->setText(QString::number(electricalData[6],10,2));
-        ui->PB->setText(QString::number(electricalData[7],10,2));
-        ui->PC->setText(QString::number(electricalData[8],10,2));
-
-        //更新画折线图需要的风量信息
-        lineChartMessage.push_front(currentVolume);
-        if(lineChartMessage.size() > 100)
-            lineChartMessage.pop_back();
-
-    }
-
-    //更新折线图
-    update();
 }
 
 void MainWindow::initSettingArea()
@@ -368,22 +116,22 @@ void MainWindow::initSpeed()
     cupList.insert(0xed,ui->ED);
     cupList.insert(0xee,ui->EE);
     cupList.insert(0xef,ui->EF);
-    cupList.append(0xf0,ui->F0);
-    cupList.append(0xf1,ui->F1);
-    cupList.append(0xf2,ui->F2);
-    cupList.append(0xf3,ui->F3);
-    cupList.append(0xf4,ui->F4);
-    cupList.append(0xf5,ui->F5);
-    cupList.append(0xf6,ui->F6);
-    cupList.append(0xf7,ui->F7);
-    cupList.append(0xf8,ui->F8);
-    cupList.append(0xf9,ui->F9);
-    cupList.append(0xfa,ui->FA);
-    cupList.append(0xfb,ui->FB);
-    cupList.append(0xfc,ui->FC);
-    cupList.append(0xfd,ui->FD);
-    cupList.append(0xfe,ui->FE);
-    cupList.append(0xff,ui->FF);
+    cupList.insert(0xf0,ui->F0);
+    cupList.insert(0xf1,ui->F1);
+    cupList.insert(0xf2,ui->F2);
+    cupList.insert(0xf3,ui->F3);
+    cupList.insert(0xf4,ui->F4);
+    cupList.insert(0xf5,ui->F5);
+    cupList.insert(0xf6,ui->F6);
+    cupList.insert(0xf7,ui->F7);
+    cupList.insert(0xf8,ui->F8);
+    cupList.insert(0xf9,ui->F9);
+    cupList.insert(0xfa,ui->FA);
+    cupList.insert(0xfb,ui->FB);
+    cupList.insert(0xfc,ui->FC);
+    cupList.insert(0xfd,ui->FD);
+    cupList.insert(0xfe,ui->FE);
+    cupList.insert(0xff,ui->FF);
 }
 
 void MainWindow::initAll()
@@ -546,4 +294,255 @@ void MainWindow::paintLineChart()
     {
         painter.drawLine(pointList[i],pointList[i+1]);
     }
+}
+
+void MainWindow::startClicked()
+{
+    if(ui->startBtton->text() == tr("开始"))
+    {
+        exportDataList.clear();//清理上次剩余的导出的信息
+        clearAll();//清理掉已有的信息
+        collectSettingMessage();//收集设置区的信息
+        ui->startBtton->setText(tr("停止"));
+        ui->flushButton->setEnabled(false);
+        ui->saveDataButton->setText(tr("保存数据"));
+        start();//根据设置区的信息建立串口，启动定时器
+    }
+    else
+    {
+        serialTimer->stop();
+        if(!exportDataList.empty())
+            writeDataInFile();
+        ui->startBtton->setText(tr("开始"));
+        ui->flushButton->setEnabled(true);
+        ui->saveDataButton->setText(tr("历史数据"));
+    }
+}
+
+void MainWindow::flushClicked()
+{
+    clearAll();//清理数据区的所有信息
+    ui->settingPort->clear();
+    foreach(const QSerialPortInfo& info,QSerialPortInfo::availablePorts())
+        ui->settingPort->addItem(info.portName());
+}
+
+void MainWindow::exportDataClicked()//保存数据信息
+{
+    if(ui->saveDataButton->text() == tr("保存数据"))
+    {
+        char index = 0xe0;
+        for(int i=0;i<currentCups;i++,index++)
+            exportDataList.append(speedList[index]);
+
+        exportDataList.append(averageSpeed);
+        exportDataList.append(currentVolume);
+        exportDataList.append(negPressure);
+        exportDataList.append(atmPressure);
+    }
+    else
+    {//读取数据，并且显示数据
+        //读取数据
+        readDataInFile();
+        int rowCount = (exportDataList.size()) / (currentCups + 2);
+        int columnCount = currentCups + 2;
+        widget->setColumnCount(columnCount);
+        widget->setRowCount(rowCount);
+        widget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+//初始化X轴
+        char index = 0xe0;
+        for(int i=0;i<columnCount-4;i++,index++)
+        {
+            QTableWidgetItem* item = new QTableWidgetItem;
+            item->setText(nameList[index]);
+            widget->setHorizontalHeaderItem(i,item);
+        }
+
+        QTableWidgetItem* item1 = new QTableWidgetItem;
+        item1->setText("平均风速:");
+        widget->setHorizontalHeaderItem(columnCount-4,item1);
+        QTableWidgetItem* item2 = new QTableWidgetItem;
+        item2->setText("当前风量:");
+        widget->setHorizontalHeaderItem(columnCount-3,item2);
+        QTableWidgetItem* item3 = new QTableWidgetItem;
+        item3->setText("负压值:");
+        widget->setHorizontalHeaderItem(columnCount-2,item3);
+        QTableWidgetItem* item4 = new QTableWidgetItem;
+        item4->setText("大气压值:");
+        widget->setHorizontalHeaderItem(columnCount-1,item4);
+//初始化Y轴
+        for(int i=0;i<rowCount;i++)
+        {
+            QTableWidgetItem* item = new QTableWidgetItem;
+            item->setText(tableGroupList[i]);
+            widget->setVerticalHeaderItem(i,item);
+        }
+//填充表格
+        for(int i=0;i < rowCount;i++)
+        {
+            for(int j = 0;j < columnCount;j++)
+            {
+                if(!exportDataList.empty())
+                {
+                    widget->setItem(i,j,new QTableWidgetItem(QString::number(exportDataList.front(),10,2)));
+                    exportDataList.pop_front();
+                }
+            }
+        }
+
+        widget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        widget->resize(800,500);
+        widget->setWindowTitle(currentFile);
+        widget->setWindowModality(Qt::ApplicationModal);
+        widget->show();
+    }
+}
+
+void MainWindow::writeDataInFile()
+{
+    currentFile.clear();
+    currentFile = dateStr + timeStr + ".dat";
+    currentFile = "/home/uuchen/" + currentFile;
+    QFile current("D:\\WindCup.dat");
+    if(current.exists())
+        current.remove();
+    if(!current.open(QIODevice::ReadWrite))
+        qDebug() << "writeDataInFile: open file error!";
+    QDataStream out(&current);
+    out << exportDataList;
+    exportDataList.clear();
+    current.close();
+}
+
+void MainWindow::readDataInFile()
+{
+    exportDataList.clear();
+    QFile current("D:\\WindCup.dat");
+    if(!current.exists())
+        return;
+    if(!current.open(QIODevice::ReadWrite))
+        qDebug() << "readDataInFile: open file error!";
+    QDataStream in(&current);
+    in >> exportDataList;
+    current.close();
+}
+
+//处理串口定时器到期
+void MainWindow::handleTimeout()
+{
+    if(currentCupIndex < (currentCups + 0xe0))
+    {
+        qDebug() << "currentCupIndex: " << currentCupIndex;
+        char ch = currentCupIndex;
+        currentSerialPort->write(&ch,1);
+        qDebug() << "write: " << (uint8_t)ch;
+        char in[3] = {'\0','\0','\0'};
+        int readByte = currentSerialPort->read(in,3);
+        qDebug() << "read: " << in;
+        qDebug() << "readByte: " << readByte;
+
+        if(readByte != 3)
+        {
+//            addrList[(uint8_t)in[0]] = ERROR;
+        }
+        else
+        {
+//            addrList[(uint8_t)in[0]] = RUNING;
+        }
+/*
+        if((uint8_t)in[0] < 0xe0)//处理负压与大气压
+        {//无符号整数
+            speedList[(uint8_t)in[0]] = (in[1] << 8) + in[2];
+        }
+        else
+        {//处理风杯
+            speedList[(uint8_t)in[0]] = in[2];
+        } */
+    }
+
+    if(++currentCupIndex == (currentCups + 0xe0))
+    {//顺便处理电机数据
+/*        char out[7] = {0x4c,0x57,0x01,0x30,0x01,0x32,0x0d};
+        currentSerialPort->write(out,7);
+        char in[25];
+        for(int i=0;i<25;i++)
+            in[i] = '\0';
+        currentSerialPort->read(in,25);
+
+        double result = 0;
+        for(int i=5;i<23;i+=2)
+        {
+            bool isNegative = 0x80 & in[i];
+            result = (in[i] << 7 + in[i+1]) / 10000;
+            isNegative ? result = -result : result = result;
+            electricalData.append(result);
+        }
+*/
+        currentCupIndex = 0xde;
+    }
+}
+
+//处理1s定时器到期
+void MainWindow::updateTime()
+{
+//更新到期的时间与日期
+    timeStr = time->currentTime().toString();
+    ui->currentTime->setText(timeStr);
+    date->currentDate().getDate(&year,&mouth,&day);
+    dateStr = QString::number(year) + "年" + QString::number(mouth) + "月" + QString::number(day) + "日";
+    ui->currentDate->setText(dateStr);
+
+//在程序处于数据采集过程中，对信息的更新
+    if(ui->startBtton->text() == tr("停止"))
+    {
+        //计算平均风速与当前数据
+        double speedSum = 0;
+        uint8_t index = 0xe0;
+        for(int i=0;i<currentCups-2;i++,index++)
+            speedSum += speedList[index];
+        averageSpeed = speedSum / currentCups;
+        currentVolume = averageSpeed * settingData.testArea.toDouble();
+        negPressure = speedList[0xde];
+        atmPressure = speedList[0xdf];
+
+        //更新平均风速与当前数据
+        ui->currentVolume->setText(QString::number(currentVolume,10,2));
+        ui->currentAverageSpeed->setText(QString::number(averageSpeed,10,2));
+        ui->currentNegPressure->setText(QString::number(negPressure,10,2));
+        ui->currentAtmPressure->setText(QString::number(atmPressure,10,2));
+
+        //更新每个风杯的实时速度
+        index = 0xe0;
+        for(int i=0;i<currentCups-2;i++,index++)
+        {
+            if(addrList[index] == RUNING)
+            {
+                cupList[index]->setEnabled(true);
+                cupList[i]->setText(nameList[index] + QString::number(speedList[index],10,2));
+            }
+            else
+            {
+                cupList[index]->setText(nameList[index] + "Error");
+                cupList[index]->setEnabled(false);
+            }
+        }
+        //更新电参数数据
+        ui->UA->setText(QString::number(electricalData[0],10,2));
+        ui->UB->setText(QString::number(electricalData[1],10,2));
+        ui->UC->setText(QString::number(electricalData[2],10,2));
+        ui->IA->setText(QString::number(electricalData[3],10,2));
+        ui->IB->setText(QString::number(electricalData[4],10,2));
+        ui->IC->setText(QString::number(electricalData[5],10,2));
+        ui->PA->setText(QString::number(electricalData[6],10,2));
+        ui->PB->setText(QString::number(electricalData[7],10,2));
+        ui->PC->setText(QString::number(electricalData[8],10,2));
+
+        //更新画折线图需要的风量信息
+        lineChartMessage.push_front(currentVolume);
+        if(lineChartMessage.size() > 100)
+            lineChartMessage.pop_back();
+
+    }
+    //更新折线图
+    update();
 }

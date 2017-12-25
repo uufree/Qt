@@ -50,20 +50,20 @@ protected:
     void paintEvent(QPaintEvent* event);
 
 private:
-    void initSettingArea();//ok
-    void initCurrentDisplayArea();//ok
-    void initLineChart();//no
-    void initSpeed();//ok
-    void initAll();//ok
+    void initSettingArea();
+    void initCurrentDisplayArea();
+    void initLineChart();
+    void initSpeed();
+    void initAll();
 
-    void clearCurrentMessage();//ok
-    void clearLineChart();//ok
-    void clearSpeed();//ok
-    void clearAll();//ok
+    void clearCurrentMessage();
+    void clearLineChart();
+    void clearSpeed();
+    void clearAll();
 
 //作为公有槽的内部函数使用
-    void collectSettingMessage();//ok
-    void start();//ok
+    void collectSettingMessage();
+    void start();
     void writeDataInFile();//将exportDataList中的数据写入文件中
     void readDataInFile();//从文件中读取数据
 //绘制折现图的函数
@@ -76,7 +76,7 @@ private:
     static const int defaultCups = 9;
     static const int systemSize = 100;//Y方向的单位长度
     int currentCups;//当前风杯数量
-    int currentCupIndex;
+    uint8_t currentCupIndex;
     QString currentFile;
 
     SettingData settingData;//设置区信息
@@ -86,7 +86,7 @@ private:
     QDate* date;//日期
     QTime* time;//时间
     int year,mouth,day;
-    QString dateStr,timeStr;//日期与实践
+    QString dateStr,timeStr;//日期与时间
     QMap<uint8_t,QPushButton*> cupList;//
     QMap<uint8_t,CUP_STATE> addrList;//每个风杯的地址
     QMap<uint8_t,QString> nameList;//使用地址索引大气压与风杯的名称信息，修改后的cupNameList
