@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>839</width>
-    <height>521</height>
+    <height>552</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -29,9 +29,9 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <layout class="QHBoxLayout" name="horizontalLayout_41" stretch="90,90">
+     <layout class="QHBoxLayout" name="horizontalLayout_42">
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_5">
+       <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_6">
           <item>
@@ -361,165 +361,143 @@
          </layout>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout">
+         <layout class="QHBoxLayout" name="horizontalLayout_41">
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_38">
+           <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,0">
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,0">
-              <item>
-               <widget class="QLabel" name="label_5">
-                <property name="text">
-                 <string>Ua:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="UA"/>
-              </item>
-             </layout>
+             <widget class="QLabel" name="label_5">
+              <property name="text">
+               <string>Ua:</string>
+              </property>
+             </widget>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_30" stretch="0,0">
-              <item>
-               <widget class="QLabel" name="label_8">
-                <property name="text">
-                 <string>Ub:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="UB"/>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_35" stretch="0,0">
-              <item>
-               <widget class="QLabel" name="label_14">
-                <property name="text">
-                 <string>Uc:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="UC"/>
-              </item>
-             </layout>
+             <widget class="QLineEdit" name="UA"/>
             </item>
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_39">
+           <layout class="QHBoxLayout" name="horizontalLayout_30" stretch="0,0">
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_31" stretch="0,0">
-              <item>
-               <widget class="QLabel" name="label_9">
-                <property name="text">
-                 <string>Ia:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="IA"/>
-              </item>
-             </layout>
+             <widget class="QLabel" name="label_8">
+              <property name="text">
+               <string>Ub:</string>
+              </property>
+             </widget>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_32" stretch="0,0">
-              <item>
-               <widget class="QLabel" name="label_10">
-                <property name="text">
-                 <string>Ib:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="IB"/>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_36" stretch="0,0">
-              <item>
-               <widget class="QLabel" name="label_20">
-                <property name="text">
-                 <string>Ic:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="IC"/>
-              </item>
-             </layout>
+             <widget class="QLineEdit" name="UB"/>
             </item>
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_40">
+           <layout class="QHBoxLayout" name="horizontalLayout_35" stretch="0,0">
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_33" stretch="0,0">
-              <item>
-               <widget class="QLabel" name="label_11">
-                <property name="text">
-                 <string>P:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="PA"/>
-              </item>
-             </layout>
+             <widget class="QLabel" name="label_14">
+              <property name="text">
+               <string>Uc:</string>
+              </property>
+             </widget>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_34" stretch="0,0">
-              <item>
-               <widget class="QLabel" name="label_12">
-                <property name="text">
-                 <string>θ:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="PB"/>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_37" stretch="0,0">
-              <item>
-               <widget class="QLabel" name="label_21">
-                <property name="text">
-                 <string>cosφ:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="PC"/>
-              </item>
-             </layout>
+             <widget class="QLineEdit" name="UC"/>
             </item>
            </layout>
           </item>
          </layout>
         </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QWidget" name="lineChartWidget" native="true">
-        <property name="maximumSize">
-         <size>
-          <width>1200</width>
-          <height>900</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="1" column="0">
-     <layout class="QHBoxLayout" name="horizontalLayout_29" stretch="10,1,10">
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_43">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_31" stretch="0,0">
+            <item>
+             <widget class="QLabel" name="label_9">
+              <property name="text">
+               <string>Ia:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="IA"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_32" stretch="0,0">
+            <item>
+             <widget class="QLabel" name="label_10">
+              <property name="text">
+               <string>Ib:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="IB"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_36" stretch="0,0">
+            <item>
+             <widget class="QLabel" name="label_20">
+              <property name="text">
+               <string>Ic:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="IC"/>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_29">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_33" stretch="0,0">
+            <item>
+             <widget class="QLabel" name="label_11">
+              <property name="text">
+               <string>P:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="PA"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_34" stretch="0,0">
+            <item>
+             <widget class="QLabel" name="label_12">
+              <property name="text">
+               <string>Q:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="PB"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_37" stretch="0,0">
+            <item>
+             <widget class="QLabel" name="label_21">
+              <property name="text">
+               <string>cosφ:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="PC"/>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_23" stretch="5,4">
           <item>
@@ -619,440 +597,473 @@
        </layout>
       </item>
       <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>13</width>
-          <height>106</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_28">
+       <layout class="QVBoxLayout" name="verticalLayout_4" stretch="20,1">
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_13" stretch="1,1">
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_16" stretch="0,1">
-              <item>
-               <widget class="QLabel" name="label_7">
-                <property name="text">
-                 <string>端口号:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QComboBox" name="settingPort"/>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="0,0">
-              <item>
-               <widget class="QLabel" name="label_3">
-                <property name="text">
-                 <string>风杯速度:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="settingSpeed"/>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_25">
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_15" stretch="0,1">
-              <item>
-               <widget class="QLabel" name="label">
-                <property name="text">
-                 <string>波特率:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QComboBox" name="settingBaudBox">
-                <item>
-                 <property name="text">
-                  <string>9600</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>1200</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>2400</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>4800</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>19200</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>38400</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="0,15">
-              <item>
-               <widget class="QLabel" name="label_4">
-                <property name="text">
-                 <string>测断面面积:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLineEdit" name="settingTestArea"/>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_27">
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_17" stretch="0,1">
-              <item>
-               <widget class="QLabel" name="label_2">
-                <property name="text">
-                 <string>轮询间隔: </string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QComboBox" name="settingPoll">
-                <item>
-                 <property name="text">
-                  <string>10</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>20</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>30</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>40</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>50</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>60</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>70</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>80</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>90</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>100</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>150</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>200</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>250</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>300</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>350</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>400</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>450</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>500</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>1000</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>2000</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>4000</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_12" stretch="0,1">
-              <item>
-               <widget class="QLabel" name="label_6">
-                <property name="text">
-                 <string>风杯数:</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QComboBox" name="settingCups">
-                <item>
-                 <property name="text">
-                  <string>9</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>1</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>2</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>3</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>4</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>5</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>6</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>7</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>8</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>10</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>11</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>12</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>13</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>14</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>15</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>16</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>17</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>18</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>19</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>20</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>21</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>22</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>23</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>24</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>25</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>26</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>27</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>28</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>29</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>30</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>31</string>
-                 </property>
-                </item>
-                <item>
-                 <property name="text">
-                  <string>32</string>
-                 </property>
-                </item>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </item>
-         </layout>
+         <widget class="QWidget" name="lineChartWidget" native="true">
+          <property name="maximumSize">
+           <size>
+            <width>1200</width>
+            <height>900</height>
+           </size>
+          </property>
+         </widget>
         </item>
         <item>
-         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <layout class="QHBoxLayout" name="horizontalLayout_40">
           <item>
-           <widget class="QPushButton" name="startBtton">
-            <property name="text">
-             <string>开始</string>
-            </property>
-           </widget>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_28">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_38" stretch="0,0">
+                <item>
+                 <widget class="QLabel" name="label_22">
+                  <property name="text">
+                   <string>电压变比:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="settingElectric"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_39" stretch="0,0">
+                <item>
+                 <widget class="QLabel" name="label_23">
+                  <property name="text">
+                   <string>电流变比:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="settingVoltage"/>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_13" stretch="1,1">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_16" stretch="0,1">
+                <item>
+                 <widget class="QLabel" name="label_7">
+                  <property name="text">
+                   <string>端口号:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="settingPort"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="0,0">
+                <item>
+                 <widget class="QLabel" name="label_3">
+                  <property name="text">
+                   <string>风杯速度:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="settingSpeed"/>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_25">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_15" stretch="0,1">
+                <item>
+                 <widget class="QLabel" name="label">
+                  <property name="text">
+                   <string>波特率:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="settingBaudBox">
+                  <item>
+                   <property name="text">
+                    <string>9600</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>1200</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>2400</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>4800</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>19200</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>38400</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="0,15">
+                <item>
+                 <widget class="QLabel" name="label_4">
+                  <property name="text">
+                   <string>测断面面积:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="settingTestArea"/>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_27">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_17" stretch="0,1">
+                <item>
+                 <widget class="QLabel" name="label_2">
+                  <property name="text">
+                   <string>轮询间隔: </string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="settingPoll">
+                  <item>
+                   <property name="text">
+                    <string>10</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>20</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>30</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>40</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>50</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>60</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>70</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>80</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>90</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>100</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>150</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>200</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>250</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>300</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>350</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>400</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>450</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>500</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>1000</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>2000</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>4000</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_12" stretch="0,1">
+                <item>
+                 <widget class="QLabel" name="label_6">
+                  <property name="text">
+                   <string>风杯数:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="settingCups">
+                  <item>
+                   <property name="text">
+                    <string>9</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>1</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>2</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>3</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>4</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>5</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>6</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>7</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>8</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>10</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>11</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>12</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>13</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>14</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>15</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>16</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>17</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>18</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>19</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>20</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>21</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>22</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>23</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>24</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>25</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>26</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>27</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>28</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>29</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>30</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>31</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>32</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
           </item>
           <item>
-           <widget class="QPushButton" name="flushButton">
-            <property name="text">
-             <string>刷新</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="saveDataButton">
-            <property name="text">
-             <string>历史数据</string>
-            </property>
-           </widget>
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <widget class="QPushButton" name="startBtton">
+              <property name="text">
+               <string>开始</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="flushButton">
+              <property name="text">
+               <string>刷新</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="saveDataButton">
+              <property name="text">
+               <string>历史数据</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
          </layout>
         </item>

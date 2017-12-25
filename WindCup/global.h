@@ -11,6 +11,8 @@ struct SettingData
     QString cupSpeed;
     QString testArea;
     QString cupCount;
+    QString electric;
+    QString voltage;
 };
 
 enum CUP_STATE

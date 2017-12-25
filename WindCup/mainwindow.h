@@ -66,6 +66,7 @@ private:
     void start();
     void writeDataInFile();//将exportDataList中的数据写入文件中
     void readDataInFile();//从文件中读取数据
+    void fillCurrentAddrList();
 //绘制折现图的函数
     void paintSystem();
     void paintLineChart();
@@ -76,7 +77,6 @@ private:
     static const int defaultCups = 9;
     static const int systemSize = 100;//Y方向的单位长度
     int currentCups;//当前风杯数量
-    uint8_t currentCupIndex;
     QString currentFile;
 
     SettingData settingData;//设置区信息
@@ -88,10 +88,11 @@ private:
     int year,mouth,day;
     QString dateStr,timeStr;//日期与时间
     QMap<uint8_t,QPushButton*> cupList;//
-    QMap<uint8_t,CUP_STATE> addrList;//每个风杯的地址
-    QMap<uint8_t,QString> nameList;//使用地址索引大气压与风杯的名称信息，修改后的cupNameList
+    QMap<uint8_t,CUP_STATE> cupStatuList;//每个风杯的地址
+    QMap<uint8_t,QString> nameList;//使用地址索引大气压与风杯的名称信息，修改后的cupNameList,"表1："
     QMap<uint8_t,double> speedList;//使用地址索引大气压与风杯的数据，修改后的currentSpeedList
     QVector<QString> tableGroupList;//数据列表显示时需要的信息,‘第一组：’
+    QVector<uint8_t> currentAddrList;//每过一整个循环便重新填充一次List
     QVector<double> electricalData;
 
 //坐标系的三点图
