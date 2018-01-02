@@ -28,11 +28,13 @@ LIBS += -L"/usr/local/qwt-6.1.3/lib/" -lqwt
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    waterlevel.cpp
+    circledata.cpp \
+    dial.cpp
 
 HEADERS += \
         mainwindow.h \
-    waterlevel.h
+    circledata.h \
+    dial.h
 
 FORMS += \
         mainwindow.ui
