@@ -15,6 +15,17 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    void display();
+
+public slots:
+//    void clickStartButton();
+//    void clickSaveButton();
+//    void clickSettingButton();
+//    void clickNextButton();
+
+protected:
+    void resizeEvent(QResizeEvent* event);
+
 private:
     Ui::MainWindow *ui;
 };

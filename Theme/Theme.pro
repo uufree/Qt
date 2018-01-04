@@ -30,13 +30,16 @@ SOURCES += \
         mainwindow.cpp \
     circledata.cpp \
     dial.cpp \
-    linechart.cpp
+    linechart.cpp \
+#    linechartview.cpp
 
 HEADERS += \
         mainwindow.h \
     circledata.h \
     dial.h \
-    linechart.h
+    linechart.h \
+    global.h \
+#    linechartview.h
 
 FORMS += \
         mainwindow.ui
