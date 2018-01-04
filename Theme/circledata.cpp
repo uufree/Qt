@@ -13,10 +13,13 @@ CircleData::CircleData(QWidget* parent):
     layout->setMargin(0);
 
     press = createDial(40.0,480.0);
+    press->setLabel("压力(KPa)");
     layout->addWidget(press,0,0);
     waterLevel = createDial(40.0,480.0);
+    waterLevel->setLabel("液位(m)");
     layout->addWidget(waterLevel,0,1);
     flow = createDial(40.0,480.0);
+    flow->setLabel("流量(m³/s)");
     layout->addWidget(flow,0,2);
 
     for(int i=0;i<layout->columnCount();i++)

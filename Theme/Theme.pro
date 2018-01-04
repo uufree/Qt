@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui charts
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -29,12 +29,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     circledata.cpp \
-    dial.cpp
+    dial.cpp \
+    linechart.cpp
 
 HEADERS += \
         mainwindow.h \
     circledata.h \
-    dial.h
+    dial.h \
+    linechart.h
 
 FORMS += \
         mainwindow.ui
