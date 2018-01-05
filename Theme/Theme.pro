@@ -32,6 +32,7 @@ SOURCES += \
     dial.cpp \
     linechart.cpp \
 #    linechartview.cpp
+    settingdialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -40,6 +41,8 @@ HEADERS += \
     linechart.h \
     global.h \
 #    linechartview.h
+    settingdialog.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    settingdialog.ui

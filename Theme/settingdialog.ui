@@ -1,0 +1,690 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SettingDialog</class>
+ <widget class="QDialog" name="SettingDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_8">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>采集方式：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="acquireStyle">
+             <item>
+              <property name="text">
+               <string>手动</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>100ms</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>200ms</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>400ms</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>600ms</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>800ms</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>1s</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>2s</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>3s</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>5s</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>8s</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>10s</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>15s</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>30s</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>1min</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>2min</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>3min</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>4min</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>5min</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>6min</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>7min</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>8min</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>9min</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>10min</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string/>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>测点数量：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="testCount"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_10">
+           <item>
+            <widget class="QLabel" name="label_9">
+             <property name="text">
+              <string>水位颜色：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="waterColor">
+             <item>
+              <property name="text">
+               <string>White</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Black</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Cyan</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DarkCyan</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Red</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DarkRed</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Megenta</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DarkMegenta</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Green</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DarkGreen</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Yellow</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DarkYellow</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Blue</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DarkBlue</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Gray</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DarkGray</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>LightGray</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_14">
+           <item>
+            <widget class="QLabel" name="label_13">
+             <property name="text">
+              <string>流量颜色：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="flowColor">
+             <item>
+              <property name="text">
+               <string>White</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Black</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Cyan</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DarkCyan</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Red</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DarkRed</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Megenta</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DarkMegenta</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Green</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DarkGreen</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Yellow</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DarkYellow</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Blue</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DarkBlue</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Gray</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DarkGray</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>LightGray</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_15">
+           <item>
+            <widget class="QLabel" name="label_14">
+             <property name="text">
+              <string>压力颜色：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="pressColor">
+             <item>
+              <property name="text">
+               <string>White</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Black</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Cyan</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DarkCyan</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Red</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DarkRed</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Megenta</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DarkMegenta</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Green</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DarkGreen</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Yellow</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DarkYellow</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Blue</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DarkBlue</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Gray</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DarkGray</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>LightGray</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_11">
+           <item>
+            <widget class="QLabel" name="label_10">
+             <property name="text">
+              <string>水位线型：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="waterLinestyle">
+             <item>
+              <property name="text">
+               <string>SolidLine</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DashLine</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DashDotLine</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DashDotDotLine</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>时间轴最小值：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="timeMIn"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <item>
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>时间轴最大值：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="timeMax"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_5">
+           <item>
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>幅值轴最小值：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="valueMin"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <item>
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>幅值轴最大值：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSpinBox" name="valueMax"/>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_12">
+           <item>
+            <widget class="QLabel" name="label_11">
+             <property name="text">
+              <string>流量线型：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="flowLineStyle">
+             <item>
+              <property name="text">
+               <string>SolidLine</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DashLine</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DashDotLine</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DashDotDotLine</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_13">
+           <item>
+            <widget class="QLabel" name="label_12">
+             <property name="text">
+              <string>压力线型：</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="pressLineStyle">
+             <item>
+              <property name="text">
+               <string>SolidLine</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DashLine</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DashDotLine</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>DashDotDotLine</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_7">
+       <item>
+        <widget class="QPushButton" name="defaultButton">
+         <property name="text">
+          <string>默认值</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="saveButton">
+         <property name="text">
+          <string>保存</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="confirmButton">
+         <property name="text">
+          <string>确定</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
