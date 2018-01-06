@@ -53,6 +53,117 @@ LineChart::LineChart(QWidget* widget):
     QPalette palette;
     palette.setColor(QPalette::Window,Qt::red);
     setPalette(palette);
+
+    view->setAutoFillBackground(true);
+    view->show();
+}
+
+void LineChart::setting(const SettingData &settingData)
+{
+    QString lineColorList[3] = {settingData.waterColor,settingData.flowColor,settingData.pressColor};
+    QString lineStyleList[3] = {settingData.waterLineStyle,settingData.flowLineStyle,settingData.pressLineStyle};
+    QVector<QLineSeries*> lineList = {waterLine,flowLine,pressLine};
+
+    for(int i=0;i<3;i++)
+    {
+        QString color = lineColorList[i];
+        QString style = lineStyleList[i];
+        QPen pen;
+        switch(color)
+        {
+            case "White":
+                pen.setColor(Qt::white);
+            case "Black":
+                pen.setColor(Qt::black);
+            case "Cyan":
+                pen.setColor(Qt::cyan);
+            case "DarkCyan":
+                pen.setColor(Qt::darkCyan);
+            case "Red":
+                pen.setColor(Qt::red);
+            case "DarkRed":
+                pen.setColor(Qt::darkRed);
+            case "Magenta":
+                pen.setColor(Qt::magenta);
+            case "DarkMagenta":
+                pen.setColor(Qt::darkMagenta);
+            case "Green":
+                pen.setColor(Qt::green);
+            case "DarkGreen":
+                pen.setColor(Qt::darkGreen);
+            case "Yellow":
+                pen.setColor(Qt::yellow);
+            case "DarkYellow":
+                pen.setColor(Qt::darkYellow);
+            case "Blue":
+                pen.setColor(Qt::blue);
+            case "DarkBlue":
+                pen.setColor(Qt::darkBlue);
+            case "Gray":
+                pen.setColor(Qt::gray);
+            case "DarkGray":
+                pen.setColor(Qt::darkGray);
+            case "LightGray":
+                pen.setColor(Qt::lightGray);
+        }
+
+        switch(style)
+        {
+            case "SolidLine":
+                pen.setStyle(Qt::SolidLine);
+            case "DashLine":
+                pen.setStyle(Qt::DashLine);
+            case "DotLine":
+                pen.setStyle(Qt::DotLine);
+            case "DashDotLine":
+                pen.setStyle(Qt::DashDotLine);
+            case "DashDotDotLine":
+                pen.setStyle(Qt::DashDotDotLine);
+        }
+
+        lineList[i]->setPen(pen);
+    }
+}
+
+void LineChart::startPressLine()
+{}
+
+void LineChart::startFlowLine()
+{}
+
+void LineChart::startWaterLine()
+{}
+
+void LineChart::stopFlowLine()
+{}
+
+void LineChart::stopPressLine()
+{}
+
+void LineChart::stopWaterLine()
+{}
+
+void LineChart::startAll()
+{}
+
+void LineChart::stopAll()
+{}
+
+void LineChart::clearAll()
+{}
+
+void LineChart::updateFlowData(QVector<double> &flowDataList)
+{}
+
+void LineChart::updateWaterData(const QVector<double> &waterDataList)
+{}
+
+void LineChart::updatePressData(const QVector<double> &pressDataList)
+{}
+
+void LineChart::resizeView(int x,int y)
+{
+    view->resize(x,y);
 }
 
 void LineChart::updateLineChart()
@@ -97,13 +208,6 @@ void LineChart::updateLineChart()
     }
 
     chart->update();
-    qDebug() << "emmmm";
 }
 
-void LineChart::start()
-{
-    timer->start(300);
-    view->setAutoFillBackground(true);
-    view->show();
-}
 

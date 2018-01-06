@@ -14,7 +14,7 @@ class CircleData : public QFrame
 public:
     CircleData(QWidget* parent = NULL);
 
-    void setting(SettingData settingData);
+    void setting(const struct SettingData& settingData);
     void
 
 public slots:

@@ -6,6 +6,7 @@
 #include<QtCharts/QChartView>
 
 #include"linechart.h"
+#include"settingdialog.h"
 
 using namespace QtCharts;
 

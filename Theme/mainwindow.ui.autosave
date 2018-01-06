@@ -181,14 +181,14 @@
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_6">
               <item>
-               <widget class="QCheckBox" name="checkBox_4">
+               <widget class="QCheckBox" name="waterCheck">
                 <property name="text">
                  <string>水位</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="checkBox_6">
+               <widget class="QCheckBox" name="pressCheck">
                 <property name="text">
                  <string>压力</string>
                 </property>
@@ -199,14 +199,14 @@
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_7">
               <item>
-               <widget class="QCheckBox" name="checkBox_5">
+               <widget class="QCheckBox" name="flowCheck">
                 <property name="text">
                  <string>流量</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QCheckBox" name="checkBox">
+               <widget class="QCheckBox" name="allCheck">
                 <property name="text">
                  <string>全部</string>
                 </property>

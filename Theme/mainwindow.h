@@ -1,7 +1,12 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
+#include<QMainWindow>
+
+#include"settingdialog.h"
+#include"circledata.h"
+#include"global.h"
+#include"linechart.h"
 
 namespace Ui {
 class MainWindow;
@@ -18,16 +23,25 @@ public:
     void display();
 
 public slots:
-//    void clickStartButton();
-//    void clickSaveButton();
-//    void clickSettingButton();
-//    void clickNextButton();
+    void clickStartButton();
+    void clickSaveButton();
+    void clickSettingButton();
+    void clickSwitchButton();
 
 protected:
     void resizeEvent(QResizeEvent* event);
 
 private:
+    void setting();//根据settingData设置展示信息
+    void start();
+    void stop();
+    void clearAll();
+
+private:
     Ui::MainWindow *ui;
+    SettingDialog* settingDialog;
+
+    bool showPress,showWater,showFlow,showAll;
 };
 
 #endif // MAINWINDOW_H

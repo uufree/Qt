@@ -19,15 +19,21 @@ class LineChart : public QWidget
 public:
     LineChart(QWidget* widget = NULL);
 
-    void resize(int x, int y)
-    {
-        view->resize(x,y);
-    }
+    void resizeView(int x, int y);
 
-public slots:
-//    void handleLineSetting();//处理设置信息
-    void updateLineChart();
-    void start();//开始
+    void setting(const struct SettingData& settingData);
+    void startPressLine();
+    void stopPressLine();
+    void startWaterLine();
+    void stopWaterLine();
+    void startFlowLine();
+    void stopFlowLine();
+    void startAll();
+    void stopAll();
+    void clearAll();
+    void updatePressData(const QVector<double>& pressDataList);
+    void updateWaterData(const QVector<double>& waterDataList);
+    void updateFlowData(QVector<double>& flowDataList);
 
 private:
     QChart* chart;
@@ -37,10 +43,6 @@ private:
     QValueAxis* axisX;
     QValueAxis* axisY;
     QChartView* view;
-    QVector<double> pressDataList;
-    QVector<double> flowDataList;
-    QVector<double> waterDataList;
-    QTimer* timer;
 };
 
 #endif // LINECHART_H

@@ -2,10 +2,12 @@
 #define SETTINGDIALOG_H
 
 #include <QDialog>
+#include"global.h"
 
 namespace Ui {
 class SettingDialog;
 }
+
 
 class SettingDialog : public QDialog
 {
@@ -14,6 +16,14 @@ class SettingDialog : public QDialog
 public:
     explicit SettingDialog(QWidget *parent = 0);
     ~SettingDialog();
+
+public slots:
+    void clickSaveButton();
+    void clickDefaultButton();
+    void clickconfirmButton();
+
+private:
+    void setSettingData();
 
 private:
     Ui::SettingDialog *ui;

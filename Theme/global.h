@@ -2,31 +2,21 @@
 #define GLOBAL_H
 
 #include<QString>
-#include<QMutex>
 
-struct LineChartsSetting
+struct SettingData
 {
-    QString pressLineColor;
-    QString flowLineColor;
-    QString waterLevelColor;
+    QString  acquireStyle;
+    int testCount;
+    QString waterColor;
+    QString flowColor;
+    QString pressColor;
+    QString waterLineStyle;
+    QString flowLineStyle;
+    QString pressLineStyle;
+    int timeMin;
+    int timeMax;
+    int valueMin;
+    int valueMax;
 };
 
-struct PressData
-{
-    double press;
-    QMutex mutex;
-};
-
-struct FlowData
-{
-    double flow;
-    QMutex mutex;
-};
-
-struct WaterLevel
-{
-    double waterLevel;
-    QMutex mutex;
-};
-
-#endif // GLOBAL_H
+#endif
