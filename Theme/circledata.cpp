@@ -15,9 +15,9 @@ CircleData::CircleData(QWidget* parent):
     press = createDial(40.0,480.0);
     press->setLabel("压力(KPa)");
     layout->addWidget(press,0,0);
-    waterLevel = createDial(40.0,480.0);
-    waterLevel->setLabel("液位(m)");
-    layout->addWidget(waterLevel,0,1);
+    water = createDial(40.0,480.0);
+    water->setLabel("液位(m)");
+    layout->addWidget(water,0,1);
     flow = createDial(40.0,480.0);
     flow->setLabel("流量(m³/s)");
     layout->addWidget(flow,0,2);
@@ -26,17 +26,17 @@ CircleData::CircleData(QWidget* parent):
         layout->setColumnStretch(i,1);
 }
 
-void CircleData::changePress(double value)
+void CircleData::updatePress(double value)
 {
     press->setValue(value);
 }
 
-void CircleData::changeWaterLevel(double value)
+void CircleData::updateWater(double value)
 {
-    waterLevel->setValue(value);
+    water->setValue(value);
 }
 
-void CircleData::changeFlow(double value)
+void CircleData::updateFlow(double value)
 {
     flow->setValue(value);
 }
@@ -68,4 +68,19 @@ Dial* CircleData::createDial(double stepSize,double scale)
     temp->setFrameShadow(QwtDial::Sunken);
 
     return temp;
+}
+
+void CircleData::pressAlarm()
+{
+    press->alarm();
+}
+
+void CircleData::waterAlarm()
+{
+    water->alarm();
+}
+
+void CircleData::flowAlarm()
+{
+    flow->alarm();
 }

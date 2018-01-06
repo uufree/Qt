@@ -30,10 +30,9 @@ public:
     void stopFlowLine();
     void startAll();
     void stopAll();
-    void clearAll();
     void updatePressData(const QVector<double>& pressDataList);
     void updateWaterData(const QVector<double>& waterDataList);
-    void updateFlowData(QVector<double>& flowDataList);
+    void updateFlowData(const QVector<double>& flowDataList);
 
 private:
     QChart* chart;

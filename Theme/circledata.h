@@ -14,20 +14,21 @@ class CircleData : public QFrame
 public:
     CircleData(QWidget* parent = NULL);
 
-    void setting(SettingData settingData);
-    void
+    void updatePress(double value);
+    void updateWater(double value);
+    void updateFlow(double value);
 
-public slots:
-    void changePress(double value);
-    void changeWaterLevel(double value);
-    void changeFlow(double value);
+    void pressAlarm();
+    void waterAlarm();
+    void flowAlarm();
 
 private:
     Dial* createDial(double stepSize,double scale);
     QPalette colorTheme(const QColor&);
+
 private:
     Dial* press;
-    Dial* waterLevel;
+    Dial* water;
     Dial* flow;
 };
 

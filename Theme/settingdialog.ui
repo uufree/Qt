@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>488</width>
     <height>300</height>
    </rect>
   </property>
@@ -170,7 +170,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="testCount"/>
+            <widget class="QSpinBox" name="testCount">
+             <property name="maximum">
+              <number>10000</number>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -492,6 +496,11 @@
              </item>
              <item>
               <property name="text">
+               <string>DotLine</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
                <string>DashLine</string>
               </property>
              </item>
@@ -523,7 +532,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="timeMin"/>
+            <widget class="QDoubleSpinBox" name="timeMin">
+             <property name="maximum">
+              <double>10000.000000000000000</double>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -537,7 +550,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="timeMax"/>
+            <widget class="QDoubleSpinBox" name="timeMax">
+             <property name="maximum">
+              <double>10000.000000000000000</double>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -551,7 +568,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="valueMin"/>
+            <widget class="QDoubleSpinBox" name="valueMin">
+             <property name="maximum">
+              <double>10000.000000000000000</double>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -565,7 +586,11 @@
             </widget>
            </item>
            <item>
-            <widget class="QSpinBox" name="valueMax"/>
+            <widget class="QDoubleSpinBox" name="valueMax">
+             <property name="maximum">
+              <double>10000.000000000000000</double>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -692,10 +717,6 @@
   <tabstop>flowColor</tabstop>
   <tabstop>pressColor</tabstop>
   <tabstop>waterLinestyle</tabstop>
-  <tabstop>timeMin</tabstop>
-  <tabstop>timeMax</tabstop>
-  <tabstop>valueMin</tabstop>
-  <tabstop>valueMax</tabstop>
   <tabstop>flowLineStyle</tabstop>
   <tabstop>pressLineStyle</tabstop>
   <tabstop>saveButton</tabstop>

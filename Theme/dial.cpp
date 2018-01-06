@@ -37,7 +37,6 @@ const QString&  Dial::getLabel() const
     return label;
 }
 
-
 void Dial::drawScaleContents( QPainter *painter,const QPointF &center, double radius ) const
 {
     QRectF rect(0.0, 0.0, 2.0 * radius, 2.0 * radius - 10.0 );
@@ -49,3 +48,6 @@ void Dial::drawScaleContents( QPainter *painter,const QPointF &center, double ra
     const int flags = Qt::AlignBottom | Qt::AlignHCenter;
     painter->drawText( rect, flags, label);
 }
+
+void Dial::alarm()
+{}

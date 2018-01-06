@@ -20,13 +20,12 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void display();
-
 public slots:
     void clickStartButton();
     void clickSaveButton();
     void clickSettingButton();
     void clickSwitchButton();
+    void handleLineChartSize();
 
 protected:
     void resizeEvent(QResizeEvent* event);
@@ -35,13 +34,12 @@ private:
     void setting();//根据settingData设置展示信息
     void start();
     void stop();
-    void clearAll();
 
 private:
     Ui::MainWindow *ui;
     SettingDialog* settingDialog;
 
-    bool showPress,showWater,showFlow,showAll;
+    QTimer* timer;
 };
 
 #endif // MAINWINDOW_H

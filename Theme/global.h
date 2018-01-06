@@ -13,10 +13,10 @@ struct SettingData
     QString waterLineStyle;
     QString flowLineStyle;
     QString pressLineStyle;
-    int timeMin;
-    int timeMax;
-    int valueMin;
-    int valueMax;
+    double timeMin;
+    double timeMax;
+    double valueMin;
+    double valueMax;
 };
 
 #endif

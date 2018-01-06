@@ -13,6 +13,8 @@ public:
     void setLabel(const QString& label_);
     const QString& getLabel() const;
 
+    void alarm();
+
 protected:
     virtual void drawScaleContents( QPainter *painter,const QPointF &center, double radius ) const;
 

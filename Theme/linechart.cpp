@@ -2,6 +2,7 @@
 #include<QtGlobal>
 #include<QDebug>
 #include<QGridLayout>
+#include<QColor>
 
 LineChart::LineChart(QWidget* widget):
     QWidget(widget),
@@ -10,11 +11,8 @@ LineChart::LineChart(QWidget* widget):
     waterLine(new QLineSeries),
     flowLine(new QLineSeries),
     axisX(new QValueAxis),
-    axisY(new QValueAxis),
-    timer(new QTimer)
+    axisY(new QValueAxis)
 {
-    QObject::connect(timer,SIGNAL(timeout()),this,SLOT(updateLineChart()));
-
     pressLine->setName("压力");
     waterLine->setName("液位");
     flowLine->setName("流量");
@@ -30,22 +28,23 @@ LineChart::LineChart(QWidget* widget):
     axisX->setMinorTickCount(1);
 
     axisY->setRange(0,100);
-    axisY->setLabelFormat("%u");
+    axisY->setLabelFormat("%.2f");
     axisY->setGridLineVisible(true);
-    axisY->setTickCount(11);
+    axisY->setTickCount(6);
     axisY->setMinorTickCount(1);
 
     chart->setAxisX(axisX,pressLine);
     chart->setAxisX(axisX,waterLine);
     chart->setAxisX(axisX,flowLine);
+    chart->setAxisY(axisY,pressLine);
     chart->setAxisY(axisY,waterLine);
     chart->setAxisY(axisY,flowLine);
-    chart->setAxisY(axisY,pressLine);
 
     chart->legend()->setAlignment(Qt::AlignRight);
     chart->setTitle("折线图");
     chart->setTheme(QChart::ChartThemeBlueCerulean);
     chart->setAnimationOptions(QChart::SeriesAnimations);
+
 
     view = new QChartView(chart,this);
     view->setRenderHint(QPainter::Antialiasing);//抗锯齿
@@ -69,145 +68,160 @@ void LineChart::setting(const SettingData &settingData)
         QString color = lineColorList[i];
         QString style = lineStyleList[i];
         QPen pen;
-        switch(color)
-        {
-            case "White":
-                pen.setColor(Qt::white);
-            case "Black":
-                pen.setColor(Qt::black);
-            case "Cyan":
-                pen.setColor(Qt::cyan);
-            case "DarkCyan":
-                pen.setColor(Qt::darkCyan);
-            case "Red":
-                pen.setColor(Qt::red);
-            case "DarkRed":
-                pen.setColor(Qt::darkRed);
-            case "Magenta":
-                pen.setColor(Qt::magenta);
-            case "DarkMagenta":
-                pen.setColor(Qt::darkMagenta);
-            case "Green":
-                pen.setColor(Qt::green);
-            case "DarkGreen":
-                pen.setColor(Qt::darkGreen);
-            case "Yellow":
-                pen.setColor(Qt::yellow);
-            case "DarkYellow":
-                pen.setColor(Qt::darkYellow);
-            case "Blue":
-                pen.setColor(Qt::blue);
-            case "DarkBlue":
-                pen.setColor(Qt::darkBlue);
-            case "Gray":
-                pen.setColor(Qt::gray);
-            case "DarkGray":
-                pen.setColor(Qt::darkGray);
-            case "LightGray":
-                pen.setColor(Qt::lightGray);
-        }
+        if(color == "White")
+            pen.setColor(Qt::white);
+        else if(color == "Black")
+            pen.setColor(Qt::black);
+        else if(color == "Cyan")
+            pen.setColor(Qt::cyan);
+        else if(color == "DarkCyan")
+            pen.setColor(Qt::darkCyan);
+        else if(color == "Red")
+            pen.setColor(Qt::red);
+        else if(color == "DarkRed")
+            pen.setColor(Qt::darkRed);
+        else if(color == "Magenta")
+            pen.setColor(Qt::magenta);
+        else if(color == "DarkMagenta")
+            pen.setColor(Qt::darkMagenta);
+        else if(color == "Green")
+            pen.setColor(Qt::green);
+        else if(color == "DarkGreen")
+            pen.setColor(Qt::darkGreen);
+        else if(color == "Yellow")
+            pen.setColor(Qt::yellow);
+        else if(color == "DarkYellow")
+            pen.setColor(Qt::darkYellow);
+        else if(color == "Blue")
+            pen.setColor(Qt::blue);
+        else if(color == "DarkBlue")
+            pen.setColor(Qt::darkBlue);
+        else if(color == "Gray")
+            pen.setColor(Qt::gray);
+        else if(color == "DarkGray")
+            pen.setColor(Qt::darkGray);
+        else if(color == "LightGray")
+            pen.setColor(Qt::lightGray);
 
-        switch(style)
-        {
-            case "SolidLine":
-                pen.setStyle(Qt::SolidLine);
-            case "DashLine":
-                pen.setStyle(Qt::DashLine);
-            case "DotLine":
-                pen.setStyle(Qt::DotLine);
-            case "DashDotLine":
-                pen.setStyle(Qt::DashDotLine);
-            case "DashDotDotLine":
-                pen.setStyle(Qt::DashDotDotLine);
-        }
+        if(style == "SolidLine")
+            pen.setStyle(Qt::SolidLine);
+        else if(style == "DashLine")
+            pen.setStyle(Qt::DashLine);
+        else if(style == "DotLine")
+            pen.setStyle(Qt::DotLine);
+        else if(style == "DashDotLine")
+            pen.setStyle(Qt::DashDotLine);
+        else if(style == "DashDotDotLine")
+            pen.setStyle(Qt::DashDotDotLine);
 
         lineList[i]->setPen(pen);
     }
+
+    double timeMin = settingData.timeMin;
+    double timeMax = settingData.timeMax;
+    double valueMin = settingData.valueMin;
+    double valueMax = settingData.valueMax;
+
+    axisX->setRange(timeMin,timeMax);
+    axisX->setLabelFormat("%u");
+    axisX->setGridLineVisible(true);
+    axisX->setTickCount(11);
+    axisX->setMinorTickCount(1);
+
+    axisY->setRange(valueMin,valueMax);
+    axisY->setLabelFormat("%f");
+    axisY->setGridLineVisible(true);
+    axisY->setTickCount(6);
+    axisY->setMinorTickCount(1);
 }
 
 void LineChart::startPressLine()
-{}
+{
+    pressLine->setName("压力");
+    chart->addSeries(pressLine);
+    chart->setAxisX(axisX,pressLine);
+    chart->setAxisY(axisY,pressLine);
+    chart->update();
+}
 
 void LineChart::startFlowLine()
-{}
+{
+    flowLine->setName("流量");
+    chart->addSeries(flowLine);
+    chart->setAxisX(axisX,flowLine);
+    chart->setAxisY(axisY,flowLine);
+    chart->update();
+}
 
 void LineChart::startWaterLine()
-{}
+{
+    flowLine->setName("液位");
+    chart->addSeries(waterLine);
+    chart->setAxisX(axisX,waterLine);
+    chart->setAxisY(axisY,waterLine);
+    chart->update();
+}
 
 void LineChart::stopFlowLine()
-{}
+{
+    chart->removeSeries(flowLine);
+    chart->update();
+}
 
 void LineChart::stopPressLine()
-{}
+{
+    chart->removeSeries(pressLine);
+    chart->update();
+}
 
 void LineChart::stopWaterLine()
-{}
+{
+    chart->removeSeries(waterLine);
+    chart->update();
+}
 
 void LineChart::startAll()
-{}
+{
+    startFlowLine();
+    startPressLine();
+    startWaterLine();
+}
 
 void LineChart::stopAll()
-{}
+{
+    stopFlowLine();
+    stopPressLine();
+    stopWaterLine();
+}
 
-void LineChart::clearAll()
-{}
-
-void LineChart::updateFlowData(QVector<double> &flowDataList)
-{}
+void LineChart::updateFlowData(const QVector<double>& flowDataList)
+{
+    flowLine->clear();
+    int flowSize = flowDataList.size();
+    for(int i=0;i<flowSize;i++)
+        flowLine->append(QPointF(100-i,flowDataList[flowSize - 1 - i]));
+    chart->update();
+}
 
 void LineChart::updateWaterData(const QVector<double> &waterDataList)
-{}
+{
+    waterLine->clear();
+    int waterSize = waterDataList.size();
+    for(int i=0;i<waterSize;i++)
+        waterLine->append(QPointF(100-i,waterDataList[waterSize - 1 - i]));
+    chart->update();
+}
 
 void LineChart::updatePressData(const QVector<double> &pressDataList)
-{}
+{
+    pressLine->clear();
+    int pressSize = pressDataList.size();
+    for(int i=0;i<pressSize;i++)
+        pressLine->append(QPointF(100-i,pressDataList[pressSize - 1 - i]));
+    chart->update();
+}
 
 void LineChart::resizeView(int x,int y)
 {
     view->resize(x,y);
 }
-
-void LineChart::updateLineChart()
-{
-    if(pressDataList.size() == 100)
-        pressDataList.pop_front();
-    pressDataList.append(qrand() % 100);
-
-    if(flowDataList.size() == 100)
-        flowDataList.pop_front();
-    flowDataList.append(qrand() % 100);
-
-    if(waterDataList.size() == 100)
-        waterDataList.pop_front();
-    waterDataList.append(qrand() % 100);
-
-    pressLine->clear();
-    flowLine->clear();
-    waterLine->clear();
-
-    int pressSize = pressDataList.size();
-    int flowSize = flowDataList.size();
-    int waterSize = waterDataList.size();
-
-    if(pressSize == flowSize  && flowSize == waterSize)
-    {
-        for(int i=0;i<pressSize;i++)
-        {
-            pressLine->append(QPointF(100-i,pressDataList[pressSize - 1 - i]));
-            waterLine->append(QPointF(100-i,waterDataList[pressSize - 1 - i]));
-            flowLine->append(QPointF(100-i,flowDataList[pressSize - 1 - i]));
-        }
-    }
-    else
-    {
-        for(int i=0;i<pressSize;i++)
-            pressLine->append(QPointF(100-i,pressDataList[pressSize - 1 - i]));
-        for(int i=0;i<waterSize;i++)
-            waterLine->append(QPointF(100-i,waterDataList[waterSize - 1 - i]));
-        for(int i=0;i<flowSize;i++)
-            flowLine->append(QPointF(100-i,flowDataList[flowSize - 1 - i]));
-    }
-
-    chart->update();
-}
-
-

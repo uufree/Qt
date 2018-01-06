@@ -5,7 +5,8 @@ extern struct SettingData settingData;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    timer(new QTimer)
 {
     ui->setupUi(this);
 
@@ -15,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->saveButton,SIGNAL(clicked()),this,SLOT(clickSaveButton()));
     connect(ui->settingButton,SIGNAL(clicked()),this,SLOT(clickSettingButton()));
     connect(ui->switchButton,SIGNAL(clicked()),this,SLOT(clickSwitchButton()));
+    connect(timer,SIGNAL(timeout()),this,SLOT(handleLineChartSize()));
+    timer->start(1);
 }
 
 MainWindow::~MainWindow()
@@ -22,21 +25,13 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::display()
-{
-    ui->circleData->resize(800,400);
-    ui->lineChart->start();
-    update();
-}
-
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
-    ui->lineChart->resize(ui->circleData->width(),ui->circleData->height());
+    ui->lineChart->resizeView(ui->circleData->width(),ui->circleData->height());
 }
 
 void MainWindow::setting()
 {
-    ui->circleData->setting(settingData);
     ui->lineChart->setting(settingData);
 }
 
@@ -90,17 +85,19 @@ void MainWindow::clickStartButton()
 void MainWindow::start()
 {
     ui->lineChart->startAll();
-    ui->lineChart->startAll();
 }
 
 void MainWindow::stop()
 {
     ui->lineChart->stopAll();
-    ui->circleData->stopAll();
 }
 
-void MainWindow::clearAll()
+void MainWindow::handleLineChartSize()
 {
-    ui->lineChart->clearAll();//清理图中的数据信息
-    ui->circleData->clearAll();//清理图中的数据信息
+    ui->lineChart->resizeView(ui->circleData->width(),ui->circleData->height());
+    if(ui->lineChart->size() == ui->circleData->size())
+        timer->stop();
+    qDebug() << "emmmm";
+    disconnect(timer,SIGNAL(timeout()),this,SLOT(handleLineChartSize()));
+    qDebug() << "连接已取消";
 }
