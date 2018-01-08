@@ -42,6 +42,7 @@ private:
     QValueAxis* axisX;
     QValueAxis* axisY;
     QChartView* view;
+    bool waterLineInChart,flowLineInChart,pressLineInChart;
 };
 
 #endif // LINECHART_H

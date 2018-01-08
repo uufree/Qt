@@ -40,11 +40,12 @@ LineChart::LineChart(QWidget* widget):
     chart->setAxisY(axisY,waterLine);
     chart->setAxisY(axisY,flowLine);
 
+    waterLineInChart = flowLineInChart = pressLineInChart = true;
+
     chart->legend()->setAlignment(Qt::AlignRight);
     chart->setTitle("折线图");
     chart->setTheme(QChart::ChartThemeBlueCerulean);
     chart->setAnimationOptions(QChart::SeriesAnimations);
-
 
     view = new QChartView(chart,this);
     view->setRenderHint(QPainter::Antialiasing);//抗锯齿
@@ -137,47 +138,71 @@ void LineChart::setting(const SettingData &settingData)
 
 void LineChart::startPressLine()
 {
-    pressLine->setName("压力");
-    chart->addSeries(pressLine);
-    chart->setAxisX(axisX,pressLine);
-    chart->setAxisY(axisY,pressLine);
-    chart->update();
+    if(!pressLineInChart)
+    {
+        pressLine->setName("压力");
+        chart->addSeries(pressLine);
+        chart->setAxisX(axisX,pressLine);
+        chart->setAxisY(axisY,pressLine);
+        chart->update();
+        pressLineInChart = true;
+    }
 }
 
 void LineChart::startFlowLine()
 {
-    flowLine->setName("流量");
-    chart->addSeries(flowLine);
-    chart->setAxisX(axisX,flowLine);
-    chart->setAxisY(axisY,flowLine);
-    chart->update();
+    if(!flowLineInChart)
+    {
+        flowLine->setName("流量");
+        chart->addSeries(flowLine);
+        chart->setAxisX(axisX,flowLine);
+        chart->setAxisY(axisY,flowLine);
+        chart->update();
+        flowLineInChart = true;
+    }
 }
 
 void LineChart::startWaterLine()
 {
-    flowLine->setName("液位");
-    chart->addSeries(waterLine);
-    chart->setAxisX(axisX,waterLine);
-    chart->setAxisY(axisY,waterLine);
-    chart->update();
+    if(!waterLineInChart)
+    {
+        flowLine->setName("液位");
+        chart->addSeries(waterLine);
+        chart->setAxisX(axisX,waterLine);
+        chart->setAxisY(axisY,waterLine);
+        chart->update();
+        waterLineInChart = true;
+    }
 }
 
 void LineChart::stopFlowLine()
 {
-    chart->removeSeries(flowLine);
-    chart->update();
+    if(flowLineInChart)
+    {
+        chart->removeSeries(flowLine);
+        chart->update();
+        flowLineInChart = false;
+    }
 }
 
 void LineChart::stopPressLine()
 {
-    chart->removeSeries(pressLine);
-    chart->update();
+    if(pressLineInChart)
+    {
+        chart->removeSeries(pressLine);
+        chart->update();
+        pressLineInChart = false;
+    }
 }
 
 void LineChart::stopWaterLine()
 {
-    chart->removeSeries(waterLine);
-    chart->update();
+    if(waterLineInChart)
+    {
+        chart->removeSeries(waterLine);
+        chart->update();
+        waterLineInChart = false;
+    }
 }
 
 void LineChart::startAll()

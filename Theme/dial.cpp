@@ -51,3 +51,9 @@ void Dial::drawScaleContents( QPainter *painter,const QPointF &center, double ra
 
 void Dial::alarm()
 {}
+
+void Dial::setRange(int low,int hight)
+{
+    setScaleStepSize((int)(hight - low) / 12);
+    setScale(low,hight);
+}

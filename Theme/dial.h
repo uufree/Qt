@@ -14,6 +14,7 @@ public:
     const QString& getLabel() const;
 
     void alarm();
+    void setRange(int low,int hight);
 
 protected:
     virtual void drawScaleContents( QPainter *painter,const QPointF &center, double radius ) const;

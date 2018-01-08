@@ -26,6 +26,10 @@ public slots:
     void clickSettingButton();
     void clickSwitchButton();
     void handleLineChartSize();
+    void handlePressLine(int type);
+    void handleWaterLine(int type);
+    void handleFlowLine(int type);
+    void testMakeData();
 
 protected:
     void resizeEvent(QResizeEvent* event);
@@ -38,8 +42,14 @@ private:
 private:
     Ui::MainWindow *ui;
     SettingDialog* settingDialog;
-
+    QVector<double> pressDataList;
+    QVector<double> waterDataList;
+    QVector<double> flowDataList;
     QTimer* timer;
+
+    QString waterNote;
+    QString flowNote;
+    QString pressNote;
 };
 
 #endif // MAINWINDOW_H

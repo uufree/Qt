@@ -17,7 +17,19 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->settingButton,SIGNAL(clicked()),this,SLOT(clickSettingButton()));
     connect(ui->switchButton,SIGNAL(clicked()),this,SLOT(clickSwitchButton()));
     connect(timer,SIGNAL(timeout()),this,SLOT(handleLineChartSize()));
+
     timer->start(1);
+
+    ui->waterCheck->setChecked(true);
+    ui->pressCheck->setChecked(true);
+    ui->flowCheck->setChecked(true);
+    connect(ui->waterCheck,SIGNAL(stateChanged(int)),this,SLOT(handleWaterLine(int)));
+    connect(ui->pressCheck,SIGNAL(stateChanged(int)),this,SLOT(handlePressLine(int)));
+    connect(ui->flowCheck,SIGNAL(stateChanged(int)),this,SLOT(handleFlowLine(int)));
+
+    ui->circleData->setWaterRange(0,120);
+    ui->circleData->setFlowRange(0,120);
+    ui->circleData->setPressRange(0,120);
 }
 
 MainWindow::~MainWindow()
@@ -84,12 +96,24 @@ void MainWindow::clickStartButton()
 
 void MainWindow::start()
 {
-    ui->lineChart->startAll();
+    if(ui->waterCheck->isChecked())
+        ui->lineChart->startWaterLine();
+    if(ui->pressCheck->isChecked())
+        ui->lineChart->startPressLine();
+    if(ui->flowCheck->isChecked())
+        ui->lineChart->startFlowLine();
+
+    connect(timer,SIGNAL(timeout()),this,SLOT(testMakeData()));
+    timer->start(300);
 }
 
 void MainWindow::stop()
 {
     ui->lineChart->stopAll();
+    timer->stop();
+    ui->circleData->setWaterValue(0);
+    ui->circleData->setFlowValue(0);
+    ui->circleData->setPressValue(0);
 }
 
 void MainWindow::handleLineChartSize()
@@ -97,7 +121,67 @@ void MainWindow::handleLineChartSize()
     ui->lineChart->resizeView(ui->circleData->width(),ui->circleData->height());
     if(ui->lineChart->size() == ui->circleData->size())
         timer->stop();
-    qDebug() << "emmmm";
     disconnect(timer,SIGNAL(timeout()),this,SLOT(handleLineChartSize()));
-    qDebug() << "连接已取消";
+}
+
+void MainWindow::handleFlowLine(int type)
+{
+    if(type && ui->startButton->text() == "停止")
+        ui->lineChart->startFlowLine();
+    else
+        ui->lineChart->stopFlowLine();
+}
+
+void MainWindow::handleWaterLine(int type)
+{
+    if(type && ui->startButton->text() == "停止")
+        ui->lineChart->startWaterLine();
+    else
+        ui->lineChart->stopWaterLine();
+}
+
+void MainWindow::handlePressLine(int type)
+{
+    if(type && ui->startButton->text() == "停止")
+        ui->lineChart->startPressLine();
+    else
+        ui->lineChart->stopPressLine();
+}
+
+void MainWindow::testMakeData()
+{
+    double ran1 = qrand() % 100;
+    double ran2  =qrand() % 100;
+    double ran3 = qrand() % 100;
+
+    if(pressDataList.size() < 100)
+        pressDataList.append(ran1);
+    else
+    {
+        pressDataList.pop_front();
+        pressDataList.append(ran1);
+    }
+
+    if(waterDataList.size() < 100)
+        waterDataList.append(ran2);
+    else
+    {
+        waterDataList.pop_front();
+        waterDataList.append(ran2);
+    }
+
+    if(flowDataList.size() < 100)
+        flowDataList.append(ran3);
+    else
+    {
+        flowDataList.pop_front();
+        flowDataList.append(ran3);
+    }
+
+    ui->lineChart->updateFlowData(flowDataList);
+    ui->lineChart->updatePressData(pressDataList);
+    ui->lineChart->updateWaterData(waterDataList);
+    ui->circleData->setPressValue(ran1);
+    ui->circleData->setWaterValue(ran2);
+    ui->circleData->setFlowValue(ran3);
 }
