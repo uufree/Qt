@@ -14,7 +14,7 @@ LineChart::LineChart(QWidget* widget):
     axisY(new QValueAxis)
 {
     pressLine->setName("压力");
-    waterLine->setName("液位");
+    waterLine->setName("水位");
     flowLine->setName("流量");
 
     chart->addSeries(pressLine);
@@ -44,7 +44,7 @@ LineChart::LineChart(QWidget* widget):
 
     chart->legend()->setAlignment(Qt::AlignRight);
     chart->setTitle("折线图");
-    chart->setTheme(QChart::ChartThemeBlueCerulean);
+    chart->setTheme(QChart::ChartThemeBlueIcy);
     chart->setAnimationOptions(QChart::SeriesAnimations);
 
     view = new QChartView(chart,this);
@@ -166,7 +166,7 @@ void LineChart::startWaterLine()
 {
     if(!waterLineInChart)
     {
-        flowLine->setName("液位");
+        flowLine->setName("水位");
         chart->addSeries(waterLine);
         chart->setAxisX(axisX,waterLine);
         chart->setAxisY(axisY,waterLine);

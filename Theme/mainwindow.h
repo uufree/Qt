@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include<QMainWindow>
+#include<QVector>
+#include<QString>
 
 #include"settingdialog.h"
 #include"circledata.h"
@@ -30,6 +32,8 @@ public slots:
     void handleWaterLine(int type);
     void handleFlowLine(int type);
     void testMakeData();
+    void handleCurrentNote();
+    void updateTime();//响应time定时器
 
 protected:
     void resizeEvent(QResizeEvent* event);
@@ -39,6 +43,12 @@ private:
     void start();
     void stop();
 
+    void waterCallBack();
+    void flowCallBack();
+    void pressCallBack();
+    void updateCurrentMessage();
+    void updateInformMessage(const QString& str);//更新通知信息
+
 private:
     Ui::MainWindow *ui;
     SettingDialog* settingDialog;
@@ -46,10 +56,15 @@ private:
     QVector<double> waterDataList;
     QVector<double> flowDataList;
     QTimer* timer;
+    QTimer* time;
 
     QString waterNote;
     QString flowNote;
     QString pressNote;
+
+    double waterCollection,waterProject;
+    double pressCollection,pressProject;
+    double flowCollection,flowProject;
 };
 
 #endif // MAINWINDOW_H

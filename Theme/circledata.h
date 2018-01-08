@@ -40,6 +40,15 @@ public:
     void setFlowValue(double data)
     {flow->setValue(data);}
 
+    void setWaterCallBack(const FixCurrentMessageCallBack& callBack_)
+    {water->setFixCurrentMessageCallBack(callBack_);}
+
+    void setFlowCallBack(const FixCurrentMessageCallBack& callBack_)
+    {flow->setFixCurrentMessageCallBack(callBack_);}
+
+    void setPressCallBack(const FixCurrentMessageCallBack& callBack_)
+    {press->setFixCurrentMessageCallBack(callBack_);}
+
 private:
     Dial* createDial(double stepSize,double scale);
     QPalette colorTheme(const QColor&);

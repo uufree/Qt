@@ -2,6 +2,8 @@
 #define GLOBAL_H
 
 #include<QString>
+#include<functional>
+#include<memory>
 
 struct SettingData
 {
@@ -18,5 +20,7 @@ struct SettingData
     double valueMin;
     double valueMax;
 };
+
+typedef std::function<void()> FixCurrentMessageCallBack;
 
 #endif

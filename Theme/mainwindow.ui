@@ -21,14 +21,21 @@
     <item row="0" column="0">
      <layout class="QVBoxLayout" name="verticalLayout_7">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="6,3">
         <property name="spacing">
          <number>0</number>
         </property>
-        <item>
-         <widget class="QLabel" name="rollingLabel">
+        <item alignment="Qt::AlignLeft">
+         <widget class="QLabel" name="thingLabel">
           <property name="text">
-           <string>滚动信息：</string>
+           <string>通知信息</string>
+          </property>
+         </widget>
+        </item>
+        <item alignment="Qt::AlignRight">
+         <widget class="QLabel" name="timeLabel">
+          <property name="text">
+           <string>时间与日期</string>
           </property>
          </widget>
         </item>
@@ -64,28 +71,24 @@
              <number>6</number>
             </property>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,5">
+             <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0">
               <property name="spacing">
                <number>0</number>
               </property>
               <item>
-               <widget class="QLabel" name="currentTestPoint">
+               <widget class="QLabel" name="jdlak">
                 <property name="text">
                  <string>测点：</string>
                 </property>
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="label_2">
-                <property name="text">
-                 <string>11</string>
-                </property>
-               </widget>
+               <widget class="QLineEdit" name="currentTestPoint"/>
               </item>
              </layout>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,6">
+             <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0">
               <property name="spacing">
                <number>0</number>
               </property>
@@ -97,16 +100,12 @@
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="currentCollection">
-                <property name="text">
-                 <string>11</string>
-                </property>
-               </widget>
+               <widget class="QLineEdit" name="currentCollection"/>
               </item>
              </layout>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,6">
+             <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0">
               <property name="spacing">
                <number>0</number>
               </property>
@@ -118,16 +117,12 @@
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="currentEngineer">
-                <property name="text">
-                 <string>11</string>
-                </property>
-               </widget>
+               <widget class="QLineEdit" name="currentProject"/>
               </item>
              </layout>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,6">
+             <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,0">
               <item>
                <widget class="QLabel" name="label_6">
                 <property name="text">
@@ -136,11 +131,7 @@
                </widget>
               </item>
               <item>
-               <widget class="QLabel" name="currentUint">
-                <property name="text">
-                 <string>11</string>
-                </property>
-               </widget>
+               <widget class="QLineEdit" name="currentUnit"/>
               </item>
              </layout>
             </item>

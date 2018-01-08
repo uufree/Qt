@@ -31,7 +31,6 @@ SOURCES += \
     circledata.cpp \
     dial.cpp \
     linechart.cpp \
-#    linechartview.cpp
     settingdialog.cpp
 
 HEADERS += \
@@ -40,9 +39,11 @@ HEADERS += \
     dial.h \
     linechart.h \
     global.h \
-#    linechartview.h
     settingdialog.h
 
 FORMS += \
         mainwindow.ui \
     settingdialog.ui
+
+RESOURCES += \
+    resources.qrc

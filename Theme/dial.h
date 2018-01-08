@@ -3,6 +3,9 @@
 
 #include<QString>
 #include<qwt_dial.h>
+#include<QMouseEvent>
+
+#include"global.h"
 
 class Dial : public QwtDial
 {
@@ -15,12 +18,15 @@ public:
 
     void alarm();
     void setRange(int low,int hight);
+    void setFixCurrentMessageCallBack(const FixCurrentMessageCallBack& callBack_)
+    {callBack = callBack_;}
 
 protected:
     virtual void drawScaleContents( QPainter *painter,const QPointF &center, double radius ) const;
-
+    virtual void mousePressEvent(QMouseEvent* event);
 private:
     QString label;
+    FixCurrentMessageCallBack callBack;
 };
 
 #endif // DIAL_H

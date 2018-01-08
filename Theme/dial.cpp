@@ -49,6 +49,12 @@ void Dial::drawScaleContents( QPainter *painter,const QPointF &center, double ra
     painter->drawText( rect, flags, label);
 }
 
+void Dial::mousePressEvent(QMouseEvent *event)
+{
+    if(callBack)
+        callBack();
+}
+
 void Dial::alarm()
 {}
 

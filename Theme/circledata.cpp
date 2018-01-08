@@ -16,7 +16,7 @@ CircleData::CircleData(QWidget* parent):
     press->setLabel("压力(KPa)");
     layout->addWidget(press,0,0);
     water = createDial(40.0,480.0);
-    water->setLabel("液位(m)");
+    water->setLabel("水位(m)");
     layout->addWidget(water,0,1);
     flow = createDial(40.0,480.0);
     flow->setLabel("流量(m³/s)");
@@ -44,14 +44,14 @@ void CircleData::updateFlow(double value)
 QPalette CircleData::colorTheme(const QColor& base)
 {
     QPalette palette;
-    palette.setColor( QPalette::Base, base);
+/*    palette.setColor( QPalette::Base, base);
     palette.setColor( QPalette::Window, base.dark( 150 ) );
     palette.setColor( QPalette::Mid, base.dark( 110 ) );
     palette.setColor( QPalette::Light, base.light( 170 ) );
     palette.setColor( QPalette::Dark, base.dark( 170 ) );
     palette.setColor( QPalette::Text, base.dark( 200 ).light( 800 ) );
     palette.setColor( QPalette::WindowText, base.dark( 200 ) );
-
+*/
     return palette;
 }
 
