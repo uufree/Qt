@@ -10,16 +10,20 @@ LineChart::LineChart(QWidget* widget):
     pressLine(new QLineSeries),
     waterLine(new QLineSeries),
     flowLine(new QLineSeries),
+    flow1Line(new QLineSeries),
     axisX(new QValueAxis),
-    axisY(new QValueAxis)
+    axisY(new QValueAxis),
+    axisXStart(100)
 {
     pressLine->setName("压力");
     waterLine->setName("水位");
     flowLine->setName("流量");
+    flow1Line->setName("流量1");
 
     chart->addSeries(pressLine);
     chart->addSeries(waterLine);
     chart->addSeries(flowLine);
+    chart->addSeries(flow1Line);
 
     axisX->setRange(0,100);
     axisX->setLabelFormat("%u");
@@ -36,11 +40,13 @@ LineChart::LineChart(QWidget* widget):
     chart->setAxisX(axisX,pressLine);
     chart->setAxisX(axisX,waterLine);
     chart->setAxisX(axisX,flowLine);
+    chart->setAxisX(axisX,flow1Line);
     chart->setAxisY(axisY,pressLine);
     chart->setAxisY(axisY,waterLine);
     chart->setAxisY(axisY,flowLine);
+    chart->setAxisY(axisY,flow1Line);
 
-    waterLineInChart = flowLineInChart = pressLineInChart = true;
+    waterLineInChart = flowLineInChart = pressLineInChart = flow1LineInChart = true;
 
     chart->legend()->setAlignment(Qt::AlignRight);
     chart->setTitle("折线图");
@@ -130,10 +136,12 @@ void LineChart::setting(const SettingData &settingData)
     axisX->setMinorTickCount(1);
 
     axisY->setRange(valueMin,valueMax);
-    axisY->setLabelFormat("%f");
+    axisY->setLabelFormat("%.2f");
     axisY->setGridLineVisible(true);
     axisY->setTickCount(6);
     axisY->setMinorTickCount(1);
+
+    axisXStart = (int)timeMax;
 }
 
 void LineChart::startPressLine()
@@ -162,6 +170,19 @@ void LineChart::startFlowLine()
     }
 }
 
+void LineChart::startFlow1Line()
+{
+    if(!flow1LineInChart)
+    {
+        flow1Line->setName("流量");
+        chart->addSeries(flow1Line);
+        chart->setAxisX(axisX,flow1Line);
+        chart->setAxisY(axisY,flow1Line);
+        chart->update();
+        flow1LineInChart = true;
+    }
+}
+
 void LineChart::startWaterLine()
 {
     if(!waterLineInChart)
@@ -182,6 +203,16 @@ void LineChart::stopFlowLine()
         chart->removeSeries(flowLine);
         chart->update();
         flowLineInChart = false;
+    }
+}
+
+void LineChart::stopFlow1Line()
+{
+    if(flow1LineInChart)
+    {
+        chart->removeSeries(flow1Line);
+        chart->update();
+        flow1LineInChart = false;
     }
 }
 
@@ -210,6 +241,7 @@ void LineChart::startAll()
     startFlowLine();
     startPressLine();
     startWaterLine();
+    startFlow1Line();
 }
 
 void LineChart::stopAll()
@@ -217,6 +249,7 @@ void LineChart::stopAll()
     stopFlowLine();
     stopPressLine();
     stopWaterLine();
+    stopFlow1Line();
 }
 
 void LineChart::updateFlowData(const QVector<double>& flowDataList)
@@ -224,7 +257,15 @@ void LineChart::updateFlowData(const QVector<double>& flowDataList)
     flowLine->clear();
     int flowSize = flowDataList.size();
     for(int i=0;i<flowSize;i++)
-        flowLine->append(QPointF(100-i,flowDataList[flowSize - 1 - i]));
+        flowLine->append(QPointF(axisXStart-i,flowDataList[flowSize - 1 - i]));
+    chart->update();
+}
+void LineChart::updateFlow1Data(const QVector<double>& flow1DataList)
+{
+    flow1Line->clear();
+    int flowSize = flow1DataList.size();
+    for(int i=0;i<flowSize;i++)
+        flow1Line->append(QPointF(axisXStart-i,flow1DataList[flowSize - 1 - i]));
     chart->update();
 }
 
@@ -233,7 +274,7 @@ void LineChart::updateWaterData(const QVector<double> &waterDataList)
     waterLine->clear();
     int waterSize = waterDataList.size();
     for(int i=0;i<waterSize;i++)
-        waterLine->append(QPointF(100-i,waterDataList[waterSize - 1 - i]));
+        waterLine->append(QPointF(axisXStart-i,waterDataList[waterSize - 1 - i]));
     chart->update();
 }
 
@@ -242,7 +283,7 @@ void LineChart::updatePressData(const QVector<double> &pressDataList)
     pressLine->clear();
     int pressSize = pressDataList.size();
     for(int i=0;i<pressSize;i++)
-        pressLine->append(QPointF(100-i,pressDataList[pressSize - 1 - i]));
+        pressLine->append(QPointF(axisXStart-i,pressDataList[pressSize - 1 - i]));
     chart->update();
 }
 

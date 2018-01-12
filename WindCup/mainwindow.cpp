@@ -48,9 +48,9 @@ MainWindow::MainWindow(QWidget *parent) :
     widget->resize(1,1);
 
     /*********在windows运行时需要修改文件路径**********/
-    QDir dir("/home/uuchen/WindCup");
+    QDir dir("D:\\WindCupData");
     if(!dir.exists())
-        dir.mkdir("/home/uuchen/WindCup");
+        dir.mkdir("D:\\WindCupData");
 }
 
 MainWindow::~MainWindow()
@@ -68,7 +68,7 @@ void MainWindow::initSettingArea()
     settingData.portName = ui->settingPort->currentText();
 
 //init settingSpeed
-    ui->settingSpeed->setText("1");
+    ui->settingSpeed->setText("1m/s");
     settingData.cupSpeed = "1";
 
 //init baud
@@ -76,7 +76,7 @@ void MainWindow::initSettingArea()
     settingData.baud = "9600";
 
 //init testArea
-    ui->settingTestArea->setText("1");
+    ui->settingTestArea->setText("1㎡");
     settingData.testArea = "1";
 
 //init pollTime
@@ -191,10 +191,16 @@ void MainWindow::clearAll()
 void MainWindow::collectSettingMessage()
 {
     settingData.baud = ui->settingBaudBox->currentText();
-    settingData.cupCount = ui->settingCups->currentText();
+    QString cupCount = ui->settingCups->currentText();
+    cupCount.remove(cupCount.size()-1,1);
+    settingData.cupCount = cupCount;
     settingData.cupSpeed = ui->settingSpeed->text();
-    settingData.pollTime = ui->settingPoll->currentText();
+    QString pollTime = ui->settingPoll->currentText();
+    pollTime.remove(pollTime.size()-2,2);
+    settingData.pollTime = pollTime;
     settingData.portName = ui->settingPort->currentText();
+    QString testArea = ui->settingTestArea->text();
+    testArea.remove(testArea.size()-1,1);
     settingData.testArea = ui->settingTestArea->text();
     settingData.voltage = ui->settingVoltage->text();
     settingData.electric = ui->settingElectric->text();
@@ -331,6 +337,7 @@ void MainWindow::startClicked()
         ui->startBtton->setText(tr("停止"));
         ui->flushButton->setEnabled(false);
         ui->saveDataButton->setText(tr("保存数据"));
+        ui->saveStatueButton->setText("已保存0组");
         currentFile = "uuchen";
         start();//根据设置区的信息建立串口，启动定时器
     }
@@ -382,6 +389,9 @@ void MainWindow::exportDataClicked()//保存数据信息
         exportDataList.append(settingData.voltage.toDouble());
         exportDataList.append(settingData.electric.toDouble());
         exportDataList.append(settingData.testArea.toDouble());
+
+        int x = exportDataList.size() / (currentCups + 16);
+        ui->saveStatueButton->setText("已保存" + QString::number(x) + "组");
     }
     else
     {//读取数据，并且显示数据
@@ -390,7 +400,7 @@ void MainWindow::exportDataClicked()//保存数据信息
         dialog->setWindowTitle("历史数据");
 
         /*******在windows运行时需要修改路径*******/
-        dialog->setDirectory("/home/uuchen/WindCup/");
+        dialog->setDirectory("D:\\WindCupData");
         dialog->setWindowModality(Qt::ApplicationModal);
         dialog->resize(800,500);
         dialog->setModal(true);
@@ -499,9 +509,19 @@ void MainWindow::writeDataInFile()
     if(currentFile == "uuchen")
     {
         QInputDialog* dialog = new QInputDialog(this);
+        dialog->setModal(false);
         currentFile = dialog->getText(this,"WindCup","请输入新建文件名：");
     /*****在windows运行时需要修改文件路径********/
-        currentFile = "/home/uuchen/WindCup/" + currentFile + ".dat";
+        if(currentFile.size() != 0)
+        {
+            currentFile = "D:\\WindCupData\\" + currentFile + ".dat";
+            ui->saveStatueButton->setText("已保存");
+        }
+        else
+        {
+            exportDataList.clear();
+            ui->saveStatueButton->setText("未保存");
+        }
     }
 
     QFile current(currentFile);
@@ -551,7 +571,7 @@ void MainWindow::handleTimeout()
     }
     else
     {
-/*        char out[7] = {0x4c,0x57,0x01,0x30,0x01,0x32,0x0d};
+        char out[7] = {0x4c,0x57,0x01,0x30,0x01,0x32,0x0d};
         currentSerialPort->write(out,7);
         char in[25];
         for(int i=0;i<25;i++)
@@ -571,16 +591,18 @@ void MainWindow::handleTimeout()
                 ++elecIndex;
             }
         }
-*/
+
         fillCurrentAddrList();
 
         return;
     }
 
 
-    char out[2];
-    out[0] = out[1] = ch;
-    currentSerialPort->write(out,2);
+    char out[3];
+    out[0] = ch;
+    out[1] = 0xa5;
+    out[2] = 0x5a;
+    currentSerialPort->write(out,3);
 //    qDebug() << "write: " << (uint8_t)ch;
     char in[4] = {'\0','\0','\0','\0'};
     int readByte = currentSerialPort->read(in,4);
@@ -636,10 +658,10 @@ void MainWindow::updateTime()
         atmPressure = speedList[0xdf];
 
         //更新平均风速与当前风压
-        ui->currentVolume->setText(QString::number(currentVolume,10,2));
-        ui->currentAverageSpeed->setText(QString::number(averageSpeed,10,2));
-        ui->currentNegPressure->setText(QString::number(negPressure,10,1));
-        ui->currentAtmPressure->setText(QString::number(atmPressure,10,1));
+        ui->currentVolume->setText(QString::number(currentVolume,10,2) + "m³/s");
+        ui->currentAverageSpeed->setText(QString::number(averageSpeed,10,2) + "m/s");
+        ui->currentNegPressure->setText(QString::number(negPressure,10,1) + "Pa");
+        ui->currentAtmPressure->setText(QString::number(atmPressure,10,1) + "KPa");
 
         //更新每个风杯的实时速度
         index = 0xe0;
@@ -648,7 +670,7 @@ void MainWindow::updateTime()
             if(cupStatuList[index] == RUNING)
             {
                 cupList[index]->setEnabled(true);
-                cupList[index]->setText(nameList[index] + QString::number(speedList[index],10,2));
+                cupList[index]->setText(nameList[index] + QString::number(speedList[index],10,2) + "m/s");
             }
             else
             {
@@ -658,7 +680,7 @@ void MainWindow::updateTime()
 
             ++index;
         }
-/*
+
         //更新电参数数据
         ui->UA->setText(QString::number((double)electricalData[0] / 20 * settingData.voltage.toInt(),10,1) + "V");
         ui->UB->setText(QString::number((double)electricalData[1] / 20 * settingData.electric.toInt(),10,1) + "A");
@@ -669,7 +691,7 @@ void MainWindow::updateTime()
         ui->PA->setText(QString::number((double)electricalData[6] * 75 / 1000,10,1) + "KW");
         ui->PB->setText(QString::number((double)electricalData[7] * 75 / 1000,10,1) + "KW");
         ui->PC->setText(QString::number((double)electricalData[8] / 10000,10,1));
-*/
+
         //更新画折线图需要的风量信息
         lineChartMessage.push_front(currentVolume);
         if(lineChartMessage.size() > 100)

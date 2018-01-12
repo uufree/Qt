@@ -196,6 +196,13 @@
                 </property>
                </widget>
               </item>
+              <item>
+               <widget class="QCheckBox" name="flow1Check">
+                <property name="text">
+                 <string>流量1</string>
+                </property>
+               </widget>
+              </item>
              </layout>
             </item>
            </layout>

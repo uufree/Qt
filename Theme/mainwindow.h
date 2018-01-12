@@ -31,6 +31,7 @@ public slots:
     void handlePressLine(int type);
     void handleWaterLine(int type);
     void handleFlowLine(int type);
+    void handleFlow1Line(int type);
     void testMakeData();
     void handleCurrentNote();
     void updateTime();//响应time定时器
@@ -45,9 +46,11 @@ private:
 
     void waterCallBack();
     void flowCallBack();
+    void flow1CallBack();
     void pressCallBack();
     void updateCurrentMessage();
     void updateInformMessage(const QString& str);//更新通知信息
+    void handleSetting(const struct SettingData& data);
 
 private:
     Ui::MainWindow *ui;
@@ -55,16 +58,21 @@ private:
     QVector<double> pressDataList;
     QVector<double> waterDataList;
     QVector<double> flowDataList;
+    QVector<double> flow1DataList;
     QTimer* timer;
     QTimer* time;
 
     QString waterNote;
     QString flowNote;
+    QString flow1Note;
     QString pressNote;
 
     double waterCollection,waterProject;
     double pressCollection,pressProject;
     double flowCollection,flowProject;
+    double flow1Collection,flow1Project;
+
+    int axisXStart = 100;
 };
 
 #endif // MAINWINDOW_H

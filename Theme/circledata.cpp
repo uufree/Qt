@@ -21,24 +21,12 @@ CircleData::CircleData(QWidget* parent):
     flow = createDial(40.0,480.0);
     flow->setLabel("流量(m³/s)");
     layout->addWidget(flow,0,2);
+    flow1 = createDial(40.0,480.0);
+    flow1->setLabel("流量1(m³/s)");
+    layout->addWidget(flow1,0,3);
 
     for(int i=0;i<layout->columnCount();i++)
         layout->setColumnStretch(i,1);
-}
-
-void CircleData::updatePress(double value)
-{
-    press->setValue(value);
-}
-
-void CircleData::updateWater(double value)
-{
-    water->setValue(value);
-}
-
-void CircleData::updateFlow(double value)
-{
-    flow->setValue(value);
 }
 
 QPalette CircleData::colorTheme(const QColor& base)
@@ -68,19 +56,4 @@ Dial* CircleData::createDial(double stepSize,double scale)
     temp->setFrameShadow(QwtDial::Sunken);
 
     return temp;
-}
-
-void CircleData::pressAlarm()
-{
-    press->alarm();
-}
-
-void CircleData::waterAlarm()
-{
-    water->alarm();
-}
-
-void CircleData::flowAlarm()
-{
-    flow->alarm();
 }

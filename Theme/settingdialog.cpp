@@ -71,7 +71,7 @@ void SettingDialog::clickDefaultButton()
     settingData.acquireStyle = "手动";
     settingData.testCount = 3;
     settingData.waterColor = "Green";
-    settingData.flowColor = "White";
+    settingData.flowColor = "Red";
     settingData.pressColor = "Yellow";
     settingData.waterLineStyle = "SolidLine";
     settingData.pressLineStyle = "SolidLine";
@@ -87,4 +87,7 @@ void SettingDialog::clickDefaultButton()
 void SettingDialog::clickconfirmButton()
 {
     this->close();
+    clickSaveButton();
+    if(callBack)
+        callBack(settingData);
 }

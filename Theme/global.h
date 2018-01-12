@@ -22,5 +22,7 @@ struct SettingData
 };
 
 typedef std::function<void()> FixCurrentMessageCallBack;
+typedef std::function<void(const struct SettingData& data)> HandleSettingMessageCallBack;
+
 
 #endif

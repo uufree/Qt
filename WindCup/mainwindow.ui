@@ -754,107 +754,107 @@
                  <widget class="QComboBox" name="settingPoll">
                   <item>
                    <property name="text">
-                    <string>10</string>
+                    <string>10ms</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>20</string>
+                    <string>20ms</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>30</string>
+                    <string>30ms</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>40</string>
+                    <string>40ms</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>50</string>
+                    <string>50ms</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>60</string>
+                    <string>60ms</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>70</string>
+                    <string>70ms</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>80</string>
+                    <string>80ms</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>90</string>
+                    <string>90ms</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>100</string>
+                    <string>100ms</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>150</string>
+                    <string>150ms</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>200</string>
+                    <string>200ms</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>250</string>
+                    <string>250ms</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>300</string>
+                    <string>300ms</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>350</string>
+                    <string>350ms</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>400</string>
+                    <string>400ms</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>450</string>
+                    <string>450ms</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>500</string>
+                    <string>500ms</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>1000</string>
+                    <string>1000ms</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>2000</string>
+                    <string>2000ms</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>4000</string>
+                    <string>4000ms</string>
                    </property>
                   </item>
                  </widget>
@@ -874,162 +874,162 @@
                  <widget class="QComboBox" name="settingCups">
                   <item>
                    <property name="text">
-                    <string>9</string>
+                    <string>9个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>1</string>
+                    <string>1个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>2</string>
+                    <string>2个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>3</string>
+                    <string>3个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>4</string>
+                    <string>4个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>5</string>
+                    <string>5个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>6</string>
+                    <string>6个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>7</string>
+                    <string>7个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>8</string>
+                    <string>8个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>10</string>
+                    <string>10个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>11</string>
+                    <string>11个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>12</string>
+                    <string>12个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>13</string>
+                    <string>13个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>14</string>
+                    <string>14个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>15</string>
+                    <string>15个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>16</string>
+                    <string>16个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>17</string>
+                    <string>17个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>18</string>
+                    <string>18个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>19</string>
+                    <string>19个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>20</string>
+                    <string>20个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>21</string>
+                    <string>21个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>22</string>
+                    <string>22个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>23</string>
+                    <string>23个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>24</string>
+                    <string>24个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>25</string>
+                    <string>25个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>26</string>
+                    <string>26个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>27</string>
+                    <string>27个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>28</string>
+                    <string>28个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>29</string>
+                    <string>29个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>30</string>
+                    <string>30个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>31</string>
+                    <string>31个</string>
                    </property>
                   </item>
                   <item>
                    <property name="text">
-                    <string>32</string>
+                    <string>32个</string>
                    </property>
                   </item>
                  </widget>
@@ -1060,6 +1060,13 @@
              <widget class="QPushButton" name="saveDataButton">
               <property name="text">
                <string>历史数据</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="saveStatueButton">
+              <property name="text">
+               <string/>
               </property>
              </widget>
             </item>

@@ -17,6 +17,9 @@ public:
     explicit SettingDialog(QWidget *parent = 0);
     ~SettingDialog();
 
+    void setHandleSettingCallback(const HandleSettingMessageCallBack& callBack_)
+    {callBack = callBack_;}
+
 public slots:
     void clickSaveButton();
     void clickDefaultButton();
@@ -27,6 +30,7 @@ private:
 
 private:
     Ui::SettingDialog *ui;
+    HandleSettingMessageCallBack callBack;
 };
 
 #endif // SETTINGDIALOG_H

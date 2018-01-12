@@ -27,6 +27,7 @@
 #include<QFile>
 #include<QDataStream>
 #include<QDir>
+#include<QProcess>
 
 #include"global.h"
 

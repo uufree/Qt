@@ -28,21 +28,27 @@ public:
     void stopWaterLine();
     void startFlowLine();
     void stopFlowLine();
+    void startFlow1Line();
+    void stopFlow1Line();
     void startAll();
     void stopAll();
     void updatePressData(const QVector<double>& pressDataList);
     void updateWaterData(const QVector<double>& waterDataList);
     void updateFlowData(const QVector<double>& flowDataList);
+    void updateFlow1Data(const QVector<double>& flow1DataList);
 
 private:
     QChart* chart;
     QLineSeries* pressLine;
     QLineSeries* flowLine;
+    QLineSeries* flow1Line;
     QLineSeries* waterLine;
     QValueAxis* axisX;
     QValueAxis* axisY;
     QChartView* view;
-    bool waterLineInChart,flowLineInChart,pressLineInChart;
+    bool waterLineInChart,flowLineInChart,pressLineInChart,flow1LineInChart;
+
+    int axisXStart;
 };
 
 #endif // LINECHART_H

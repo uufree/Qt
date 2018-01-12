@@ -39,17 +39,21 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->waterCheck->setChecked(true);
     ui->pressCheck->setChecked(true);
     ui->flowCheck->setChecked(true);
+    ui->flow1Check->setChecked(true);
     connect(ui->waterCheck,SIGNAL(stateChanged(int)),this,SLOT(handleWaterLine(int)));
     connect(ui->pressCheck,SIGNAL(stateChanged(int)),this,SLOT(handlePressLine(int)));
     connect(ui->flowCheck,SIGNAL(stateChanged(int)),this,SLOT(handleFlowLine(int)));
+    connect(ui->flow1Check,SIGNAL(stateChanged(int)),this,SLOT(handleFlow1Line(int)));
 
     ui->circleData->setWaterRange(0,120);
     ui->circleData->setFlowRange(0,120);
+    ui->circleData->setFlow1Range(0,120);
     ui->circleData->setPressRange(0,120);
 
     ui->circleData->setWaterCallBack(std::bind(&MainWindow::waterCallBack,this));
     ui->circleData->setPressCallBack(std::bind(&MainWindow::pressCallBack,this));
     ui->circleData->setFlowCallBack(std::bind(&MainWindow::flowCallBack,this));
+    ui->circleData->setFlow1CallBack(std::bind(&MainWindow::flow1CallBack,this));
 
     ui->currentTestPoint->setText("");
     ui->currentCollection->setText("");
@@ -65,11 +69,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     waterNote = "我是水位";
     flowNote = "我是流量";
+    flow1Note = "我是流量1";
     pressNote = "我是压力";
 
     connect(time,SIGNAL(timeout()),this,SLOT(updateTime()));
     time->start(1000);
     updateInformMessage("准备启动");
+
+    settingDialog->setHandleSettingCallback(std::bind(&MainWindow::handleSetting,this,std::placeholders::_1));
 }
 
 MainWindow::~MainWindow()
@@ -82,6 +89,7 @@ void MainWindow::waterCallBack()
 {
     ui->currentTestPoint->setText("水位");
     ui->currentNote->setText(waterNote);
+    ui->currentUnit->setText("m");
     updateInformMessage("监测水位信息");
 }
 
@@ -89,13 +97,23 @@ void MainWindow::flowCallBack()
 {
     ui->currentTestPoint->setText("流量");
     ui->currentNote->setText(flowNote);
+    ui->currentUnit->setText("m³/s");
     updateInformMessage("监测流量信息");
+}
+
+void MainWindow::flow1CallBack()
+{
+    ui->currentTestPoint->setText("流量1");
+    ui->currentNote->setText(flow1Note);
+    ui->currentUnit->setText("m³/s");
+    updateInformMessage("监测流量1信息");
 }
 
 void MainWindow::pressCallBack()
 {
     ui->currentTestPoint->setText("压力");
     ui->currentNote->setText(pressNote);
+    ui->currentUnit->setText("KPa");
     updateInformMessage("监测压力信息");
 }
 
@@ -171,6 +189,8 @@ void MainWindow::start()
         ui->lineChart->startPressLine();
     if(ui->flowCheck->isChecked())
         ui->lineChart->startFlowLine();
+    if(ui->flow1Check->isChecked())
+        ui->lineChart->startFlow1Line();
 
     connect(timer,SIGNAL(timeout()),this,SLOT(testMakeData()));
     timer->start(300);
@@ -188,6 +208,7 @@ void MainWindow::stop()
     timer->stop();
     ui->circleData->setWaterValue(0);
     ui->circleData->setFlowValue(0);
+    ui->circleData->setFlow1Value(0);
     ui->circleData->setPressValue(0);
 
     ui->currentTestPoint->setText("");
@@ -211,6 +232,14 @@ void MainWindow::handleFlowLine(int type)
         ui->lineChart->startFlowLine();
     else
         ui->lineChart->stopFlowLine();
+}
+
+void MainWindow::handleFlow1Line(int type)
+{
+    if(type && ui->startButton->text() == "停止")
+        ui->lineChart->startFlow1Line();
+    else
+        ui->lineChart->stopFlow1Line();
 }
 
 void MainWindow::handleWaterLine(int type)
@@ -243,11 +272,17 @@ void MainWindow::updateCurrentMessage()
         ui->currentProject->setText(QString::number(flowProject,10,2));
         ui->currentUnit->setText("m³/s");
     }
-    else
+    else if(ui->currentTestPoint->text() == "水位")
     {
         ui->currentCollection->setText(QString::number(waterCollection,10,2));
         ui->currentProject->setText(QString::number(waterProject,10,2));
         ui->currentUnit->setText("m");
+    }
+    else
+    {
+        ui->currentCollection->setText(QString::number(flowCollection,10,2));
+        ui->currentProject->setText(QString::number(flow1Project,10,2));
+        ui->currentUnit->setText("m³/s");
     }
 }
 
@@ -256,8 +291,9 @@ void MainWindow::testMakeData()
     double ran1 = qrand() % 100;
     double ran2  =qrand() % 100;
     double ran3 = qrand() % 100;
+    double ran4 = qrand() % 100;
 
-    if(pressDataList.size() < 100)
+    if(pressDataList.size() < axisXStart)
         pressDataList.append(ran1);
     else
     {
@@ -267,7 +303,7 @@ void MainWindow::testMakeData()
     pressCollection = ran1;
     pressProject = pressCollection;
 
-    if(waterDataList.size() < 100)
+    if(waterDataList.size() < axisXStart)
         waterDataList.append(ran2);
     else
     {
@@ -277,7 +313,7 @@ void MainWindow::testMakeData()
     waterCollection = ran2;
     waterProject = waterCollection;
 
-    if(flowDataList.size() < 100)
+    if(flowDataList.size() < axisXStart)
         flowDataList.append(ran3);
     else
     {
@@ -287,16 +323,28 @@ void MainWindow::testMakeData()
     flowCollection = ran3;
     flowProject = flowCollection;
 
+    if(flow1DataList.size() < axisXStart)
+        flow1DataList.append(ran4);
+    else
+    {
+        flow1DataList.pop_front();
+        flow1DataList.append(ran4);
+    }
+    flow1Collection = ran4;
+    flow1Project = flow1Collection;
+
     ui->lineChart->updateFlowData(flowDataList);
+    ui->lineChart->updateFlow1Data(flow1DataList);
     ui->lineChart->updatePressData(pressDataList);
     ui->lineChart->updateWaterData(waterDataList);
 
     ui->circleData->setPressValue(pressCollection);
     ui->circleData->setWaterValue(waterCollection);
     ui->circleData->setFlowValue(flowCollection);
+    ui->circleData->setFlow1Value(flow1Collection);
 
     updateCurrentMessage();
-    updateInformMessage("目前工作测点数量：3个");
+    updateInformMessage("目前工作测点数量：4个");
 }
 
 void MainWindow::handleCurrentNote()
@@ -307,6 +355,8 @@ void MainWindow::handleCurrentNote()
         pressNote = ui->currentNote->toPlainText();
     else if(ui->currentTestPoint->text() == "水位")
         waterNote = ui->currentNote->toPlainText();
+    else if(ui->currentTestPoint->text() == "流量1")
+        flow1Note = ui->currentNote->toPlainText();
     else
     {};
 }
@@ -323,4 +373,10 @@ void MainWindow::updateTime()
 void MainWindow::updateInformMessage(const QString& str)
 {
     ui->thingLabel->setText(str);
+}
+
+void MainWindow::handleSetting(const struct SettingData &data)
+{
+    ui->lineChart->setting(data);
+    axisXStart = (int)data.timeMax;
 }
