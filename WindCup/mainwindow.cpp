@@ -560,6 +560,34 @@ void MainWindow::fillCurrentAddrList()
     }
 }
 
+/*
+void MainWindow::handleTimeout()
+{
+    char out[3];
+    out[0] = 0xf0;
+    out[1] = 0xa5;
+    out[2] = 0x5a;
+    currentSerialPort->write(out,3);
+    qDebug() << "write: " << (uint8_t)out[0];
+    char in[4] = {'\0','\0','\0','\0'};
+    int readByte = currentSerialPort->read(in,4);
+    qDebug() << "read: " << (uint8_t)in[0]  << " " << (uint8_t)in[1] << " " << (uint8_t)in[2] << " " << (uint8_t)in[3];
+    qDebug() << "readByte: " << readByte;
+
+    if(readByte != 4)
+    {
+        if((uint8_t)in[0] > 0xdd || (uint8_t)in[0] <= 0xff)
+            cupStatuList[(uint8_t)in[0]] = ERROR;
+        return;
+    }
+    else
+    {
+        if((uint8_t)in[0] > 0xdd || (uint8_t)in[0] <= 0xff)
+            cupStatuList[(uint8_t)in[0]] = RUNING;
+    }
+}
+*/
+
 //处理串口定时器到期
 void MainWindow::handleTimeout()
 {
@@ -572,6 +600,7 @@ void MainWindow::handleTimeout()
     else
     {
         char out[7] = {0x4c,0x57,0x01,0x30,0x01,0x32,0x0d};
+        qDebug() << "writeBytes: 7";
         currentSerialPort->write(out,7);
         char in[25];
         for(int i=0;i<25;i++)
@@ -581,14 +610,17 @@ void MainWindow::handleTimeout()
         int elecIndex = 0;
         if(readBytes == 25)
         {
-            double result = 0;
-            for(int i=5;i<23;i+=2)
-            {//这里只将16位保存下来，在显示的时候进行具体的计算
-                bool isNegative = 0x80 & in[i];
-                result = (double)((uint16_t)((in[i] & 0x7f) << 8) + (uint8_t)in[i+1]);
-                isNegative ? result = -result : result = result;
-                electricalData[elecIndex] = result;
-                ++elecIndex;
+            if(in[0] == 0x4c && in[1] == 0x57 && in[2] == 0x01 && in[3] == 0x30)
+            {
+                double result = 0;
+                for(int i=5;i<23;i+=2)
+                {//这里只将16位保存下来，在显示的时候进行具体的计算
+                    bool isNegative = 0x80 & in[i];
+                    result = (double)((uint16_t)((in[i] & 0x7f) << 8) + (uint8_t)in[i+1]);
+                    isNegative ? result = -result : result = result;
+                    electricalData[elecIndex] = result;
+                    ++elecIndex;
+                }
             }
         }
 
@@ -596,8 +628,7 @@ void MainWindow::handleTimeout()
 
         return;
     }
-
-
+/*
     char out[3];
     out[0] = ch;
     out[1] = 0xa5;
@@ -629,6 +660,7 @@ void MainWindow::handleTimeout()
     {//处理风杯
         speedList[(uint8_t)in[0]] = (uint8_t)in[3];
     }
+*/
 }
 
 //处理1s定时器到期
@@ -641,6 +673,23 @@ void MainWindow::updateTime()
     dateStr = QString::number(year) + "年" + QString::number(mouth) + "月" + QString::number(day) + "日";
     ui->currentDate->setText(dateStr);
 
+    double cupSpeedTar,testAreaTar;
+    if(settingData.cupSpeed[settingData.cupSpeed.size() - 1] != "s")
+        cupSpeedTar = settingData.cupSpeed.toDouble();
+    else
+    {
+        QString str = settingData.cupSpeed.remove(settingData.cupSpeed.size() - 3,3);
+        cupSpeedTar = str.toDouble();
+    }
+
+    if(settingData.testArea[settingData.testArea.size() - 1] != "㎡")
+        testAreaTar = settingData.testArea.toDouble();
+    else
+    {
+        QString str = settingData.testArea.remove(settingData.testArea.size() - 1, 1);
+        testAreaTar = str.toDouble();
+    }
+
 //在程序处于数据采集过程中，对信息的更新
     if(ui->startBtton->text() == tr("停止"))
     {
@@ -649,11 +698,12 @@ void MainWindow::updateTime()
         uint8_t index = 0xe0;
         for(int i=0;i<currentCups;i++)
         {
+            speedList[index] = speedList[index] * cupSpeedTar;
             speedSum += speedList[index];
             ++index;
         }
         averageSpeed = speedSum / currentCups;
-        currentVolume = averageSpeed * settingData.testArea.toDouble();
+        currentVolume = averageSpeed * testAreaTar;
         negPressure = speedList[0xde];
         atmPressure = speedList[0xdf];
 

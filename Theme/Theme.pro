@@ -31,7 +31,8 @@ SOURCES += \
     circledata.cpp \
     dial.cpp \
     linechart.cpp \
-    settingdialog.cpp
+    settingdialog.cpp \
+    communication.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -39,7 +40,8 @@ HEADERS += \
     dial.h \
     linechart.h \
     global.h \
-    settingdialog.h
+    settingdialog.h \
+    communication.h
 
 FORMS += \
         mainwindow.ui \
