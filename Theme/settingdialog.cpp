@@ -25,7 +25,7 @@ SettingDialog::SettingDialog(QWidget *parent) :
 
     setSettingData();
 
-    connect(ui->confirmButton,SIGNAL(clicked()),this,SLOT(clickconfirmButton()));
+    connect(ui->confirmButton,SIGNAL(clicked()),this,SLOT(clickConfirmButton()));
     connect(ui->defaultButton,SIGNAL(clicked()),this,SLOT(clickDefaultButton()));
     connect(ui->saveButton,SIGNAL(clicked()),this,SLOT(clickSaveButton()));
 }

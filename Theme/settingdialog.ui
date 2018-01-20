@@ -298,6 +298,16 @@
            <widget class="QComboBox" name="flowColor">
             <item>
              <property name="text">
+              <string>Red</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Green</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
               <string>White</string>
              </property>
             </item>
@@ -318,11 +328,6 @@
             </item>
             <item>
              <property name="text">
-              <string>Red</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
               <string>DarkRed</string>
              </property>
             </item>
@@ -334,11 +339,6 @@
             <item>
              <property name="text">
               <string>DarkMegenta</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Green</string>
              </property>
             </item>
             <item>

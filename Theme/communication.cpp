@@ -102,6 +102,18 @@ void Communication::sendMessage()
         index = 1;
 }
 
+float Communication::charToFloat(const unsigned char* p)
+{
+    float a;
+    unsigned char* r = (unsigned char*)&a;
+    *r = p[1];
+    *(++r) = p[0];
+    *(++r) = p[3];
+    *(++r) = p[2];
+
+    return a;
+}
+
 void Communication::handleSerialPort()
 {
     QByteArray array = port->readAll();
@@ -144,12 +156,12 @@ void Communication::handleTcpSocket()
             array.append(tcpBuffer[0]);
             tcpBuffer.remove(0,1);
         }
-        QString str;
-        str.append((char)array[3]);
-        str.append((char)array[4]);
-        str.append((char)array[5]);
-        str.append((char)array[6]);
-        float number = str.toFloat();
+        unsigned char str[4];
+        str[0] = (unsigned char)array[3];
+        str[1] = (unsigned char)array[4];
+        str[2] = (unsigned char)array[5];
+        str[3] = (unsigned char)array[6];
+        float number = charToFloat(str);
         if(flow1CallBack)
             flow1CallBack(number);
     }
@@ -162,12 +174,12 @@ void Communication::handleTcpSocket()
             array.append(tcpBuffer[0]);
             tcpBuffer.remove(0,1);
         }
-        QString str;
-        str.append((char)array[3]);
-        str.append((char)array[4]);
-        str.append((char)array[5]);
-        str.append((char)array[6]);
-        float number = str.toFloat();
+        unsigned char str[4];
+        str[0] = (unsigned char)array[3];
+        str[1] = (unsigned char)array[4];
+        str[2] = (unsigned char)array[5];
+        str[3] = (unsigned char)array[6];
+        float number = charToFloat(str);
         if(flow2CallBack)
             flow2CallBack(number);
     }

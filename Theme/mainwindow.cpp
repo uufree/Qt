@@ -43,8 +43,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->flow2Check->setChecked(true);
     connect(ui->waterCheck,SIGNAL(stateChanged(int)),this,SLOT(handleWaterLine(int)));
     connect(ui->pressCheck,SIGNAL(stateChanged(int)),this,SLOT(handlePressLine(int)));
-    connect(ui->flow1Check,SIGNAL(stateChanged(int)),this,SLOT(handleFlowLine(int)));
-    connect(ui->flow2Check,SIGNAL(stateChanged(int)),this,SLOT(handleFlow1Line(int)));
+    connect(ui->flow1Check,SIGNAL(stateChanged(int)),this,SLOT(handleFlow1Line(int)));
+    connect(ui->flow2Check,SIGNAL(stateChanged(int)),this,SLOT(handleFlow2Line(int)));
 
     ui->circleData->setWaterRange(0,120);
     ui->circleData->setFlow1Range(0,120);
@@ -140,10 +140,10 @@ void MainWindow::clickStartButton()
         ui->settingButton->setEnabled(true);
         com->closeSerialPort();
         com->closeTcpSocket();
+        stop();
         com->updateSerialPortInfo();
         const QVector<QString>& serialPortNameList = com->getSerialPortNameList();
         settingDialog->updateSerialPortInfo(serialPortNameList);
-        stop();
         updateInformMessage("运行停止");
     }
 }
@@ -233,8 +233,13 @@ void MainWindow::start()
     if(ui->flow2Check->isChecked())
         ui->lineChart->startFlow2Line();
 
+/*
     connect(timer,SIGNAL(timeout()),this,SLOT(testMakeData()));
     timer->start(300);
+*/
+
+    connect(timer,SIGNAL(timeout()),com,SLOT(sendMessage()));
+    timer->start(1000);
 
     ui->currentTestPoint->setText("流量1");
     ui->currentCollection->setText("");
@@ -407,7 +412,6 @@ void MainWindow::comFlow2CallBack(float flow2)
     updateInformMessage("目前工作测点数量：4个");
 }
 
-/*
 void MainWindow::testMakeData()
 {
     double ran1 = qrand() % 100;
@@ -468,4 +472,4 @@ void MainWindow::testMakeData()
     updateCurrentMessage();
     updateInformMessage("目前工作测点数量：4个");
 }
-*/
+

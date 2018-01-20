@@ -36,6 +36,7 @@ public:
     void closeTcpSocket();
     void closeSerialPort();
     void updateSerialPortInfo();
+    float charToFloat(const unsigned char* str);
 
 public slots:
     void handleSerialPort();

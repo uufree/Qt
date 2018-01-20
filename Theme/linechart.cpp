@@ -174,7 +174,7 @@ void LineChart::startFlow2Line()
 {
     if(!flow2LineInChart)
     {
-        flow2Line->setName("流量");
+        flow2Line->setName("流量2");
         chart->addSeries(flow2Line);
         chart->setAxisX(axisX,flow2Line);
         chart->setAxisY(axisY,flow2Line);
