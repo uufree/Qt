@@ -17,6 +17,7 @@ SettingDialog::SettingDialog(QWidget *parent) :
     settingData.waterLineStyle = "SolidLine";
     settingData.pressLineStyle = "SolidLine";
     settingData.flowLineStyle = "SolidLine";
+    settingData.baudRate = "9600";
     settingData.timeMin = 0;
     settingData.timeMax = 100;
     settingData.valueMin = 0;
@@ -48,6 +49,8 @@ void SettingDialog::clickSaveButton()
     settingData.timeMax = ui->timeMax->value();
     settingData.valueMin = ui->valueMin->value();
     settingData.valueMax = ui->valueMax->value();
+    settingData.baudRate = ui->baudRate->currentText();
+    settingData.serialPort = ui->serialPort->currentText();
 }
 
 void SettingDialog::setSettingData()
@@ -64,6 +67,7 @@ void SettingDialog::setSettingData()
     ui->timeMax->setValue(settingData.timeMax);
     ui->valueMin->setValue(settingData.valueMin);
     ui->valueMax->setValue(settingData.valueMax);
+    ui->baudRate->setCurrentText(settingData.baudRate);
 }
 
 void SettingDialog::clickDefaultButton()
@@ -80,14 +84,22 @@ void SettingDialog::clickDefaultButton()
     settingData.timeMax = 100;
     settingData.valueMin = 0;
     settingData.valueMax = 100;
+    settingData.baudRate = "9600";
 
     setSettingData();
 }
 
-void SettingDialog::clickconfirmButton()
+void SettingDialog::clickConfirmButton()
 {
     this->close();
     clickSaveButton();
     if(callBack)
         callBack(settingData);
+}
+
+void SettingDialog::updateSerialPortInfo(const QVector<QString> &serialPortList)
+{
+    ui->serialPort->clear();
+    for(int i = 0;i < serialPortList.size();i++)
+        ui->serialPort->addItem(serialPortList[i]);
 }

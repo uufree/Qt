@@ -26,27 +26,27 @@ public:
     void stopPressLine();
     void startWaterLine();
     void stopWaterLine();
-    void startFlowLine();
-    void stopFlowLine();
     void startFlow1Line();
     void stopFlow1Line();
+    void startFlow2Line();
+    void stopFlow2Line();
     void startAll();
     void stopAll();
     void updatePressData(const QVector<double>& pressDataList);
     void updateWaterData(const QVector<double>& waterDataList);
-    void updateFlowData(const QVector<double>& flowDataList);
     void updateFlow1Data(const QVector<double>& flow1DataList);
+    void updateFlow2Data(const QVector<double>& flow2DataList);
 
 private:
     QChart* chart;
     QLineSeries* pressLine;
-    QLineSeries* flowLine;
     QLineSeries* flow1Line;
+    QLineSeries* flow2Line;
     QLineSeries* waterLine;
     QValueAxis* axisX;
     QValueAxis* axisY;
     QChartView* view;
-    bool waterLineInChart,flowLineInChart,pressLineInChart,flow1LineInChart;
+    bool waterLineInChart,flow1LineInChart,pressLineInChart,flow2LineInChart;
 
     int axisXStart;
 };

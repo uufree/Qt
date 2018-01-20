@@ -20,10 +20,12 @@ public:
     void setHandleSettingCallback(const HandleSettingMessageCallBack& callBack_)
     {callBack = callBack_;}
 
+    void updateSerialPortInfo(const QVector<QString>& serialPortList);
+
 public slots:
     void clickSaveButton();
     void clickDefaultButton();
-    void clickconfirmButton();
+    void clickConfirmButton();
 
 private:
     void setSettingData();

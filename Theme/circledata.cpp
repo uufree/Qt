@@ -18,12 +18,12 @@ CircleData::CircleData(QWidget* parent):
     water = createDial(40.0,480.0);
     water->setLabel("水位(m)");
     layout->addWidget(water,0,1);
-    flow = createDial(40.0,480.0);
-    flow->setLabel("流量(m³/s)");
-    layout->addWidget(flow,0,2);
     flow1 = createDial(40.0,480.0);
     flow1->setLabel("流量1(m³/s)");
-    layout->addWidget(flow1,0,3);
+    layout->addWidget(flow1,0,2);
+    flow2 = createDial(40.0,480.0);
+    flow2->setLabel("流量2(m³/s)");
+    layout->addWidget(flow2,0,3);
 
     for(int i=0;i<layout->columnCount();i++)
         layout->setColumnStretch(i,1);

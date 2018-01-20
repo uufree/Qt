@@ -9,21 +9,21 @@ LineChart::LineChart(QWidget* widget):
     chart(new QChart),
     pressLine(new QLineSeries),
     waterLine(new QLineSeries),
-    flowLine(new QLineSeries),
     flow1Line(new QLineSeries),
+    flow2Line(new QLineSeries),
     axisX(new QValueAxis),
     axisY(new QValueAxis),
     axisXStart(100)
 {
     pressLine->setName("压力");
     waterLine->setName("水位");
-    flowLine->setName("流量");
     flow1Line->setName("流量1");
+    flow2Line->setName("流量2");
 
     chart->addSeries(pressLine);
     chart->addSeries(waterLine);
-    chart->addSeries(flowLine);
     chart->addSeries(flow1Line);
+    chart->addSeries(flow2Line);
 
     axisX->setRange(0,100);
     axisX->setLabelFormat("%u");
@@ -39,14 +39,14 @@ LineChart::LineChart(QWidget* widget):
 
     chart->setAxisX(axisX,pressLine);
     chart->setAxisX(axisX,waterLine);
-    chart->setAxisX(axisX,flowLine);
     chart->setAxisX(axisX,flow1Line);
+    chart->setAxisX(axisX,flow2Line);
     chart->setAxisY(axisY,pressLine);
     chart->setAxisY(axisY,waterLine);
-    chart->setAxisY(axisY,flowLine);
     chart->setAxisY(axisY,flow1Line);
+    chart->setAxisY(axisY,flow2Line);
 
-    waterLineInChart = flowLineInChart = pressLineInChart = flow1LineInChart = true;
+    waterLineInChart = flow1LineInChart = pressLineInChart = flow2LineInChart = true;
 
     chart->legend()->setAlignment(Qt::AlignRight);
     chart->setTitle("折线图");
@@ -68,7 +68,7 @@ void LineChart::setting(const SettingData &settingData)
 {
     QString lineColorList[3] = {settingData.waterColor,settingData.flowColor,settingData.pressColor};
     QString lineStyleList[3] = {settingData.waterLineStyle,settingData.flowLineStyle,settingData.pressLineStyle};
-    QVector<QLineSeries*> lineList = {waterLine,flowLine,pressLine};
+    QVector<QLineSeries*> lineList = {waterLine,flow1Line,pressLine};
 
     for(int i=0;i<3;i++)
     {
@@ -157,24 +157,11 @@ void LineChart::startPressLine()
     }
 }
 
-void LineChart::startFlowLine()
-{
-    if(!flowLineInChart)
-    {
-        flowLine->setName("流量");
-        chart->addSeries(flowLine);
-        chart->setAxisX(axisX,flowLine);
-        chart->setAxisY(axisY,flowLine);
-        chart->update();
-        flowLineInChart = true;
-    }
-}
-
 void LineChart::startFlow1Line()
 {
     if(!flow1LineInChart)
     {
-        flow1Line->setName("流量");
+        flow1Line->setName("流量1");
         chart->addSeries(flow1Line);
         chart->setAxisX(axisX,flow1Line);
         chart->setAxisY(axisY,flow1Line);
@@ -183,26 +170,29 @@ void LineChart::startFlow1Line()
     }
 }
 
+void LineChart::startFlow2Line()
+{
+    if(!flow2LineInChart)
+    {
+        flow2Line->setName("流量");
+        chart->addSeries(flow2Line);
+        chart->setAxisX(axisX,flow2Line);
+        chart->setAxisY(axisY,flow2Line);
+        chart->update();
+        flow2LineInChart = true;
+    }
+}
+
 void LineChart::startWaterLine()
 {
     if(!waterLineInChart)
     {
-        flowLine->setName("水位");
+        waterLine->setName("水位");
         chart->addSeries(waterLine);
         chart->setAxisX(axisX,waterLine);
         chart->setAxisY(axisY,waterLine);
         chart->update();
         waterLineInChart = true;
-    }
-}
-
-void LineChart::stopFlowLine()
-{
-    if(flowLineInChart)
-    {
-        chart->removeSeries(flowLine);
-        chart->update();
-        flowLineInChart = false;
     }
 }
 
@@ -213,6 +203,16 @@ void LineChart::stopFlow1Line()
         chart->removeSeries(flow1Line);
         chart->update();
         flow1LineInChart = false;
+    }
+}
+
+void LineChart::stopFlow2Line()
+{
+    if(flow2LineInChart)
+    {
+        chart->removeSeries(flow2Line);
+        chart->update();
+        flow2LineInChart = false;
     }
 }
 
@@ -238,34 +238,34 @@ void LineChart::stopWaterLine()
 
 void LineChart::startAll()
 {
-    startFlowLine();
+    startFlow1Line();
     startPressLine();
     startWaterLine();
-    startFlow1Line();
+    startFlow2Line();
 }
 
 void LineChart::stopAll()
 {
-    stopFlowLine();
+    stopFlow1Line();
     stopPressLine();
     stopWaterLine();
-    stopFlow1Line();
+    stopFlow2Line();
 }
 
-void LineChart::updateFlowData(const QVector<double>& flowDataList)
-{
-    flowLine->clear();
-    int flowSize = flowDataList.size();
-    for(int i=0;i<flowSize;i++)
-        flowLine->append(QPointF(axisXStart-i,flowDataList[flowSize - 1 - i]));
-    chart->update();
-}
 void LineChart::updateFlow1Data(const QVector<double>& flow1DataList)
 {
     flow1Line->clear();
-    int flowSize = flow1DataList.size();
-    for(int i=0;i<flowSize;i++)
-        flow1Line->append(QPointF(axisXStart-i,flow1DataList[flowSize - 1 - i]));
+    int flow1Size = flow1DataList.size();
+    for(int i=0;i<flow1Size;i++)
+        flow1Line->append(QPointF(axisXStart-i,flow1DataList[flow1Size - 1 - i]));
+    chart->update();
+}
+void LineChart::updateFlow2Data(const QVector<double>& flow2DataList)
+{
+    flow2Line->clear();
+    int flow2Size = flow2DataList.size();
+    for(int i=0;i<flow2Size;i++)
+        flow2Line->append(QPointF(axisXStart-i,flow2DataList[flow2Size - 1 - i]));
     chart->update();
 }
 
